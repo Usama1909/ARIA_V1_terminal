@@ -1,0 +1,96 @@
+{
+  "PATTERN_VOL_001": {
+    "name": "Volume Quality Filter",
+    "type": "data_quality",
+    "rule": {
+      "feature": "Volume",
+      "condition": "greater_than",
+      "threshold": 0.0,
+      "threshold_type": "median_based"
+    },
+    "stats": {
+      "median": 0.0,
+      "mean": 528498525.5988483,
+      "std": 1378412578.4396877
+    },
+    "description": "Remove low-volume candles (likely unreliable)",
+    "discovered_date": "2026-03-12T01:26:50.836338",
+    "discovered_from": "BTC.csv",
+    "status": "active"
+  },
+  "PATTERN_PRICE_001": {
+    "name": "Price Spike Filter",
+    "type": "data_quality",
+    "rule": {
+      "feature": "price_range",
+      "condition": "less_than",
+      "threshold": 0.015082222560755445,
+      "threshold_type": "percentile_95"
+    },
+    "stats": {
+      "p50": 0.004592391524133541,
+      "p95": 0.015082222560755445,
+      "p99": 0.0248296227228132
+    },
+    "description": "Remove extreme price spikes/crashes (outliers)",
+    "discovered_date": "2026-03-12T01:26:50.849824",
+    "discovered_from": "BTC.csv",
+    "status": "active"
+  },
+  "PATTERN_TIME_001": {
+    "name": "Time Continuity Check",
+    "type": "data_quality",
+    "rule": {
+      "feature": "time_gap",
+      "condition": "less_than",
+      "threshold": 3.0,
+      "threshold_type": "interval_based"
+    },
+    "stats": {
+      "typical_interval_hours": 1.0,
+      "max_allowed_gap_hours": 3.0,
+      "median_gap_hours": 1.0
+    },
+    "description": "Ensure continuous time series (no big gaps)",
+    "discovered_date": "2026-03-12T01:26:50.945779",
+    "discovered_from": "BTC.csv",
+    "status": "active"
+  },
+  "PATTERN_CONTEXT_001": {
+    "name": "Minimum History Requirement",
+    "type": "feature_engineering",
+    "rule": {
+      "feature": "lookback_periods",
+      "condition": "greater_than",
+      "threshold": 100,
+      "threshold_type": "fixed"
+    },
+    "description": "Need 100+ prior candles for reliable technical indicators",
+    "discovered_date": "2026-03-12T01:26:50.946015",
+    "discovered_from": "domain_knowledge",
+    "status": "active"
+  },
+  "PATTERN_FEATURES_001": {
+    "name": "Core Feature Set (with Volume)",
+    "type": "feature_engineering",
+    "rule": {
+      "features": [
+        "rsi",
+        "macd",
+        "macd_hist",
+        "volatility",
+        "bb_position",
+        "ma_distance",
+        "price_change_5",
+        "price_change_10",
+        "rsi_momentum",
+        "volume_ratio"
+      ],
+      "importance": "high"
+    },
+    "description": "10 proven technical indicators including volume",
+    "discovered_date": "2026-03-12T01:26:50.946189",
+    "discovered_from": "domain_knowledge + data_availability",
+    "status": "active"
+  }
+}

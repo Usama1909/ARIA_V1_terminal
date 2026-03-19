@@ -1,0 +1,80 @@
+[
+  {
+    "timestamp": "2026-03-17T11:27:09.562160",
+    "symbol": "ETH",
+    "signal": "STOP_LOSS",
+    "confidence": 59.9,
+    "price": 2330.6069,
+    "sentiment": "NEUTRAL",
+    "rsi": 37.8,
+    "outcome": "PENDING",
+    "outcome_price": null,
+    "outcome_time": null,
+    "pnl_pct": null
+  },
+  {
+    "timestamp": "2026-03-17T11:27:10.166508",
+    "symbol": "NVDA",
+    "signal": "TAKE_PROFIT",
+    "confidence": 58.0,
+    "price": 183.13,
+    "sentiment": "NEGATIVE",
+    "rsi": 50.4,
+    "outcome": "PENDING",
+    "outcome_price": null,
+    "outcome_time": null,
+    "pnl_pct": null
+  },
+  {
+    "timestamp": "2026-03-17T11:27:25.843517",
+    "symbol": "GLD",
+    "signal": "STOP_LOSS",
+    "confidence": 65.1,
+    "price": 460.45,
+    "sentiment": "NEGATIVE",
+    "rsi": 29.7,
+    "outcome": "PENDING",
+    "outcome_price": null,
+    "outcome_time": null,
+    "pnl_pct": null
+  },
+  {
+    "timestamp": "2026-03-17T12:03:25.541365",
+    "symbol": "BTC",
+    "signal": "TAKE_PROFIT",
+    "confidence": 57.0,
+    "price": 74036.2422,
+    "sentiment": "NEGATIVE",
+    "rsi": 41.1,
+    "outcome": "PENDING",
+    "outcome_price": null,
+    "outcome_time": null,
+    "pnl_pct": null
+  },
+  {
+    "timestamp": "2026-03-17T12:28:16.508652",
+    "symbol": "GLD",
+    "signal": "STOP_LOSS",
+    "confidence": 65.1,
+    "price": 460.45,
+    "sentiment": "NEGATIVE",
+    "rsi": 29.7,
+    "outcome": "PENDING",
+    "outcome_price": null,
+    "outcome_time": null,
+    "pnl_pct": null
+  },
+  {
+    "timestamp": "2026-03-17T12:41:42.474215",
+    "symbol": "ETH",
+    "signal": "TAKE_PROFIT",
+    "confidence": 55.6,
+    "price": 2315.5249,
+    "sentiment": "NEUTRAL",
+    "rsi": 33.6,
+    "outcome": "PENDING",
+    "outcome_price": null,
+    "outcome_time": null,
+    "pnl_pct": null
+  }
+]

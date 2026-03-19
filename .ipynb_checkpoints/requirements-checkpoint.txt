@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+anthropic
+pandas
+numpy
+yfinance
+scikit-learn
+xgboost
+scipy
+requests
+python-multipart

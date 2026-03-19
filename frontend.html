@@ -1,0 +1,471 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Trading Analytics - Beta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .stats-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value {
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .main-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .results {
+            display: none;
+            margin-top: 30px;
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .asset-info h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .price {
+            color: #667eea;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .pattern-badge {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .bullish {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .bearish {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .confidence {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .analysis-section {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .analysis-section h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        
+        .analysis-text {
+            color: #333;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+        
+        .market-context {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .context-item {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .context-label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .context-value {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>  AI Trading Analytics</h1>
+            <p>Beta Version - AI-powered market pattern analysis</p>
+        </div>
+        
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-label">Analyses Today</div>
+                <div class="stat-value" id="analyses-today">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Remaining</div>
+                <div class="stat-value" id="remaining">3</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Daily Limit</div>
+                <div class="stat-value">3</div>
+            </div>
+        </div>
+        
+        <!-- Main Card -->
+        <div class="main-card">
+            <div class="success" id="success-msg"></div>
+            
+            <form id="analyze-form">
+                <div class="form-group">
+                    <label for="username">Your Name</label>
+                    <input type="text" id="username" placeholder="Enter your name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="asset">Select Asset</label>
+                    <select id="asset" required>
+                        <option value="">Choose an asset...</option>
+                        <option value="BTC">BTC - Bitcoin</option>
+                        <option value="ETH">ETH - Ethereum</option>
+                        <option value="AAPL">AAPL - Apple Inc.</option>
+                        <option value="NVDA">NVDA - NVIDIA Corp.</option>
+                        <option value="TSLA">TSLA - Tesla Inc.</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn" id="analyze-btn">
+                     Analyze Asset
+                </button>
+            </form>
+            
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Analyzing market patterns...</p>
+            </div>
+            
+            <!-- Error -->
+            <div class="error" id="error"></div>
+            
+            <!-- Results -->
+            <div class="results" id="results">
+                <div class="result-header">
+                    <div class="asset-info">
+                        <h2 id="result-symbol"></h2>
+                        <div class="price" id="result-price"></div>
+                    </div>
+                    <div>
+                        <div class="pattern-badge" id="pattern-badge"></div>
+                        <div class="confidence" id="confidence"></div>
+                    </div>
+                </div>
+                
+                <div class="market-context" id="market-context"></div>
+                
+                <div class="analysis-section">
+                    <h3> AI Analysis</h3>
+                    <div class="analysis-text" id="analysis-text"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_URL = 'http://localhost:8000';
+        
+        const form = document.getElementById('analyze-form');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const error = document.getElementById('error');
+        const successMsg = document.getElementById('success-msg');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        
+        // Update user stats
+        async function updateStats(username) {
+            try {
+                const response = await fetch(`${API_URL}/stats/${username}`);
+                const stats = await response.json();
+                
+                document.getElementById('analyses-today').textContent = stats.analyses_today;
+                document.getElementById('remaining').textContent = stats.remaining_today;
+            } catch (err) {
+                console.error('Error fetching stats:', err);
+            }
+        }
+        
+        // Handle form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const symbol = document.getElementById('asset').value;
+            
+            if (!username || !symbol) {
+                showError('Please enter your name and select an asset');
+                return;
+            }
+            
+            // Show loading
+            form.style.display = 'none';
+            loading.style.display = 'block';
+            results.style.display = 'none';
+            error.style.display = 'none';
+            successMsg.style.display = 'none';
+            
+            try {
+                // Call API
+                const response = await fetch(`${API_URL}/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        symbol: symbol,
+                        username: username
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResults(data);
+                    updateStats(username);
+                } else {
+                    showError(data.message || data.error);
+                }
+                
+            } catch (err) {
+                showError('Failed to connect to API. Make sure the server is running.');
+            } finally {
+                loading.style.display = 'none';
+                form.style.display = 'block';
+            }
+        });
+        
+        function displayResults(data) {
+            // Symbol and price
+            document.getElementById('result-symbol').textContent = data.symbol;
+            document.getElementById('result-price').textContent = `$${data.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            // Pattern badge
+            const badge = document.getElementById('pattern-badge');
+            badge.textContent = data.pattern;
+            badge.className = 'pattern-badge ' + (data.pattern.includes('BULLISH') ? 'bullish' : 'bearish');
+            
+            // Confidence
+            document.getElementById('confidence').textContent = `Confidence: ${data.confidence.toFixed(1)}%`;
+            
+            // Market context
+            const contextHtml = `
+                <div class="context-item">
+                    <div class="context-label">Asset Class</div>
+                    <div class="context-value">${data.market_context.asset_class}</div>
+                </div>
+                <div class="context-item">
+                    <div class="context-label">Recent Trend</div>
+                    <div class="context-value">${data.market_context.recent_trend}</div>
+                </div>
+                <div class="context-item">
+                    <div class="context-label">Volatility</div>
+                    <div class="context-value">${data.market_context.volatility_regime}</div>
+                </div>
+            `;
+            document.getElementById('market-context').innerHTML = contextHtml;
+            
+            // Analysis
+            document.getElementById('analysis-text').textContent = data.analysis;
+            
+            // Show results
+            results.style.display = 'block';
+            
+            // Show success message
+            if (data.from_cache) {
+                successMsg.textContent = ' Results loaded from cache (saved $0.006!)';
+                successMsg.style.display = 'block';
+            }
+        }
+        
+        function showError(message) {
+            error.textContent = '❌ ' + message;
+            error.style.display = 'block';
+            form.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
