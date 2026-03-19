@@ -28,7 +28,7 @@ import uvicorn
 
 # ── CONFIGURATION ─────────────────────────────────────────
 PORT = int(os.environ.get('PORT', 8001))
-ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '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')
 
 print("ARIA TERMINAL - STARTING UP")
 print("="*60)
