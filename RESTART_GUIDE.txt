@@ -1,0 +1,38 @@
+
+================================================================================
+TRADING DATA SYSTEM - RESTART GUIDE
+================================================================================
+
+TO RESTART THE ENTIRE SYSTEM:
+
+1. Open Jupyter Lab
+   - Anaconda Prompt: cd "C:\Users\Digital Technologies\Quant_Folder 2"
+   - Run: jupyter lab
+
+2. Open notebook in data_gathering folder
+
+3. Run cells from top to bottom (takes 2-3 minutes)
+
+4. Start all collectors:
+   source_manager.start_all()
+
+5. Check status:
+   source_manager.status_all()
+
+6. Start dashboard (separate Anaconda Prompt):
+   cd "C:\Users\Digital Technologies\Quant_Folder 2\data_gathhering"
+   streamlit run dashboard.py
+
+================================================================================
+USEFUL COMMANDS:
+================================================================================
+
+source_manager.status_all()      - Check all sources
+source_manager.restart_failed()  - Restart stopped sources  
+storage_manager.status()         - Storage breakdown
+system_status()                  - Complete overview
+
+================================================================================
+CURRENT STATUS: 20 sources collecting data 24/7
+Database location: C:\Users\Digital Technologies\Quant_Folder 2\data\market_data.db
+================================================================================

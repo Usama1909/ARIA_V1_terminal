@@ -1,0 +1,15 @@
+{
+  "timestamp": "2026-03-11T12:04:00.724321",
+  "system": "Enhanced Layer 3 - Contextual AI Analysis",
+  "improvements": [
+    "Market context detection (trend + volatility)",
+    "Structured 4-section output format",
+    "Asset class awareness (crypto vs equity)",
+    "Contradiction detection",
+    "Actionable levels and risks"
+  ],
+  "results": {
+    "BTC": {
+      "price": 70027.24,
+      "pattern": "BEARISH SETUP",
+      "confidence": 
