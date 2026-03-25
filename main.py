@@ -684,7 +684,7 @@ def calculate_var_cvar(position_usd, vol_data, confidence=0.95, horizon_days=1):
         'method':  'Student-t (fat tails)'
     }
 
-def analyse_trade_risk(symbol, direction, amount_usd, entry_price, portfolio_balance, signal_confidence):
+def analyse_trade_risk(symbol, direction, amount_usd, entry_price, portfolio_balance, signal_confidence, num_simulations=10000):
     regime      = detect_market_regime(symbol)
     regime_mult = REGIME_KELLY_MULTIPLIER.get(regime, 0.75)
     vol_data    = get_realised_volatility(symbol)
@@ -698,7 +698,7 @@ def analyse_trade_risk(symbol, direction, amount_usd, entry_price, portfolio_bal
     kelly_pct    = kelly_frac * 100
     position_pct = (amount_usd / portfolio_balance) * 100
     holding_hours = 48 if symbol in ['BTC', 'ETH'] else 24
-    mc = monte_carlo_simulation(entry_price, direction, vol_data, holding_hours, trade_cost, 10000)
+    mc = monte_carlo_simulation(entry_price, direction, vol_data, holding_hours, trade_cost, num_simulations)
     var_cvar = calculate_var_cvar(amount_usd, vol_data)
     ev_pct   = (win_rate * avg_win_pct) - ((1 - win_rate) * avg_loss_pct) - (trade_cost * 100)
     ev_usd   = round((ev_pct / 100) * amount_usd, 2)
@@ -853,7 +853,7 @@ def get_risk_analysis(symbol: str, direction: str = 'LONG', amount_usd: float = 
         confidence  = signal.get('confidence', 0.5) if signal else 0.5
         portfolio   = get_or_create_portfolio(user_id)
         balance     = portfolio['balance']
-        risk = analyse_trade_risk(symbol, direction.upper(), amount_usd, entry_price, balance, confidence)
+        risk = analyse_trade_risk(symbol, direction.upper(), amount_usd, entry_price, balance, confidence, num_simulations=1000)
         return clean_floats(risk)
     except HTTPException:
         raise
