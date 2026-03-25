@@ -1386,11 +1386,32 @@ def get_leaderboard():
         raise HTTPException(status_code=500, detail=str(e))
 
 # ── FRONTEND ──────────────────────────────────────────────
+# ── FRONTEND ──────────────────────────────────────────────
 os.makedirs('static', exist_ok=True)
-html_content = open('aria_terminal.html', 'r', encoding='utf-8').read() if os.path.exists('aria_terminal.html') else "<h1>ARIA Terminal</h1><p>Frontend file not found</p>"
+
+html_content = open('aria_terminal.html', 'r', encoding='utf-8').read() if os.path.exists('aria_terminal.html') else None
+
+if not html_content:
+    # Download HTML from GitHub raw if not found locally
+    try:
+        import urllib.request
+        url = 'https://raw.githubusercontent.com/Usama1909/ARIA_V1_terminal/main/aria_terminal.html'
+        with urllib.request.urlopen(url, timeout=10) as response:
+            html_content = response.read().decode('utf-8')
+        # Fix API URL for Railway deployment
+        html_content = html_content.replace('var API = "http://127.0.0.1:8001";', 'var API = "";')
+        html_content = html_content.replace('    setTimeout(loadRiskPanel, 100);\n', '')
+        print("  HTML loaded from GitHub")
+    except Exception as e:
+        print(f"  HTML fetch failed: {e}")
+        html_content = "<h1>ARIA Terminal</h1><p>Frontend loading...</p>"
+else:
+    html_content = html_content.replace('var API = "http://127.0.0.1:8001";', 'var API = "";')
+    html_content = html_content.replace('    setTimeout(loadRiskPanel, 100);\n', '')
+    print("  HTML loaded from local file")
+
 with open('static/index.html', 'w', encoding='utf-8') as f:
     f.write(html_content)
-
 try:
     app.mount("/static", StaticFiles(directory="static"), name="static")
 except:
