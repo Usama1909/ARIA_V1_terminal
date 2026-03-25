@@ -241,7 +241,7 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:"SF 
   </div>
 </div>
 <script>
-var API = "http://127.0.0.1:8001";
+var API = "";
 var userMode = "beginner";
 var selectedAsset = "BTC";
 var assetData = {};
@@ -441,7 +441,6 @@ async function loadPortfolio() {
       }
     } catch(e) {}
     container.innerHTML = html;
-    setTimeout(loadRiskPanel, 100);
   } catch(e) {
     container.innerHTML = "<div class=\"loading\">Portfolio unavailable. Check connection.</div>";
   }
