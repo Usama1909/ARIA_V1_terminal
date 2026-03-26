@@ -1440,6 +1440,100 @@ print("  GET /backtest/{symbol}   real win rates from 60d backtest")
 print("  GET /backtest/all        all 6 assets")
 print("  GET /macro               FRED leading indicators")
 print("="*60)
+# ── AGENT STATE ENDPOINT ──────────────────────────────────
+@app.get("/agent/state")
+def get_agent_state():
+    try:
+        state = {
+            'timestamp': datetime.now().isoformat(),
+            'assets': {},
+            'macro': {},
+            'news': [],
+            'fear_greed': 50
+        }
+
+        for symbol in ['BTC', 'ETH', 'AAPL', 'NVDA', 'TSLA', 'GLD']:
+            try:
+                price_data = get_live_price_only(symbol)
+                if price_data:
+                    regime = detect_market_regime(symbol)
+                    bt = _backtest_cache.get(symbol, {})
+                    state['assets'][symbol] = {
+                        'price':      price_data['price'],
+                        'change_24h': price_data['change_24h'],
+                        'rsi':        price_data['rsi'],
+                        'signal':     price_data['signal']['signal'] if price_data['signal'] else 'HOLD',
+                        'confidence': price_data['signal']['confidence'] if price_data['signal'] else 0.5,
+                        'sentiment':  price_data['sentiment'],
+                        'fear_greed': price_data['fear_greed'],
+                        'regime':     regime,
+                        'win_rate':   bt.get('win_rate', 52.0),
+                        'sharpe':     bt.get('sharpe_ratio', 0.8),
+                        'max_dd':     bt.get('max_drawdown', -15.0),
+                    }
+                    state['fear_greed'] = price_data['fear_greed']
+            except:
+                pass
+
+        try:
+            macro = get_macro_indicators()
+            summary = macro.get('summary', {})
+            state['macro'] = {
+                'crisis_score':   summary.get('crisis_score', 0),
+                'overall':        summary.get('overall', 'NORMAL'),
+                'burry_signals':  summary.get('burry_signals', 0),
+                'yield_curve':    macro.get('yield_curve', {}).get('signal', 'NORMAL'),
+                'vix':            macro.get('vix', {}).get('current', 20),
+                'vix_signal':     macro.get('vix', {}).get('signal', 'NORMAL'),
+                'dollar':         macro.get('dollar_index', {}).get('signal', 'NEUTRAL'),
+                'credit':         macro.get('credit_spreads', {}).get('signal', 'NORMAL'),
+                'gold_vs_crypto': macro.get('gold_vs_crypto', {}).get('signal', 'NEUTRAL'),
+            }
+        except:
+            pass
+
+        try:
+            state['news'] = [
+                {'title': h['title'], 'tag': h['tag'], 'priority': h['priority']}
+                for h in news_cache.get('headlines', [])[:20]
+            ]
+        except:
+            pass
+
+        return clean_floats(state)
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── AGENT REPORT ENDPOINTS ────────────────────────────────
+_agent_reports = []
+
+class AgentReport(BaseModel):
+    agent_id:   str
+    agent_type: str
+    symbol:     Optional[str] = None
+    action:     str
+    confidence: float
+    reasoning:  str
+    pnl_today:  Optional[float] = 0.0
+
+@app.post("/agent/report")
+def receive_agent_report(report: AgentReport):
+    entry = {**report.dict(), 'timestamp': datetime.now().isoformat()}
+    _agent_reports.insert(0, entry)
+    if len(_agent_reports) > 100:
+        _agent_reports.pop()
+    return {"received": True}
+
+@app.get("/agent/reports")
+def get_agent_reports():
+    return {
+        "reports":   _agent_reports[:50],
+        "count":     len(_agent_reports),
+        "timestamp": datetime.now().isoformat()
+    }
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
