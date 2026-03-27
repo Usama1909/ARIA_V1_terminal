@@ -1384,6 +1384,23 @@ def get_leaderboard():
         return {"leaderboard": board[:10], "timestamp": datetime.now().isoformat()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+        
+@app.post("/paper/reset/{user_id}")
+def reset_portfolio(user_id: str):
+    try:
+        portfolios = load_paper_portfolios()
+        portfolios[user_id] = {
+            'user_id': user_id,
+            'balance': STARTING_BALANCE,
+            'starting_balance': STARTING_BALANCE,
+            'open_trades': [],
+            'closed_trades': [],
+            'created_at': datetime.now().isoformat()
+        }
+        save_paper_portfolios(portfolios)
+        return {"success": True, "message": f"Portfolio reset for {user_id}", "balance": STARTING_BALANCE}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # ── FRONTEND ──────────────────────────────────────────────
 # ── FRONTEND ──────────────────────────────────────────────
