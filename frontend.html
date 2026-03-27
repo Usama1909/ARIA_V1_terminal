@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Trading Analytics - Beta</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,253 +16,292 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #09090b;
+            color: #fafafa;
             min-height: 100vh;
-            padding: 20px;
+            padding: 24px;
         }
-        
+
         .container {
             max-width: 900px;
             margin: 0 auto;
         }
-        
+
         .header {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 28px 32px;
+            margin-bottom: 16px;
         }
-        
+
         .header h1 {
-            color: #667eea;
-            font-size: 32px;
-            margin-bottom: 10px;
+            color: #fafafa;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
         }
-        
+
+        .header h1 span {
+            color: #6366f1;
+        }
+
         .header p {
-            color: #666;
-            font-size: 16px;
+            color: #a1a1aa;
+            font-size: 14px;
         }
-        
+
         .stats-bar {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 20px 28px;
+            margin-bottom: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .stat {
             text-align: center;
         }
-        
+
         .stat-label {
-            color: #888;
-            font-size: 12px;
+            color: #71717a;
+            font-size: 11px;
+            font-weight: 500;
             text-transform: uppercase;
-            margin-bottom: 5px;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
         }
-        
+
         .stat-value {
-            color: #333;
+            color: #fafafa;
             font-size: 24px;
-            font-weight: bold;
+            font-weight: 700;
         }
-        
+
         .main-card {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
             margin-bottom: 20px;
         }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
+
         label {
             display: block;
-            color: #333;
-            font-weight: 600;
-            margin-bottom: 10px;
-            font-size: 14px;
+            color: #a1a1aa;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 13px;
+            letter-spacing: 0.3px;
         }
-        
+
         input, select {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: all 0.3s;
+            padding: 12px 14px;
+            background: #09090b;
+            border: 1px solid #27272a;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: #fafafa;
+            transition: all 0.2s;
         }
-        
+
+        select option {
+            background: #18181b;
+            color: #fafafa;
+        }
+
         input:focus, select:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
         }
-        
+
+        input::placeholder {
+            color: #52525b;
+        }
+
         .btn {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 14px;
+            background: #6366f1;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: 600;
+            font-family: inherit;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
+            transition: all 0.2s;
+            margin-top: 8px;
         }
-        
+
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            background: #4f46e5;
         }
-        
+
         .btn:disabled {
-            background: #ccc;
+            background: #27272a;
+            color: #52525b;
             cursor: not-allowed;
-            transform: none;
         }
-        
+
         .loading {
             display: none;
             text-align: center;
             padding: 40px;
+            color: #a1a1aa;
         }
-        
+
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
+            border: 3px solid #27272a;
+            border-top: 3px solid #6366f1;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
         .results {
             display: none;
-            margin-top: 30px;
+            margin-top: 24px;
         }
-        
+
         .result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 1px solid #27272a;
         }
-        
+
         .asset-info h2 {
-            color: #333;
-            font-size: 28px;
-            margin-bottom: 5px;
+            color: #fafafa;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 4px;
         }
-        
+
         .price {
-            color: #667eea;
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .pattern-badge {
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .bullish {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .bearish {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .confidence {
-            color: #666;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-        
-        .analysis-section {
-            background: #f9f9f9;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
-        
-        .analysis-section h3 {
-            color: #667eea;
+            color: #6366f1;
             font-size: 18px;
-            margin-bottom: 15px;
+            font-weight: 600;
         }
-        
+
+        .pattern-badge {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .bullish {
+            background: rgba(34,197,94,0.12);
+            color: #22c55e;
+            border: 1px solid rgba(34,197,94,0.3);
+        }
+
+        .bearish {
+            background: rgba(239,68,68,0.12);
+            color: #ef4444;
+            border: 1px solid rgba(239,68,68,0.3);
+        }
+
+        .confidence {
+            color: #71717a;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        .analysis-section {
+            background: #111114;
+            border: 1px solid #27272a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .analysis-section h3 {
+            color: #6366f1;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
         .analysis-text {
-            color: #333;
+            color: #a1a1aa;
             line-height: 1.8;
             white-space: pre-wrap;
+            font-size: 14px;
         }
-        
+
         .market-context {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
-        
+
         .context-item {
-            background: #f0f4ff;
-            padding: 15px;
-            border-radius: 10px;
+            background: #111114;
+            border: 1px solid #27272a;
+            padding: 14px;
+            border-radius: 8px;
         }
-        
+
         .context-label {
-            color: #666;
-            font-size: 12px;
-            margin-bottom: 5px;
+            color: #71717a;
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
         }
-        
+
         .context-value {
-            color: #333;
+            color: #fafafa;
             font-weight: 600;
+            font-size: 14px;
         }
-        
+
         .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
+            background: rgba(239,68,68,0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239,68,68,0.2);
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
             display: none;
+            font-size: 14px;
         }
-        
+
         .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            background: rgba(34,197,94,0.1);
+            color: #22c55e;
+            border: 1px solid rgba(34,197,94,0.2);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
             display: none;
+            font-size: 14px;
         }
     </style>
 </head>
