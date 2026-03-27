@@ -585,7 +585,26 @@ async function loadRightPanel() {
     document.getElementById("fgLabel").style.color = color;
   } catch(e) {}
 }
-
+async function toggleKillSwitch() {
+  var btn = document.getElementById('killSwitchBtn');
+  try {
+    var status = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
+    var endpoint = status.stopped ? "/agents/resume" : "/agents/stop";
+    await fetch(API + endpoint, {method: "POST"});
+    if (status.stopped) {
+      btn.textContent = "⚠ KILL SWITCH";
+      btn.style.background = "rgba(255,51,102,0.2)";
+      btn.style.color = "var(--accent-red)";
+    } else {
+      btn.textContent = "✅ RESUME AGENTS";
+      btn.style.background = "rgba(0,255,136,0.2)";
+      btn.style.color = "var(--accent-green)";
+    }
+  } catch(e) {
+    alert("Kill switch error: " + e.message);
+  }
+}
+    
 // ── AGENTS TAB ────────────────────────────────────────────
 async function loadAgents() {
   var container = document.getElementById("agentContainer");
@@ -619,6 +638,7 @@ async function loadAgents() {
     html += "<div class='agent-header-bar'>" +
       "<div class='agent-header-title'>LIVE AGENT DECISIONS — " + reports.length + " TOTAL</div>" +
       "<button class='agent-refresh-btn' onclick='loadAgents()'>&#8635; REFRESH</button>" +
+"<button class='agent-refresh-btn' id='killSwitchBtn' onclick='toggleKillSwitch()' style='background:rgba(255,51,102,0.2);border-color:var(--accent-red);color:var(--accent-red)'>&#9888; KILL SWITCH</button>" +  
     "</div>";
 
     // Agent type to badge class

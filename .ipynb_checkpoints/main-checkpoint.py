@@ -1544,7 +1544,6 @@ def receive_agent_report(report: AgentReport):
         _agent_reports.pop()
     save_agent_reports(_agent_reports)
     return {"received": True}
-
 @app.get("/agent/reports")
 def get_agent_reports():
     return {
@@ -1553,6 +1552,25 @@ def get_agent_reports():
         "timestamp": datetime.now().isoformat()
     }
 
+# ── KILL SWITCH ───────────────────────────────────────────
+_agents_stopped = False
+
+@app.post("/agents/stop")
+def stop_agents():
+    global _agents_stopped
+    _agents_stopped = True
+    return {"stopped": True, "message": "All agents halted"}
+
+@app.post("/agents/resume")
+def resume_agents():
+    global _agents_stopped
+    _agents_stopped = False
+    return {"stopped": False, "message": "Agents resumed"}
+
+@app.get("/agents/status")
+def agents_status():
+    return {"stopped": _agents_stopped, "timestamp": datetime.now().isoformat()
+           }
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
