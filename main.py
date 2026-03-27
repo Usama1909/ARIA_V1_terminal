@@ -1508,6 +1508,25 @@ def get_agent_state():
 
 # ── AGENT REPORT ENDPOINTS ────────────────────────────────
 _agent_reports = []
+AGENT_REPORTS_FILE = 'agent_reports.json'
+
+def load_agent_reports():
+    if os.path.exists(AGENT_REPORTS_FILE):
+        try:
+            with open(AGENT_REPORTS_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return []
+    return []
+
+def save_agent_reports(reports):
+    try:
+        with open(AGENT_REPORTS_FILE, 'w') as f:
+            json.dump(reports[:100], f, indent=2)
+    except:
+        pass
+
+_agent_reports = load_agent_reports()
 
 class AgentReport(BaseModel):
     agent_id:   str
@@ -1517,13 +1536,13 @@ class AgentReport(BaseModel):
     confidence: float
     reasoning:  str
     pnl_today:  Optional[float] = 0.0
-
 @app.post("/agent/report")
 def receive_agent_report(report: AgentReport):
     entry = {**report.dict(), 'timestamp': datetime.now().isoformat()}
     _agent_reports.insert(0, entry)
     if len(_agent_reports) > 100:
         _agent_reports.pop()
+    save_agent_reports(_agent_reports)
     return {"received": True}
 
 @app.get("/agent/reports")
