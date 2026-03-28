@@ -1144,6 +1144,15 @@ def get_price(symbol: str):
         raise HTTPException(status_code=503, detail="Could not fetch data")
     return data
 
+
+@app.get("/assets")
+def get_assets():
+    assets = []
+    for symbol in ["BTC","ETH","AAPL","NVDA","TSLA","GLD"]:
+        data = get_live_price_only(symbol)
+        if data:
+            assets.append(data)
+    return assets
 @app.get("/sentiment")
 def get_sentiment():
     summary = {}
