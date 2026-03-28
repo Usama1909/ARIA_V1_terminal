@@ -288,6 +288,8 @@ var userMode = "beginner";
 var selectedAsset = "BTC";
 var assetData = {};
 var currentUserId = "aria-user";
+var portfolioRefreshTimer = null;
+var portfolioRefreshInterval = 30000;
 
 function setMode(btn, mode) {
   userMode = mode;
@@ -301,7 +303,13 @@ function switchTab(tab, name) {
   tab.classList.add("active");
   document.getElementById("tab-" + name).classList.add("active");
   if (name === "news") loadNews();
-  if (name === "portfolio") loadPortfolio();
+  if (name === "portfolio") {
+    loadPortfolio();
+    if (portfolioRefreshTimer) clearInterval(portfolioRefreshTimer);
+    portfolioRefreshTimer = setInterval(function() { loadPortfolio(true); }, portfolioRefreshInterval);
+  } else {
+    if (portfolioRefreshTimer) { clearInterval(portfolioRefreshTimer); portfolioRefreshTimer = null; }
+  }
   if (name === "agents") loadAgents();
 }
 
@@ -423,9 +431,9 @@ async function loadRiskPanel() {
   }
 }
 
-async function loadPortfolio() {
+async function loadPortfolio(silent) {
   var container = document.getElementById("portfolioContainer");
-  container.innerHTML = "<div class=\"loading\">Loading portfolio...</div>";
+  if (!silent) container.innerHTML = "<div class=\"loading\">Loading portfolio...</div>";
   try {
     var port = await fetch(API + "/paper/portfolio/" + currentUserId).then(function(r) { return r.json(); });
     var returnColor = port.total_return_pct >= 0 ? "var(--accent-green)" : "var(--accent-red)";
