@@ -1289,7 +1289,7 @@ def open_paper_trade(request: TradeRequest):
     if request.amount_usd < 10 or request.amount_usd > 10000:
         raise HTTPException(status_code=400, detail="Amount must be between $10 and $10,000")
     try:
-        portfolios = load_paper_portfolios(); portfolio = get_or_create_portfolio(request.user_id)
+        portfolio = get_or_create_portfolio(request.user_id)
         if portfolio['balance'] < request.amount_usd:
             raise HTTPException(status_code=400, detail="Insufficient balance")
         price_data = get_live_price_only(symbol)
@@ -1307,8 +1307,22 @@ def open_paper_trade(request: TradeRequest):
         }
         portfolio['balance'] -= request.amount_usd
         portfolio['open_trades'].append(trade)
-        portfolios[request.user_id] = portfolio
-        save_paper_portfolios(portfolios)
+        # Save to PostgreSQL
+        try:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute(
+                "INSERT INTO paper_trades_v2 (trade_id, user_id, symbol, direction, amount_usd, entry_price) VALUES (%s, %s, %s, %s, %s, %s)",
+                (trade_id, request.user_id, symbol, direction, request.amount_usd, round(current_price, 4))
+            )
+            cur.execute(
+                "INSERT INTO paper_portfolios (user_id, balance, starting_balance) VALUES (%s, %s, %s) ON CONFLICT (user_id) DO UPDATE SET balance = %s",
+                (request.user_id, portfolio['balance'], STARTING_BALANCE, portfolio['balance'])
+            )
+            conn.commit()
+            conn.close()
+        except Exception as db_err:
+            print(f"DB save error: {db_err}")
         return {"success": True, "trade": trade, "balance": round(portfolio['balance'], 2), "message": f"Opened {direction} on {symbol} @ ${current_price:.2f}"}
     except HTTPException:
         raise
@@ -1339,10 +1353,7 @@ def get_paper_portfolio(user_id: str):
 @app.post("/paper/close")
 def close_paper_trade(request: CloseTradeRequest):
     try:
-        portfolios = load_paper_portfolios()
-        if request.user_id not in portfolios:
-            raise HTTPException(status_code=404, detail="Portfolio not found")
-        portfolio = portfolios[request.user_id]
+        portfolio = get_or_create_portfolio(request.user_id)
         trade     = next((t for t in portfolio['open_trades'] if t['trade_id'] == request.trade_id), None)
         if not trade:
             raise HTTPException(status_code=404, detail="Trade not found")
@@ -1358,7 +1369,23 @@ def close_paper_trade(request: CloseTradeRequest):
         trade['pnl_usd'] = round(pnl_usd, 2); trade['closed_at'] = datetime.now().isoformat()
         trade['status'] = 'CLOSED'; trade['outcome'] = 'WIN' if pnl_usd > 0 else 'LOSS'
         portfolio['balance'] += amount_usd + pnl_usd
-        portfolio['open_trades']   = [t for t in portfolio['open_trades'] if t['trade_id'] != request.trade_id]
+        portfolio['open_trades'] = [t for t in portfolio['open_trades'] if t['trade_id'] != request.trade_id]
+        # Save to PostgreSQL
+        try:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute("UPDATE paper_trades_v2 SET status = 'closed' WHERE trade_id = %s", (request.trade_id,))
+            cur.execute(
+                "INSERT INTO paper_trades_closed (trade_id, user_id, symbol, direction, amount_usd, entry_price, exit_price, pnl_usd, pnl_pct, opened_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                (request.trade_id, request.user_id, trade['symbol'], trade['direction'],
+                 amount_usd, entry_price, round(current_price,4), round(pnl_usd,2), round(pnl_pct,2), trade.get('opened_at'))
+            )
+            cur.execute("UPDATE paper_portfolios SET balance = %s WHERE user_id = %s",
+                       (portfolio['balance'], request.user_id))
+            conn.commit()
+            conn.close()
+        except Exception as db_err:
+            print(f"DB close error: {db_err}")
         portfolio['closed_trades'].append(trade)
         portfolios[request.user_id] = portfolio
         save_paper_portfolios(portfolios)
@@ -1382,7 +1409,20 @@ def get_trade_history(user_id: str):
 @app.get("/paper/leaderboard")
 def get_leaderboard():
     try:
-        portfolios = load_paper_portfolios(); board = []
+        try:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute("SELECT user_id, balance FROM paper_portfolios ORDER BY balance DESC LIMIT 10")
+            rows = cur.fetchall()
+            conn.close()
+            board = []
+            for user_id, balance in rows:
+                ret = round((balance - STARTING_BALANCE) / STARTING_BALANCE * 100, 2)
+                board.append({"user_id": user_id, "balance": round(balance,2), "return_pct": ret, "trades": 0})
+            return {"leaderboard": board}
+        except Exception as e:
+            pass
+        portfolios = {}; board = []
         for user_id, portfolio in portfolios.items():
             closed = portfolio['closed_trades']
             wins   = [t for t in closed if t.get('outcome') == 'WIN']
@@ -1397,7 +1437,18 @@ def get_leaderboard():
 @app.post("/paper/reset/{user_id}")
 def reset_portfolio(user_id: str):
     try:
-        portfolios = load_paper_portfolios()
+        try:
+            conn = get_db()
+            cur = conn.cursor()
+            cur.execute("DELETE FROM paper_trades_v2 WHERE user_id = %s", (user_id,))
+            cur.execute("DELETE FROM paper_trades_closed WHERE user_id = %s", (user_id,))
+            cur.execute("INSERT INTO paper_portfolios (user_id, balance, starting_balance) VALUES (%s, %s, %s) ON CONFLICT (user_id) DO UPDATE SET balance = %s",
+                       (user_id, STARTING_BALANCE, STARTING_BALANCE, STARTING_BALANCE))
+            conn.commit()
+            conn.close()
+        except Exception as db_err:
+            print(f"DB reset error: {db_err}")
+        portfolios = {}
         portfolios[user_id] = {
             'user_id': user_id,
             'balance': STARTING_BALANCE,
@@ -1406,7 +1457,6 @@ def reset_portfolio(user_id: str):
             'closed_trades': [],
             'created_at': datetime.now().isoformat()
         }
-        save_paper_portfolios(portfolios)
         return {"success": True, "message": f"Portfolio reset for {user_id}", "balance": STARTING_BALANCE}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
