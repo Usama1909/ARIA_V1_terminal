@@ -779,6 +779,9 @@ async function loadSwarm(silent) {
     var reports = reportsData.reports || [];
     var agentStatus = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
     var port = await fetch(API + "/paper/portfolio/aria-agent-system").then(function(r) { return r.json(); });
+    var port = await fetch(API + "/paper/portfolio/aria-agent-system").then(function(r) { return r.json(); });
+var swarmPos = await fetch(API + "/swarm/positions").then(function(r) { return r.json(); });
+var allPositions = swarmPos.positions || [];  
 
     // Derive swarm stats from reports
     var uniqueAgents = {};
@@ -823,17 +826,17 @@ async function loadSwarm(silent) {
 
     // ── Open Positions
     html += "<div class='swarm-section'><div class='swarm-section-title'><span>LIVE POSITIONS</span><span style='color:var(--text-dim);font-size:9px'>Binance Testnet + ARIA Paper</span></div>";
-    if (port.open_trades && port.open_trades.length > 0) {
-      for (var j = 0; j < port.open_trades.length; j++) {
-        var t = port.open_trades[j];
+    if (allPositions.length > 0) {
+      for (var j = 0; j < allPositions.length; j++) {
+        var t = allPositions[j];
         var pnlColor = (t.pnl_usd || 0) >= 0 ? "var(--accent-green)" : "var(--accent-red)";
         var dirClass = (t.direction||"").toLowerCase() === "short" ? "dir-short" : "dir-long";
-        var exchange = (t.symbol === "BTC" || t.symbol === "ETH") ? "Binance Testnet" : "ARIA Paper";
         html += "<div class='position-row'>" +
           "<span class='position-symbol'>" + t.symbol + "</span>" +
-          "<span class='position-dir " + dirClass + "'>" + (t.direction||"").toUpperCase() + "</span>" +
-          "<span class='position-exchange'>" + exchange + "</span>" +
-          "<span class='position-entry' style='color:var(--text-secondary)'>Entry $" + (t.entry_price||0).toLocaleString() + "</span>" +
+          "<span class='position-dir " + dirClass + "'>" + (t.direction||"LONG").toUpperCase() + "</span>" +
+          "<span class='position-exchange'>" + t.exchange + "</span>" +
+          "<span class='position-entry' style='color:var(--text-secondary)'>$" + (t.price||0).toLocaleString() + "</span>" +
+          "<span style='color:var(--text-secondary)'>$" + (t.value_usd||0).toFixed(2) + "</span>" +
           "<span class='position-pnl' style='color:" + pnlColor + "'>" + ((t.pnl_usd||0)>=0?"+":"") + "$" + (t.pnl_usd||0).toFixed(2) + "</span>" +
         "</div>";
       }

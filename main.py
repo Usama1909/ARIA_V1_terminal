@@ -1648,5 +1648,72 @@ def agents_status():
     return {"stopped": _agents_stopped, "timestamp": datetime.now().isoformat()
            }
 
+@app.get("/swarm/positions")
+def get_swarm_positions():
+    """Get live positions from Binance testnet + ARIA paper"""
+    import hmac as hmac_lib, hashlib
+    from urllib.parse import urlencode as ue
+    
+    BINANCE_API_KEY = "AMMWwf7NYmSh02xjGbLu5nZv7CaW9B6IyG8Ghx2NNv4AwDIA5eSPpM2wzSjvgcif"
+    BINANCE_SECRET  = "ATp5pNBYTPD8w84q8Dss0eAS7UVBSWxmK7jZ0w7pH5IPx5Cb2VEVE8lLf0WGTqTf"
+    BINANCE_TESTNET = "https://testnet.binance.vision/api"
+    
+    positions = []
+    
+    try:
+        params    = {'timestamp': int(time.time() * 1000)}
+        query     = ue(params)
+        signature = hmac_lib.new(BINANCE_SECRET.encode(), query.encode(), hashlib.sha256).hexdigest()
+        url       = f"{BINANCE_TESTNET}/v3/account?{query}&signature={signature}"
+        headers   = {'X-MBX-APIKEY': BINANCE_API_KEY}
+        r         = req.get(url, headers=headers, timeout=10)
+        data      = r.json()
+        for b in data.get('balances', []):
+            free   = float(b['free'])
+            locked = float(b['locked'])
+            total  = free + locked
+            if total > 0.00001 and b['asset'] not in ['USDT']:
+                symbol = b['asset']
+                try:
+                    price_r = req.get(
+                        f"{BINANCE_TESTNET}/v3/ticker/price",
+                        params={'symbol': f"{symbol}USDT"}, timeout=5
+                    )
+                    price = float(price_r.json().get('price', 0))
+                except:
+                    price = 0
+                positions.append({
+                    'symbol':    symbol,
+                    'quantity':  total,
+                    'free':      free,
+                    'locked':    locked,
+                    'price':     price,
+                    'value_usd': round(total * price, 2),
+                    'exchange':  'Binance Testnet',
+                    'direction': 'LONG'
+                })
+    except Exception as e:
+        print(f"Binance positions error: {e}")
+
+    try:
+        port = get_or_create_portfolio('aria-agent-system')
+        port, _ = calculate_portfolio_pnl(port)
+        for t in port.get('open_trades', []):
+            positions.append({
+                'symbol':    t['symbol'],
+                'quantity':  t['amount_usd'],
+                'price':     t.get('current_price', t['entry_price']),
+                'value_usd': t['amount_usd'],
+                'exchange':  'ARIA Paper',
+                'direction': t['direction'],
+                'entry_price': t['entry_price'],
+                'pnl_usd':   t.get('pnl_usd', 0),
+                'pnl_pct':   t.get('pnl_pct', 0)
+            })
+    except Exception as e:
+        print(f"ARIA portfolio error: {e}")
+
+    return clean_floats({'positions': positions, 'count': len(positions)})
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
