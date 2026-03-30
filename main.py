@@ -1648,6 +1648,7 @@ def agents_status():
     return {"stopped": _agents_stopped, "timestamp": datetime.now().isoformat()
            }
 
+
 @app.get("/swarm/positions")
 def get_swarm_positions():
     """Get live positions from Black Box snapshot in PostgreSQL"""
@@ -1680,6 +1681,7 @@ def get_swarm_positions():
     except Exception as e:
         print(f"Blackbox positions error: {e}")
     return clean_floats({'positions': positions, 'count': len(positions)})
-    
+
+
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
