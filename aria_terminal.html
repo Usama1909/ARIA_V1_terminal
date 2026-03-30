@@ -190,6 +190,10 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
 .badge-regime     { background:#047857; }
 .badge-risk       { background:#b91c1c; }
 .badge-ensemble   { background:#1e3a5f; border:1px solid #6366f1; color:#6366f1; }
+.badge-data       { background:#0f4c75; }
+.badge-analysis   { background:#1b4332; }
+.badge-strategy   { background:#4a1942; }
+.badge-meta       { background:#2d2d2d; border:1px solid var(--accent-gold); color:var(--accent-gold); }
 .agent-info { flex:1; }
 .agent-reasoning { font-size:12px; color:var(--text-primary); margin-bottom:3px; line-height:1.4; }
 .agent-meta { font-size:10px; color:var(--text-secondary); }
@@ -200,6 +204,63 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
 .agent-stat-label { font-size:9px; color:var(--text-secondary); letter-spacing:2px; margin-bottom:6px; }
 .agent-stat-value { font-size:20px; font-weight:700; }
 .portfolio-refresh-indicator { font-size:9px; color:var(--text-dim); text-align:right; padding:4px 0; }
+
+/* ── SWARM DASHBOARD STYLES ── */
+.swarm-container { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:16px; }
+.swarm-header-bar { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.swarm-stat { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:14px; text-align:center; }
+.swarm-stat-label { font-size:9px; color:var(--text-secondary); letter-spacing:2px; margin-bottom:6px; }
+.swarm-stat-value { font-size:22px; font-weight:700; }
+.swarm-stat-sub { font-size:10px; color:var(--text-dim); margin-top:3px; }
+.swarm-section { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:16px; }
+.swarm-section-title { font-size:10px; color:var(--text-secondary); letter-spacing:2px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+.swarm-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:12px; gap:8px; }
+.swarm-row:last-child { border-bottom:none; }
+.swarm-agent-name { font-weight:700; font-size:12px; width:140px; color:var(--text-primary); }
+.swarm-personality { font-size:10px; color:var(--text-dim); width:100px; }
+.swarm-pnl { font-weight:700; font-size:13px; min-width:70px; text-align:right; }
+.swarm-trades { font-size:11px; color:var(--text-secondary); min-width:50px; text-align:center; }
+.swarm-winrate { font-size:11px; font-weight:600; min-width:50px; text-align:center; }
+.swarm-gen { font-size:10px; color:var(--text-dim); min-width:40px; text-align:center; }
+.swarm-status-badge { font-size:9px; padding:2px 8px; border-radius:3px; font-weight:700; min-width:60px; text-align:center; }
+.status-active  { background:rgba(34,197,94,0.12); color:var(--accent-green); }
+.status-mutated { background:rgba(245,158,11,0.12); color:var(--accent-gold); }
+.status-dead    { background:rgba(239,68,68,0.12); color:var(--accent-red); }
+.swarm-winbar { flex:1; height:4px; background:var(--bg-secondary); border-radius:2px; overflow:hidden; margin:0 8px; }
+.swarm-winbar-fill { height:100%; border-radius:2px; }
+.position-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:12px; gap:8px; }
+.position-row:last-child { border-bottom:none; }
+.position-symbol { font-weight:700; font-size:14px; width:48px; }
+.position-dir { padding:2px 8px; border-radius:3px; font-size:10px; font-weight:700; }
+.position-exchange { font-size:10px; color:var(--text-dim); width:80px; }
+.position-entry { color:var(--text-secondary); }
+.position-pnl { font-weight:700; }
+.storm-banner { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:12px 16px; display:flex; align-items:center; gap:12px; }
+.storm-icon { font-size:20px; }
+.storm-text { font-size:12px; color:var(--accent-red); font-weight:600; }
+.storm-sub { font-size:10px; color:var(--text-secondary); margin-top:2px; }
+.clear-banner { background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.3); border-radius:8px; padding:12px 16px; display:flex; align-items:center; gap:12px; }
+.clear-text { font-size:12px; color:var(--accent-green); font-weight:600; }
+.pattern-count { font-size:32px; font-weight:700; color:var(--accent-purple); }
+.pattern-sub { font-size:11px; color:var(--text-secondary); margin-top:4px; }
+.mutation-log { font-size:11px; color:var(--text-secondary); line-height:1.8; }
+.mutation-entry { padding:4px 0; border-bottom:1px solid var(--border); display:flex; gap:8px; align-items:center; }
+.mutation-entry:last-child { border-bottom:none; }
+.layer-badge { font-size:9px; padding:1px 6px; border-radius:3px; font-weight:700; }
+.layer-1 { background:rgba(2,132,199,0.15); color:#38bdf8; }
+.layer-2 { background:rgba(4,120,87,0.15); color:#34d399; }
+.layer-3 { background:rgba(124,58,237,0.15); color:#a78bfa; }
+.layer-4 { background:rgba(180,83,9,0.15); color:var(--accent-gold); }
+.swarm-refresh-btn { padding:4px 12px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:4px; font-size:10px; color:var(--text-secondary); cursor:pointer; font-family:inherit; transition:all 0.2s; }
+.swarm-refresh-btn:hover { border-color:var(--accent); color:var(--accent); }
+.trade-feed-item { display:flex; gap:10px; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:11px; }
+.trade-feed-item:last-child { border-bottom:none; }
+.feed-time { color:var(--text-dim); width:50px; flex-shrink:0; }
+.feed-symbol { font-weight:700; width:36px; }
+.feed-dir { padding:1px 6px; border-radius:3px; font-size:9px; font-weight:700; }
+.feed-exchange { color:var(--text-dim); width:80px; }
+.feed-price { color:var(--text-secondary); flex:1; }
+.feed-status { font-weight:700; }
 </style>
 </head>
 <body>
@@ -230,7 +291,9 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
       <div class="tab" onclick="switchTab(this,'intelligence')">INTELLIGENCE</div>
       <div class="tab" onclick="switchTab(this,'news')">NEWS FEED</div>
       <div class="tab" onclick="switchTab(this,'agents')">AGENTS &#9679;</div>
+      <div class="tab" onclick="switchTab(this,'swarm')" style="color:#8b5cf6">SWARM &#9956;</div>
     </div>
+    <!-- EXISTING TAB CONTENTS — UNCHANGED -->
     <div class="tab-content active" id="tab-chat">
       <div class="chat-container" id="chatContainer">
         <div class="welcome-message">
@@ -264,6 +327,14 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
         <div class="loading">Loading agent activity...</div>
       </div>
     </div>
+
+    <!-- ── NEW SWARM TAB ── -->
+    <div class="tab-content" id="tab-swarm">
+      <div class="swarm-container" id="swarmContainer">
+        <div class="loading">Loading swarm intelligence...</div>
+      </div>
+    </div>
+
   </div>
   <div class="right-panel">
     <div class="panel-header">GEOPOLITICAL RISK</div>
@@ -290,7 +361,9 @@ var selectedAsset = "BTC";
 var assetData = {};
 var currentUserId = "aria-agent-system";
 var portfolioRefreshTimer = null;
+var swarmRefreshTimer = null;
 var isPortfolioTabActive = false;
+var isSwarmTabActive = false;
 
 function setMode(btn, mode) {
   userMode = mode;
@@ -313,6 +386,14 @@ function switchTab(tab, name) {
     stopPortfolioAutoRefresh();
   }
   if (name === "agents") loadAgents();
+  if (name === "swarm") {
+    isSwarmTabActive = true;
+    loadSwarm();
+    startSwarmAutoRefresh();
+  } else {
+    isSwarmTabActive = false;
+    stopSwarmAutoRefresh();
+  }
 }
 
 function startPortfolioAutoRefresh() {
@@ -323,10 +404,18 @@ function startPortfolioAutoRefresh() {
 }
 
 function stopPortfolioAutoRefresh() {
-  if (portfolioRefreshTimer) {
-    clearInterval(portfolioRefreshTimer);
-    portfolioRefreshTimer = null;
-  }
+  if (portfolioRefreshTimer) { clearInterval(portfolioRefreshTimer); portfolioRefreshTimer = null; }
+}
+
+function startSwarmAutoRefresh() {
+  stopSwarmAutoRefresh();
+  swarmRefreshTimer = setInterval(function() {
+    if (isSwarmTabActive) loadSwarm(true);
+  }, 30000);
+}
+
+function stopSwarmAutoRefresh() {
+  if (swarmRefreshTimer) { clearInterval(swarmRefreshTimer); swarmRefreshTimer = null; }
 }
 
 function selectAsset(symbol) {
@@ -620,18 +709,15 @@ async function loadAgents() {
   try {
     var data = await fetch(API + "/agent/reports").then(function(r) { return r.json(); });
     var reports = data.reports || [];
-
     if (reports.length === 0) {
       container.innerHTML = "<div class='loading'>No agent activity yet. Agents run every 60s on Hetzner.</div>";
       setTimeout(loadAgents, 10000);
       return;
     }
-
     var buys     = reports.filter(function(r) { return r.action === "BUY"; }).length;
     var sells    = reports.filter(function(r) { return r.action === "SELL"; }).length;
     var vetos    = reports.filter(function(r) { return r.action === "VETO"; }).length;
     var reverses = reports.filter(function(r) { return r.action === "REVERSE"; }).length;
-
     var html = "";
     html += "<div class='agent-summary-bar'>" +
       "<div class='agent-stat'><div class='agent-stat-label'>DECISIONS</div><div class='agent-stat-value' style='color:var(--accent)'>" + reports.length + "</div></div>" +
@@ -639,39 +725,32 @@ async function loadAgents() {
       "<div class='agent-stat'><div class='agent-stat-label'>SELL SIGNALS</div><div class='agent-stat-value' style='color:var(--accent-red)'>" + sells + "</div></div>" +
       "<div class='agent-stat'><div class='agent-stat-label'>RISK VETOS</div><div class='agent-stat-value' style='color:var(--accent-gold)'>" + vetos + "</div></div>" +
     "</div>";
-
     html += "<div class='agent-header-bar'>" +
       "<div class='agent-header-title'>LIVE AGENT DECISIONS — " + reports.length + " TOTAL</div>" +
       "<button class='agent-refresh-btn' onclick='loadAgents()'>&#8635; REFRESH</button>" +
       "<button class='agent-refresh-btn' id='killSwitchBtn' onclick='toggleKillSwitch()' style='background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.4);color:var(--accent-red)'>&#9888; KILL SWITCH</button>" +
     "</div>";
-
     var badgeClass = {
       "SPECIALIST": "badge-specialist",
       "MACRO":      "badge-macro",
       "SENTIMENT":  "badge-sentiment",
       "REGIME":     "badge-regime",
       "RISK":       "badge-risk",
-      "ENSEMBLE":   "badge-ensemble"
+      "ENSEMBLE":   "badge-ensemble",
+      "DATA":       "badge-data",
+      "ANALYSIS":   "badge-analysis",
+      "STRATEGY":   "badge-strategy",
+      "META":       "badge-meta"
     };
-
     for (var i = 0; i < reports.length; i++) {
       var r = reports[i];
       var action = (r.action || "HOLD").toUpperCase();
-      var actionColor = action==="BUY"?"var(--accent-green)":
-                        action==="SELL"?"var(--accent-red)":
-                        action==="HOLD"?"var(--text-dim)":
-                        action==="REVERSE"?"var(--accent-gold)":
-                        action==="APPROVED"?"var(--accent-green)":
-                        action==="VETO"?"var(--accent-red)":
-                        action==="CLOSE"?"var(--accent)":
-                        "var(--accent-gold)";
+      var actionColor = action==="BUY"?"var(--accent-green)":action==="SELL"?"var(--accent-red)":action==="HOLD"?"var(--text-dim)":action==="REVERSE"?"var(--accent-gold)":action==="APPROVED"?"var(--accent-green)":action==="VETO"?"var(--accent-red)":action==="CLOSE"?"var(--accent)":"var(--accent-gold)";
       var conf = (r.confidence * 100).toFixed(0);
       var time = new Date(r.timestamp).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
       var agentName = (r.agent_id || "").replace("agent_","").replace("ensemble_","").toUpperCase();
       var bClass = badgeClass[r.agent_type] || "badge-specialist";
       var cardClass = "agent-card action-" + action.toLowerCase();
-
       html += "<div class='" + cardClass + "'>" +
         "<div class='agent-badge " + bClass + "'>" + agentName + "</div>" +
         "<div class='agent-info'>" +
@@ -682,12 +761,171 @@ async function loadAgents() {
         "<div class='agent-conf'>" + conf + "%</div>" +
       "</div>";
     }
-
     container.innerHTML = html;
   } catch(e) {
     container.innerHTML = "<div class='loading'>Agent data unavailable. Check Hetzner connection.</div>";
   }
   setTimeout(loadAgents, 30000);
+}
+
+/* ── SWARM DASHBOARD ── */
+async function loadSwarm(silent) {
+  var container = document.getElementById("swarmContainer");
+  if (!silent) container.innerHTML = "<div class='loading'>Loading swarm intelligence...</div>";
+
+  try {
+    // Fetch agent reports for swarm data
+    var reportsData = await fetch(API + "/agent/reports").then(function(r) { return r.json(); });
+    var reports = reportsData.reports || [];
+    var agentStatus = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
+    var port = await fetch(API + "/paper/portfolio/aria-agent-system").then(function(r) { return r.json(); });
+
+    // Derive swarm stats from reports
+    var uniqueAgents = {};
+    for (var i = 0; i < reports.length; i++) {
+      var rep = reports[i];
+      var aid = rep.agent_id;
+      if (!uniqueAgents[aid]) {
+        uniqueAgents[aid] = { id: aid, type: rep.agent_type, decisions: 0, buys: 0, sells: 0 };
+      }
+      uniqueAgents[aid].decisions++;
+      if (rep.action === "BUY") uniqueAgents[aid].buys++;
+      if (rep.action === "SELL") uniqueAgents[aid].sells++;
+    }
+
+    var agentList = Object.values(uniqueAgents);
+    var totalDecisions = reports.length;
+    var totalBuys = reports.filter(function(r) { return r.action === "BUY"; }).length;
+    var totalSells = reports.filter(function(r) { return r.action === "SELL"; }).length;
+    var openCount = port.open_count || 0;
+    var balance = port.balance || 10000;
+    var returnPct = port.total_return_pct || 0;
+    var returnColor = returnPct >= 0 ? "var(--accent-green)" : "var(--accent-red)";
+    var stormActive = agentStatus.stopped || false;
+
+    var html = "";
+
+    // ── Storm / Clear banner
+    if (stormActive) {
+      html += "<div class='storm-banner'><div class='storm-icon'>🌩️</div><div><div class='storm-text'>KILL SWITCH ACTIVE — ALL AGENTS HALTED</div><div class='storm-sub'>Resume agents to restore trading</div></div><button onclick='resumeSwarm()' style='margin-left:auto;padding:6px 14px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.4);border-radius:4px;color:var(--accent-green);font-size:11px;cursor:pointer;font-family:inherit'>RESUME</button></div>";
+    } else {
+      html += "<div class='clear-banner'><div style='font-size:20px'>☀️</div><div><div class='clear-text'>SWARM ACTIVE — 20 AGENTS RUNNING</div><div style='font-size:10px;color:var(--text-secondary);margin-top:2px'>Storm Protocol armed &bull; Black Box saving every 15min &bull; Mutation at 2AM</div></div><button onclick='haltSwarm()' style='margin-left:auto;padding:6px 14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);border-radius:4px;color:var(--accent-red);font-size:11px;cursor:pointer;font-family:inherit'>⚠ HALT</button></div>";
+    }
+
+    // ── Top stats
+    html += "<div class='swarm-header-bar'>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>SWARM BALANCE</div><div class='swarm-stat-value' style='color:" + returnColor + "'>$" + balance.toLocaleString("en-US",{maximumFractionDigits:0}) + "</div><div class='swarm-stat-sub'>" + (returnPct>=0?"+":"") + returnPct + "% all time</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>OPEN POSITIONS</div><div class='swarm-stat-value' style='color:var(--accent)'>" + openCount + "</div><div class='swarm-stat-sub'>of 5 max</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>ACTIVE AGENTS</div><div class='swarm-stat-value' style='color:var(--accent-purple)'>" + agentList.length + "</div><div class='swarm-stat-sub'>of 20 total</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>BUY SIGNALS</div><div class='swarm-stat-value' style='color:var(--accent-green)'>" + totalBuys + "</div><div class='swarm-stat-sub'>this session</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>SELL SIGNALS</div><div class='swarm-stat-value' style='color:var(--accent-red)'>" + totalSells + "</div><div class='swarm-stat-sub'>this session</div></div>" +
+    "</div>";
+
+    // ── Open Positions
+    html += "<div class='swarm-section'><div class='swarm-section-title'><span>LIVE POSITIONS</span><span style='color:var(--text-dim);font-size:9px'>Binance Testnet + ARIA Paper</span></div>";
+    if (port.open_trades && port.open_trades.length > 0) {
+      for (var j = 0; j < port.open_trades.length; j++) {
+        var t = port.open_trades[j];
+        var pnlColor = (t.pnl_usd || 0) >= 0 ? "var(--accent-green)" : "var(--accent-red)";
+        var dirClass = (t.direction||"").toLowerCase() === "short" ? "dir-short" : "dir-long";
+        var exchange = (t.symbol === "BTC" || t.symbol === "ETH") ? "Binance Testnet" : "ARIA Paper";
+        html += "<div class='position-row'>" +
+          "<span class='position-symbol'>" + t.symbol + "</span>" +
+          "<span class='position-dir " + dirClass + "'>" + (t.direction||"").toUpperCase() + "</span>" +
+          "<span class='position-exchange'>" + exchange + "</span>" +
+          "<span class='position-entry' style='color:var(--text-secondary)'>Entry $" + (t.entry_price||0).toLocaleString() + "</span>" +
+          "<span class='position-pnl' style='color:" + pnlColor + "'>" + ((t.pnl_usd||0)>=0?"+":"") + "$" + (t.pnl_usd||0).toFixed(2) + "</span>" +
+        "</div>";
+      }
+    } else {
+      html += "<div class='loading' style='padding:12px'>No open positions</div>";
+    }
+    html += "</div>";
+
+    // ── Agent Activity Feed
+    html += "<div class='swarm-section'><div class='swarm-section-title'><span>AGENT LEADERBOARD</span><span style='font-size:9px;color:var(--text-dim)'>" + agentList.length + " active agents</span></div>";
+    html += "<div style='display:grid;grid-template-columns:140px 80px 60px 60px 60px;gap:4px;padding:4px 0 8px;border-bottom:1px solid var(--border);font-size:9px;color:var(--text-dim);letter-spacing:1px'>" +
+      "<span>AGENT</span><span style='text-align:center'>TYPE</span><span style='text-align:center'>BUYS</span><span style='text-align:center'>SELLS</span><span style='text-align:center'>DECISIONS</span></div>";
+
+    // Sort by decisions
+    agentList.sort(function(a,b) { return b.decisions - a.decisions; });
+    var layerColors = {"DATA":"layer-1","ANALYSIS":"layer-2","STRATEGY":"layer-3","SPECIALIST":"layer-3","META":"layer-4","RISK":"layer-4"};
+
+    for (var k = 0; k < agentList.length; k++) {
+      var ag = agentList[k];
+      var lClass = layerColors[ag.type] || "layer-3";
+      var agName = ag.id.replace("agent_","").replace("specialist_","").replace("_agent","").toUpperCase();
+      html += "<div class='swarm-row'>" +
+        "<span class='swarm-agent-name'>" + agName + "</span>" +
+        "<span style='text-align:center'><span class='layer-badge " + lClass + "'>" + ag.type + "</span></span>" +
+        "<span class='swarm-trades' style='color:var(--accent-green)'>" + ag.buys + "</span>" +
+        "<span class='swarm-trades' style='color:var(--accent-red)'>" + ag.sells + "</span>" +
+        "<span class='swarm-trades' style='color:var(--accent)'>" + ag.decisions + "</span>" +
+      "</div>";
+    }
+    html += "</div>";
+
+    // ── Live Trade Feed
+    html += "<div class='swarm-section'><div class='swarm-section-title'><span>LIVE SIGNAL FEED</span><button class='swarm-refresh-btn' onclick='loadSwarm()'>&#8635; REFRESH</button></div>";
+    var recentReports = reports.slice(0, 20);
+    if (recentReports.length > 0) {
+      for (var m = 0; m < recentReports.length; m++) {
+        var rep2 = recentReports[m];
+        var act = (rep2.action||"HOLD").toUpperCase();
+        var actColor = act==="BUY"?"var(--accent-green)":act==="SELL"?"var(--accent-red)":act==="APPROVED"?"var(--accent-green)":act==="VETO"?"var(--accent-red)":act==="REVERSE"?"var(--accent-gold)":"var(--text-dim)";
+        var feedTime = new Date(rep2.timestamp).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+        var feedName = (rep2.agent_id||"").replace("agent_","").replace("specialist_","").toUpperCase();
+        html += "<div class='trade-feed-item'>" +
+          "<span class='feed-time'>" + feedTime + "</span>" +
+          "<span class='feed-symbol'>" + feedName + "</span>" +
+          "<span class='feed-dir " + (act==="BUY"?"dir-long":act==="SELL"?"dir-short":"") + "' style='color:" + actColor + ";font-weight:700'>" + act + "</span>" +
+          "<span class='feed-exchange'>" + (rep2.symbol||"MULTI") + "</span>" +
+          "<span class='feed-price' style='color:var(--text-secondary)'>" + (rep2.reasoning||"").substring(0,40) + (rep2.reasoning&&rep2.reasoning.length>40?"...":"") + "</span>" +
+        "</div>";
+      }
+    } else {
+      html += "<div class='loading' style='padding:12px'>No signals yet. Waiting for next cycle...</div>";
+    }
+    html += "</div>";
+
+    // ── System Info
+    html += "<div class='swarm-section'><div class='swarm-section-title'>SYSTEM STATUS</div>" +
+      "<div style='display:grid;grid-template-columns:1fr 1fr;gap:12px'>" +
+        "<div style='font-size:12px;color:var(--text-secondary);line-height:2'>" +
+          "<div>🧠 <span style='color:var(--text-primary)'>Pattern Memory</span> — PostgreSQL (grows per trade)</div>" +
+          "<div>⚡ <span style='color:var(--text-primary)'>Signal Bus</span> — Shared across all 20 agents</div>" +
+          "<div>🌩️ <span style='color:var(--text-primary)'>Storm Protocol</span> — Armed (VIX/Funding/Sentiment)</div>" +
+          "<div>💾 <span style='color:var(--text-primary)'>Black Box</span> — Saves every 15 minutes</div>" +
+        "</div>" +
+        "<div style='font-size:12px;color:var(--text-secondary);line-height:2'>" +
+          "<div>🧬 <span style='color:var(--text-primary)'>Mutation Engine</span> — Fires at 2AM UTC</div>" +
+          "<div>🎯 <span style='color:var(--text-primary)'>Binance Testnet</span> — BTC, ETH real orders</div>" +
+          "<div>📊 <span style='color:var(--text-primary)'>ARIA Paper</span> — AAPL, NVDA, TSLA, GLD</div>" +
+          "<div>⏱️ <span style='color:var(--text-primary)'>Cycle</span> — Every 60 seconds</div>" +
+        "</div>" +
+      "</div></div>";
+
+    html += "<div class='portfolio-refresh-indicator'>Auto-refreshes every 30s &bull; Last update: " + new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"}) + "</div>";
+
+    container.innerHTML = html;
+
+  } catch(e) {
+    container.innerHTML = "<div class='loading'>Swarm data unavailable. Check connection.<br><br><small>" + e.message + "</small></div>";
+  }
+}
+
+async function haltSwarm() {
+  try {
+    await fetch(API + "/agents/stop", {method:"POST"});
+    loadSwarm();
+  } catch(e) { alert("Halt failed: " + e.message); }
+}
+
+async function resumeSwarm() {
+  try {
+    await fetch(API + "/agents/resume", {method:"POST"});
+    loadSwarm();
+  } catch(e) { alert("Resume failed: " + e.message); }
 }
 
 function handleKey(e) {
@@ -796,7 +1034,7 @@ async function loadABTest() {
           "<div style=\"font-size:11px;color:var(--text-secondary);margin-top:4px\">$" + v3.balance.toLocaleString() + " | " + v3.open_count + " open | " + v3.win_rate + "% WR</div>" +
         "</div>" +
         "<div style=\"background:var(--bg-secondary);border:1px solid var(--accent);border-radius:8px;padding:12px\">" +
-          "<div style=\"font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:8px\">V4 — 18 AGENTS ★</div>" +
+          "<div style=\"font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:8px\">V4 — 20 AGENTS &#9956;</div>" +
           "<div style=\"font-size:20px;font-weight:700;color:" + v4color + "\">" + (v4.total_return_pct >= 0 ? "+" : "") + v4.total_return_pct + "%</div>" +
           "<div style=\"font-size:11px;color:var(--text-secondary);margin-top:4px\">$" + v4.balance.toLocaleString() + " | " + v4.open_count + " open | " + v4.win_rate + "% WR</div>" +
         "</div>" +
