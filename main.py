@@ -1657,7 +1657,7 @@ def agents_status():
     try:
         seen = set()
         for rep in _agent_reports:
-            if rep.get('action') in ['BUY', 'SELL'] and rep.get('symbol'):
+            if rep.get('action') in ['BUY', 'SELL', 'APPROVED', 'REVERSE'] and rep.get('symbol'):
                 sym = rep['symbol']
                 if sym not in seen:
                     seen.add(sym)

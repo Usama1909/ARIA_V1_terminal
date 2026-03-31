@@ -1655,28 +1655,19 @@ def resume_agents():
 def agents_status():
     positions = []
     try:
-        import psycopg2
-        conn = psycopg2.connect(
-            host='65.108.217.183', port=5432,
-            dbname='aria_db', user='postgres',
-            password='aria_secure_2026'
-        )
-        cur = conn.cursor()
-        cur.execute("SELECT snapshot FROM swarm_blackbox ORDER BY created_at DESC LIMIT 1")
-        row = cur.fetchone()
-        cur.close()
-        conn.close()
-        if row:
-            snapshot = row[0]
-            open_pos = snapshot.get('open_positions', {})
-            for symbol, pos in open_pos.items():
-                positions.append({
-                    'symbol': symbol,
-                    'direction': pos.get('direction', 'LONG'),
-                    'exchange': pos.get('exchange', 'ARIA Paper'),
-                    'value_usd': pos.get('size', 100),
-                    'pnl_usd': 0
-                })
+        seen = set()
+        for rep in _agent_reports:
+            if rep.get('action') in ['BUY', 'SELL', 'APPROVED', 'REVERSE'] and rep.get('symbol'):
+                sym = rep['symbol']
+                if sym not in seen:
+                    seen.add(sym)
+                    positions.append({
+                        'symbol': sym,
+                        'direction': 'LONG' if rep['action'] == 'BUY' else 'SHORT',
+                        'exchange': 'Binance Testnet' if sym in ['BTC','ETH'] else 'ARIA Paper',
+                        'value_usd': 100,
+                        'pnl_usd': 0
+                    })
     except Exception as e:
         print(f"Positions error: {e}")
     return clean_floats({
