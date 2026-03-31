@@ -186,6 +186,14 @@ def save_paper_portfolios(portfolios):
     with open(PAPER_TRADES_FILE, 'w') as f:
         json.dump(portfolios, f, indent=2)
 
+def get_db():
+    import psycopg2
+    return psycopg2.connect(
+        host='65.108.217.183', port=5432,
+        dbname='aria_db', user='postgres',
+        password='aria_secure_2026'
+    )
+
 def get_or_create_portfolio(user_id):
     portfolios = load_paper_portfolios()
     if user_id not in portfolios:
