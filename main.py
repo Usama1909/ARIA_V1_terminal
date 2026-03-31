@@ -1624,7 +1624,7 @@ class AgentReport(BaseModel):
 def receive_agent_report(report: AgentReport):
     entry = {**report.dict(), 'timestamp': datetime.now().isoformat()}
     _agent_reports.insert(0, entry)
-    if len(_agent_reports) > 100:
+    if len(_agent_reports) > 500:
         _agent_reports.pop()
     save_agent_reports(_agent_reports)
     return {"received": True}
