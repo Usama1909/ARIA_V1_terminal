@@ -780,7 +780,7 @@ async function loadSwarm(silent) {
     var agentStatus = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
     var port = await fetch(API + "/paper/portfolio/aria-agent-system").then(function(r) { return r.json(); });
     var port = await fetch(API + "/paper/portfolio/aria-agent-system").then(function(r) { return r.json(); });
-var swarmPos = await fetch(API + "/swarm/positions").then(function(r) { return r.json(); });
+var swarmPos = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
 var allPositions = swarmPos.positions || [];  
 
     // Derive swarm stats from reports
