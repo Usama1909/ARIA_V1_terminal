@@ -1181,6 +1181,14 @@ def calculate_portfolio_pnl(portfolio):
     portfolio['open_trades'] = updated_trades
     return portfolio, round(total_unrealised, 2)
 
+
+
+# Initialize Railway PostgreSQL on startup
+try:
+    init_railway_db()
+    print("Railway PostgreSQL ready")
+except Exception as e:
+    print(f"Railway DB error: {e}")
 # ── FASTAPI ENDPOINTS ─────────────────────────────────────
 
 @app.get("/")
