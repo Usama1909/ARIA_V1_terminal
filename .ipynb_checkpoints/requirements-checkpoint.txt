@@ -9,3 +9,4 @@ xgboost
 scipy
 requests
 python-multipart
+psycopg2-binary
