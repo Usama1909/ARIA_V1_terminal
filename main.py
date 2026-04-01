@@ -31,7 +31,6 @@ PORT = int(os.environ.get('PORT', 8001))
 ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
 
 print("ARIA TERMINAL v2 - STARTING UP")
-init_railway_db()
 print("="*60)
 print(f"Port: {PORT}")
 print(f"API Key: {'SET' if ANTHROPIC_API_KEY else 'MISSING'}")
