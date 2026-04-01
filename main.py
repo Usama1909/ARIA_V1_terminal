@@ -31,6 +31,7 @@ PORT = int(os.environ.get('PORT', 8001))
 ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
 
 print("ARIA TERMINAL v2 - STARTING UP")
+init_railway_db()
 print("="*60)
 print(f"Port: {PORT}")
 print(f"API Key: {'SET' if ANTHROPIC_API_KEY else 'MISSING'}")
@@ -170,7 +171,56 @@ _price_cache_time = {}
 CACHE_SECONDS     = 60
 
 # ── PAPER TRADING ─────────────────────────────────────────
-PAPER_TRADES_FILE = 'paper_trades.json'
+
+
+# Railway PostgreSQL connection
+RAILWAY_DB_URL = "postgresql://postgres:hhEIkGHTFdvgnnwvCjmJvxdWycyTHJXt@postgres.railway.internal:5432/railway"
+
+def get_railway_db():
+    import psycopg2
+    return psycopg2.connect(RAILWAY_DB_URL)
+
+def init_railway_db():
+    try:
+        conn = get_railway_db()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS paper_portfolios (
+                user_id VARCHAR(100) PRIMARY KEY,
+                balance FLOAT DEFAULT 10000,
+                starting_balance FLOAT DEFAULT 10000,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS paper_trades_open (
+                trade_id VARCHAR(200) PRIMARY KEY,
+                user_id VARCHAR(100),
+                symbol VARCHAR(10),
+                direction VARCHAR(10),
+                amount_usd FLOAT,
+                entry_price FLOAT,
+                opened_at TIMESTAMP DEFAULT NOW()
+            );
+            CREATE TABLE IF NOT EXISTS paper_trades_closed (
+                trade_id VARCHAR(200) PRIMARY KEY,
+                user_id VARCHAR(100),
+                symbol VARCHAR(10),
+                direction VARCHAR(10),
+                amount_usd FLOAT,
+                entry_price FLOAT,
+                exit_price FLOAT,
+                pnl_usd FLOAT,
+                pnl_pct FLOAT,
+                opened_at TIMESTAMP,
+                closed_at TIMESTAMP DEFAULT NOW()
+            );
+        """)
+        conn.commit()
+        cur.close()
+        conn.close()
+        print("Railway PostgreSQL initialized")
+    except Exception as e:
+        print(f"Railway DB init error: {e}")
+
 STARTING_BALANCE  = 10000.0
 
 def load_paper_portfolios():
