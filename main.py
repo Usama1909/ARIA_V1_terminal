@@ -1182,9 +1182,30 @@ def agents_status():
     positions = []
     if _live_positions:
         for sym, pos in _live_positions.items():
-            positions.append({'symbol': sym, 'direction': pos.get('direction', 'LONG'),
-                             'exchange': pos.get('exchange', 'ARIA Paper'),
-                             'value_usd': pos.get('size', 100), 'pnl_usd': 0})
+            entry_price = pos.get('entry_price', 0)
+            current_price = 0
+            pnl_usd = 0
+            pnl_pct = 0
+            try:
+                price_data = get_live_price_only(sym)
+                if price_data and entry_price > 0:
+                    current_price = price_data['price']
+                    if pos.get('direction') == 'LONG':
+                        pnl_pct = ((current_price - entry_price) / entry_price) * 100
+                    else:
+                        pnl_pct = ((entry_price - current_price) / entry_price) * 100
+                    pnl_usd = round((pnl_pct / 100) * pos.get('size', 100), 2)
+            except: pass
+            positions.append({
+                'symbol': sym,
+                'direction': pos.get('direction', 'LONG'),
+                'exchange': pos.get('exchange', 'ARIA Paper'),
+                'value_usd': pos.get('size', 100),
+                'entry_price': round(entry_price, 4),
+                'current_price': round(current_price, 4),
+                'pnl_usd': pnl_usd,
+                'pnl_pct': round(pnl_pct, 2)
+            })
     else:
         try:
             seen = set()
