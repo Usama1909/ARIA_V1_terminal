@@ -835,9 +835,9 @@ var allPositions = swarmPos.positions || [];
           "<span class='position-symbol'>" + t.symbol + "</span>" +
           "<span class='position-dir " + dirClass + "'>" + (t.direction||"LONG").toUpperCase() + "</span>" +
           "<span class='position-exchange'>" + t.exchange + "</span>" +
-          "<span class='position-entry' style='color:var(--text-secondary)'>$" + (t.price||0).toLocaleString() + "</span>" +
-          "<span style='color:var(--text-secondary)'>$" + (t.value_usd||0).toFixed(2) + "</span>" +
-          "<span class='position-pnl' style='color:" + pnlColor + "'>" + ((t.pnl_usd||0)>=0?"+":"") + "$" + (t.pnl_usd||0).toFixed(2) + "</span>" +
+          "<span class='position-entry' style='color:var(--text-secondary)'>Entry: $" + (t.entry_price||0).toLocaleString() + "</span>" +
+          "<span style='color:var(--text-secondary)'>Now: $" + (t.current_price||0).toLocaleString() + "</span>" +
+          "<span class='position-pnl' style='color:" + pnlColor + "'>" + ((t.pnl_usd||0)>=0?"+":"") + "$" + (t.pnl_usd||0).toFixed(2) + " (" + ((t.pnl_pct||0)>=0?"+":"") + (t.pnl_pct||0).toFixed(2) + "%)</span>" + 
         "</div>";
       }
     } else {
