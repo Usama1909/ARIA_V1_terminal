@@ -791,6 +791,42 @@ def calculate_portfolio_pnl(portfolio):
 
 # ── ASK ARIA ─────────────────────────────────────────────
 conversation_history = {}
+
+def get_conversation_history(user_id, limit=20):
+    """Read conversation history from Railway DB — persistent across deploys."""
+    try:
+        conn = get_railway_db()
+        cur = conn.cursor()
+        cur.execute("""CREATE TABLE IF NOT EXISTS conversation_history (
+            id SERIAL PRIMARY KEY, user_id VARCHAR(100),
+            role VARCHAR(20), content TEXT, created_at TIMESTAMP DEFAULT NOW()
+        )""")
+        cur.execute("""SELECT role, content FROM conversation_history
+            WHERE user_id=%s ORDER BY created_at DESC LIMIT %s""", [user_id, limit])
+        rows = cur.fetchall()
+        conn.commit(); cur.close(); conn.close()
+        return [{"role": r[0], "content": r[1]} for r in reversed(rows)]
+    except:
+        return []
+
+def save_conversation_turn(user_id, role, content):
+    """Save turn to Railway DB — survives deploys."""
+    try:
+        conn = get_railway_db()
+        cur = conn.cursor()
+        cur.execute("""CREATE TABLE IF NOT EXISTS conversation_history (
+            id SERIAL PRIMARY KEY, user_id VARCHAR(100),
+            role VARCHAR(20), content TEXT, created_at TIMESTAMP DEFAULT NOW()
+        )""")
+        cur.execute("INSERT INTO conversation_history (user_id,role,content) VALUES (%s,%s,%s)",
+            [user_id, role, content[:2000]])
+        cur.execute("""DELETE FROM conversation_history WHERE user_id=%s AND id NOT IN (
+            SELECT id FROM conversation_history WHERE user_id=%s
+            ORDER BY created_at DESC LIMIT 20)""", [user_id, user_id])
+        conn.commit(); cur.close(); conn.close()
+    except:
+        pass
+
 usage_tracker = {}
 
 def check_rate_limit(user_id, limit=50):
@@ -807,7 +843,7 @@ def get_live_news_context():
         return "\n".join([f"  [{h.get('tag','news').upper()}] {h.get('title','')} ({h.get('source','')})" for h in headlines])
     except: return "Live news temporarily unavailable."
 
-def ask_aria(user_message, symbol=None, user_level='intermediate'):
+def ask_aria(user_message, symbol=None, user_level='intermediate', messages=None):
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
     context_data = {}
     symbols_to_analyse = [symbol] if symbol else list(production_models.keys())
@@ -819,11 +855,13 @@ def ask_aria(user_message, symbol=None, user_level='intermediate'):
     system_prompt = f"""You are ARIA (Advanced Retail Intelligence & Analytics), a professional financial intelligence assistant.
 USER LEVEL: {user_level}
 RULES: Never say buy or sell directly. Always mention key risk alongside opportunity.
+If asked why ARIA is not trading, explain based on system mode and world state.
 LIVE NEWS:\n{get_live_news_context()}
 MARKET DATA:\n{context_str}
 Time: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')} | Fear/Greed: {fg_value}"""
+    api_messages = messages if messages and len(messages) > 0 else [{"role": "user", "content": user_message}]
     response = client.messages.create(model="claude-sonnet-4-20250514", max_tokens=1000,
-                                      system=system_prompt, messages=[{"role": "user", "content": user_message}])
+                                      system=system_prompt, messages=api_messages)
     return response.content[0].text
 
 # ── FASTAPI ENDPOINTS ─────────────────────────────────────
@@ -871,12 +909,16 @@ def chat(request: ChatRequest):
         raise HTTPException(status_code=429, detail="Rate limit exceeded.")
     try:
         user_id = request.user_id or 'anonymous'
+        history = get_conversation_history(user_id)
+        save_conversation_turn(user_id, "user", request.message)
+        messages = history + [{"role": "user", "content": request.message}]
+        if len(messages) > 20: messages = messages[-20:]
+        response = ask_aria(user_message=request.message,
+            symbol=request.symbol.upper() if request.symbol else None,
+            user_level=request.user_level, messages=messages)
+        save_conversation_turn(user_id, "assistant", response)
         if user_id not in conversation_history: conversation_history[user_id] = []
-        conversation_history[user_id].append({"role": "user", "content": request.message})
-        if len(conversation_history[user_id]) > 20:
-            conversation_history[user_id] = conversation_history[user_id][-20:]
-        response = ask_aria(user_message=request.message, symbol=request.symbol.upper() if request.symbol else None, user_level=request.user_level)
-        conversation_history[user_id].append({"role": "assistant", "content": response})
+        conversation_history[user_id] = messages + [{"role": "assistant", "content": response}]
         return {"response": response, "timestamp": datetime.now().isoformat()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
