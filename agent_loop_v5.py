@@ -81,6 +81,18 @@ def read_world_state():
             'liquidity_state':'NORMAL','dominant_driver':'UNKNOWN',
             'confidence':0.5,'age_seconds':9999,'stale':True}
 
+def read_system_mode():
+    """Read system mode written by anomaly detector."""
+    try:
+        conn=get_db(); cur=conn.cursor()
+        cur.execute("SELECT value FROM aria_config WHERE key='system_mode' LIMIT 1")
+        row=cur.fetchone(); cur.close(); conn.close()
+        if row:
+            d=json.loads(row[0])
+            return d.get('mode','NORMAL'), d.get('score',100)
+    except: pass
+    return 'NORMAL', 100
+
 def read_risk(symbol):
     try:
         conn=get_db(); cur=conn.cursor()
@@ -399,7 +411,8 @@ def main():
                     if close_position(symbol, open_positions[symbol], current, 'TAKE_PROFIT', sentiment, world, cycle):
                         del open_positions[symbol]
 
-            safe_mode = sentiment['stale'] or not market
+            sys_mode, sys_score = read_system_mode()
+            safe_mode = sentiment['stale'] or not market or sys_mode == 'SAFE'
             regime    = sentiment.get('regime','NORMAL')
             score     = sentiment.get('score',0)
             vel       = sentiment.get('velocity',0)
@@ -409,7 +422,7 @@ def main():
             liq       = world.get('liquidity_state','?')
             w_mult    = world_state_multiplier(world)
 
-            log.info(f"[Cycle {cycle}] Regime:{regime} Sent:{score:+.1f}({stance}) F&G:{fg} | World:{narrative} Liq:{liq} Wmult:{w_mult}x | Portfolio:${portfolio_value:.0f} Safe:{'ON' if safe_mode else 'OFF'} Open:{list(open_positions.keys())}")
+            log.info(f"[Cycle {cycle}] SysMode:{sys_mode}({sys_score}) Regime:{regime} Sent:{score:+.1f}({stance}) F&G:{fg} | World:{narrative} Liq:{liq} Wmult:{w_mult}x | Portfolio:${portfolio_value:.0f} Safe:{'ON' if safe_mode else 'OFF'} Open:{list(open_positions.keys())}")
 
             if safe_mode:
                 log.info("Safe mode — no new trades this cycle")
