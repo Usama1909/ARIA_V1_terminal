@@ -174,6 +174,7 @@ def close_position(symbol, pos, exit_price, exit_reason, sentiment, world, cycle
             VALUES (%s,%s,%s,%s)""",
             [exit_reason, round(pnl_pct*100,2), symbol,
              f"{outcome} pnl:{pnl_usd:+.2f} entry:{entry_price:.4f} exit:{exit_price:.4f} world:{narrative}"])
+        cur.execute("UPDATE positions_live SET status='CLOSED', updated_at=NOW() WHERE symbol=%s", [symbol])
         conn.commit(); cur.close(); conn.close()
         log.info(f"  CLOSED {symbol} | {exit_reason} | {outcome} | PnL: ${pnl_usd:+.2f} ({pnl_pct*100:+.1f}%) | held:{hold_hours:.1f}h | world:{narrative}")
         return True
@@ -201,6 +202,26 @@ def kelly_size(symbol, confidence, sentiment, risk, world, portfolio_value):
     size_usd=round(portfolio_value*final,2)
     reasoning=f"Kelly:{kelly*100:.1f}% adj:{final*100:.1f}% regime:{regime_mult}x fg:{fg_mult}x vol:{vol_mult:.2f}x world:{world_mult}x VaR:{var*100:.1f}%"
     return max(100.0, size_usd), final, reasoning
+
+
+def get_nlp_sentiment(symbol):
+    """Read latest NLP sentiment score from DB for this symbol."""
+    try:
+        conn = get_db()
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT score, label, fomc_signal 
+            FROM nlp_sentiment 
+            WHERE symbol=%s 
+            ORDER BY timestamp DESC LIMIT 1
+        """, (symbol,))
+        row = cur.fetchone()
+        cur.close(); conn.close()
+        if row:
+            return {'score': float(row[0]), 'label': row[1], 'fomc': row[2]}
+    except Exception as e:
+        pass
+    return {'score': 0.0, 'label': 'NEUTRAL', 'fomc': 'NEUTRAL'}
 
 def generate_signal(symbol, market_data, sentiment, risk, world):
     """
@@ -324,6 +345,38 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
     if final_dir is None:
         return 'HOLD', final_conf, None
 
+    # ── Step 4: NLP sentiment modifier ───────────────────
+    try:
+        nlp = get_nlp_sentiment(symbol)
+        nlp_score = nlp['score']
+        nlp_label = nlp['label']
+        fomc      = nlp['fomc']
+
+        # NLP agrees with direction → boost confidence
+        if final_dir == 'LONG' and nlp_score > 0.1:
+            final_conf = min(0.92, final_conf + 0.05)
+            log.info(f"  {symbol} NLP BOOST: {nlp_label} ({nlp_score:+.3f}) → conf:{final_conf:.3f}")
+        elif final_dir == 'SHORT' and nlp_score < -0.1:
+            final_conf = min(0.92, final_conf + 0.05)
+            log.info(f"  {symbol} NLP BOOST: {nlp_label} ({nlp_score:+.3f}) → conf:{final_conf:.3f}")
+        # NLP disagrees → reduce confidence
+        elif final_dir == 'LONG' and nlp_score < -0.15:
+            final_conf = max(0.45, final_conf - 0.03)
+            log.info(f"  {symbol} NLP DRAG: {nlp_label} ({nlp_score:+.3f}) → conf:{final_conf:.3f}")
+        elif final_dir == 'SHORT' and nlp_score > 0.15:
+            final_conf = max(0.45, final_conf - 0.03)
+            log.info(f"  {symbol} NLP DRAG: {nlp_label} ({nlp_score:+.3f}) → conf:{final_conf:.3f}")
+
+        # FOMC hawkish → risk-off, reduce confidence on risky assets
+        if fomc == 'HAWKISH' and symbol in ['BTC','ETH','NVDA','TSLA']:
+            final_conf = max(0.45, final_conf - 0.05)
+            log.info(f"  {symbol} FOMC HAWKISH penalty → conf:{final_conf:.3f}")
+        elif fomc == 'DOVISH' and symbol == 'GLD':
+            final_conf = max(0.45, final_conf - 0.03)
+            log.info(f"  {symbol} FOMC DOVISH GLD drag → conf:{final_conf:.3f}")
+    except Exception as e:
+        log.warning(f"NLP modifier failed for {symbol}: {e}")
+
     return ('BUY' if final_dir == 'LONG' else 'SELL'), final_conf, final_dir
 
 def write_order(symbol,action,direction,size_usd,confidence,kelly_fraction,reasoning,cycle):
@@ -410,6 +463,15 @@ def main():
                     log.info(f"TAKE PROFIT triggered: {symbol} pnl:{pnl_pct*100:.1f}%")
                     if close_position(symbol, open_positions[symbol], current, 'TAKE_PROFIT', sentiment, world, cycle):
                         del open_positions[symbol]
+                else:
+                    # Time stop: close if open 48h+ and PnL between -2% and +2%
+                    entry_time = pos.get('entry_time')
+                    if entry_time:
+                        hours_open = (datetime.utcnow() - entry_time.replace(tzinfo=None)).total_seconds() / 3600
+                        if hours_open >= 48 and abs(pnl_pct) < 0.02:
+                            log.info(f"TIME STOP: {symbol} open {hours_open:.1f}h pnl:{pnl_pct*100:.1f}% — closing flat")
+                            if close_position(symbol, open_positions[symbol], current, 'TIME_STOP', sentiment, world, cycle):
+                                del open_positions[symbol]
 
             sys_mode, sys_score = read_system_mode()
             safe_mode = sentiment['stale'] or not market or sys_mode == 'SAFE'
@@ -452,6 +514,22 @@ def main():
                     d['entry_time']  = datetime.utcnow()
                     d['hold_cycles'] = 0
                     open_positions[d['symbol']] = d
+                    try:
+                        conn2 = get_db()
+                        cur2 = conn2.cursor()
+                        cur2.execute("""
+                            INSERT INTO positions_live (symbol, direction, entry_price, size_usd, regime_at_entry, sentiment_at_entry, fear_greed_at_entry, status)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, 'OPEN')
+                            ON CONFLICT (symbol) DO UPDATE SET
+                            direction=EXCLUDED.direction, entry_price=EXCLUDED.entry_price,
+                            size_usd=EXCLUDED.size_usd, status='OPEN', updated_at=NOW()
+                        """, (d['symbol'], d['direction'], d.get('entry_price', 0),
+                               d['size_usd'], d.get('regime','NORMAL'),
+                               d.get('sentiment_score', 0), d.get('fear_greed', 21)))
+                        conn2.commit()
+                        conn2.close()
+                    except Exception as pe:
+                        log.error(f"positions_live write failed: {pe}")
                     log.info(f"  ORDER: {d['action']} {d['symbol']} ${d['size_usd']:.0f}")
 
             log_cycle(cycle, sentiment, world)
