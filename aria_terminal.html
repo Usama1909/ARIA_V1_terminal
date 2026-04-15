@@ -812,14 +812,14 @@ var allPositions = swarmPos.positions || [];
     if (stormActive) {
       html += "<div class='storm-banner'><div class='storm-icon'>🌩️</div><div><div class='storm-text'>KILL SWITCH ACTIVE — ALL AGENTS HALTED</div><div class='storm-sub'>Resume agents to restore trading</div></div><button onclick='resumeSwarm()' style='margin-left:auto;padding:6px 14px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.4);border-radius:4px;color:var(--accent-green);font-size:11px;cursor:pointer;font-family:inherit'>RESUME</button></div>";
     } else {
-      html += "<div class='clear-banner'><div style='font-size:20px'>☀️</div><div><div class='clear-text'>SWARM ACTIVE — 20 AGENTS RUNNING</div><div style='font-size:10px;color:var(--text-secondary);margin-top:2px'>Storm Protocol armed &bull; Black Box saving every 15min &bull; Mutation at 2AM</div></div><button onclick='haltSwarm()' style='margin-left:auto;padding:6px 14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);border-radius:4px;color:var(--accent-red);font-size:11px;cursor:pointer;font-family:inherit'>⚠ HALT</button></div>";
+      html += "<div class='clear-banner'><div style='font-size:20px'>☀️</div><div><div class='clear-text'>SWARM ACTIVE — 12 AGENTS RUNNING</div><div style='font-size:10px;color:var(--text-secondary);margin-top:2px'>Storm Protocol armed &bull; Black Box saving every 15min &bull; Mutation at 2AM</div></div><button onclick='haltSwarm()' style='margin-left:auto;padding:6px 14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);border-radius:4px;color:var(--accent-red);font-size:11px;cursor:pointer;font-family:inherit'>⚠ HALT</button></div>";
     }
 
     // ── Top stats
     html += "<div class='swarm-header-bar'>" +
       "<div class='swarm-stat'><div class='swarm-stat-label'>SWARM BALANCE</div><div class='swarm-stat-value' style='color:" + returnColor + "'>$" + balance.toLocaleString("en-US",{maximumFractionDigits:0}) + "</div><div class='swarm-stat-sub'>" + (returnPct>=0?"+":"") + returnPct + "% all time</div></div>" +
-      "<div class='swarm-stat'><div class='swarm-stat-label'>OPEN POSITIONS</div><div class='swarm-stat-value' style='color:var(--accent)'>" + openCount + "</div><div class='swarm-stat-sub'>of 5 max</div></div>" +
-      "<div class='swarm-stat'><div class='swarm-stat-label'>ACTIVE AGENTS</div><div class='swarm-stat-value' style='color:var(--accent-purple)'>" + agentList.length + "</div><div class='swarm-stat-sub'>of 20 total</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>OPEN POSITIONS</div><div class='swarm-stat-value' style='color:var(--accent)'>" + openCount + "</div><div class='swarm-stat-sub'>of 6 max</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>ACTIVE AGENTS</div><div class='swarm-stat-value' style='color:var(--accent-purple)'>" + agentList.length + "</div><div class='swarm-stat-sub'>of 12 total</div></div>" +
       "<div class='swarm-stat'><div class='swarm-stat-label'>BUY SIGNALS</div><div class='swarm-stat-value' style='color:var(--accent-green)'>" + totalBuys + "</div><div class='swarm-stat-sub'>this session</div></div>" +
       "<div class='swarm-stat'><div class='swarm-stat-label'>SELL SIGNALS</div><div class='swarm-stat-value' style='color:var(--accent-red)'>" + totalSells + "</div><div class='swarm-stat-sub'>this session</div></div>" +
     "</div>";
@@ -1037,7 +1037,7 @@ async function loadABTest() {
           "<div style=\"font-size:11px;color:var(--text-secondary);margin-top:4px\">$" + v3.balance.toLocaleString() + " | " + v3.open_count + " open | " + v3.win_rate + "% WR</div>" +
         "</div>" +
         "<div style=\"background:var(--bg-secondary);border:1px solid var(--accent);border-radius:8px;padding:12px\">" +
-          "<div style=\"font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:8px\">V4 — 20 AGENTS &#9956;</div>" +
+          "<div style=\"font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:8px\">V5 — 12 AGENTS &#9956;</div>" +
           "<div style=\"font-size:20px;font-weight:700;color:" + v4color + "\">" + (v4.total_return_pct >= 0 ? "+" : "") + v4.total_return_pct + "%</div>" +
           "<div style=\"font-size:11px;color:var(--text-secondary);margin-top:4px\">$" + v4.balance.toLocaleString() + " | " + v4.open_count + " open | " + v4.win_rate + "% WR</div>" +
         "</div>" +
