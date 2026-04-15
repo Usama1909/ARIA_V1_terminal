@@ -1269,4 +1269,4 @@ def get_swarm_positions():
     return agents_status()
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")
+    uvicorn.run(app, host="0.0.0.0", port=PORT, log_level="info")# force redeploy Wed Apr 15 01:04:38 AM UTC 2026
