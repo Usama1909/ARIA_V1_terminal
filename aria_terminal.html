@@ -1051,8 +1051,21 @@ async function loadABTest() {
   }
 }
 
+async function updateRiskBadge() {
+  try {
+    var r = await fetch(API + "/riskscore/BTC?direction=LONG&amount_usd=100&user_id=aria-agent-system");
+    var d = await r.json();
+    var score = d.risk_metrics.risk_score;
+    var badge = document.getElementById("riskBadge");
+    if (!badge) return;
+    if (score > 70) { badge.textContent = "CRITICAL RISK"; badge.className = "risk-badge risk-critical"; }
+    else if (score > 40) { badge.textContent = "MODERATE RISK"; badge.className = "risk-badge risk-warning"; }
+    else { badge.textContent = "LOW RISK"; badge.className = "risk-badge risk-safe"; }
+  } catch(e) {}
+}
 async function init() {
-  await loadRiskPanel();
+  updateRiskBadge();
+  setInterval(updateRiskBadge, 300000);
   await Promise.all([loadAssets(), loadIntelligence(), loadRightPanel()]);
   setInterval(loadAssets, 300000);
 }
