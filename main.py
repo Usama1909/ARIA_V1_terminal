@@ -847,7 +847,7 @@ def ask_aria(user_message, symbol=None, user_level='intermediate', messages=None
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
     context_data = {}
     symbols_to_analyse = [symbol] if symbol else list(production_models.keys())
-    for sym in symbols_to_analyse[:2]:
+    for sym in symbols_to_analyse[:6]:
         ctx = build_aria_context(sym)
         if ctx: context_data[sym] = ctx
     context_str = json.dumps(context_data, indent=2, default=str)
