@@ -1193,6 +1193,14 @@ def receive_agent_report(report: AgentReport):
     save_agent_reports(_agent_reports)
     return {"received": True}
 
+
+@app.post("/agent/reports/sync")
+def sync_agent_reports(data: dict):
+    global _agent_reports
+    reports = data.get("reports", [])
+    _agent_reports = reports
+    save_agent_reports(_agent_reports)
+    return {"success": True, "count": len(_agent_reports)}
 @app.get("/agent/reports")
 def get_agent_reports():
     return {"reports": _agent_reports[:50], "count": len(_agent_reports), "timestamp": datetime.now().isoformat()}
