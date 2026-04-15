@@ -1052,6 +1052,7 @@ async function loadABTest() {
 }
 
 async function init() {
+  await loadRiskPanel();
   await Promise.all([loadAssets(), loadIntelligence(), loadRightPanel()]);
   setInterval(loadAssets, 300000);
 }
