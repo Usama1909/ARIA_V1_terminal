@@ -175,6 +175,16 @@ def close_position(symbol, pos, exit_price, exit_reason, sentiment, world, cycle
             [exit_reason, round(pnl_pct*100,2), symbol,
              f"{outcome} pnl:{pnl_usd:+.2f} entry:{entry_price:.4f} exit:{exit_price:.4f} world:{narrative}"])
         cur.execute("UPDATE positions_live SET status='CLOSED', updated_at=NOW() WHERE symbol=%s", [symbol])
+        # Write to episodic memory with full context
+        try:
+            from aria_nlp_service import get_nlp_sentiment
+            nlp = get_nlp_sentiment(symbol) if hasattr(__builtins__, '__import__') else {'label':'NEUTRAL','fomc':'NEUTRAL'}
+        except:
+            nlp = {'label':'NEUTRAL','fomc':'NEUTRAL'}
+        fg_bucket = 'EXTREME_FEAR' if sentiment.get('fear_greed',50)<25 else 'FEAR' if sentiment.get('fear_greed',50)<45 else 'NEUTRAL' if sentiment.get('fear_greed',50)<55 else 'GREED' if sentiment.get('fear_greed',50)<75 else 'EXTREME_GREED'
+        cur.execute("""INSERT INTO episodic_memory (symbol, direction, regime, fear_greed_bucket, nlp_label, fomc_signal, outcome, pnl_pct)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
+            [symbol, direction, regime, fg_bucket, nlp.get('label','NEUTRAL'), nlp.get('fomc','NEUTRAL'), outcome, round(pnl_pct,6)])
         conn.commit(); cur.close(); conn.close()
         log.info(f"  CLOSED {symbol} | {exit_reason} | {outcome} | PnL: ${pnl_usd:+.2f} ({pnl_pct*100:+.1f}%) | held:{hold_hours:.1f}h | world:{narrative}")
         return True
