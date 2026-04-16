@@ -55,6 +55,27 @@ def ensure_table():
     conn.close()
     log.info("NLP table ready")
 
+def fetch_newsapi_headlines(symbol):
+    """Fetch headlines from NewsAPI for a specific symbol."""
+    try:
+        import os
+        from newsapi import NewsApiClient
+        key = os.getenv('NEWSAPI_KEY', '79812f8bd44a444ea9d6627d13d69368')
+        newsapi = NewsApiClient(api_key=key)
+        query_map = {
+            'BTC': 'bitcoin OR crypto', 'ETH': 'ethereum OR ether',
+            'AAPL': 'Apple stock', 'NVDA': 'Nvidia GPU chips',
+            'TSLA': 'Tesla Elon', 'GLD': 'gold price safe haven'
+        }
+        q = query_map.get(symbol, symbol)
+        articles = newsapi.get_everything(q=q, language='en', sort_by='publishedAt', page_size=10)
+        headlines = [a['title'] for a in articles.get('articles', []) if a.get('title')]
+        log.info(f"NewsAPI: {len(headlines)} headlines for {symbol}")
+        return headlines
+    except Exception as e:
+        log.warning(f"NewsAPI failed for {symbol}: {e}")
+        return []
+
 def fetch_headlines():
     headlines = []
     for feed_url in NEWS_FEEDS:
@@ -78,6 +99,8 @@ def score_fomc(headlines):
 def score_symbol(symbol, headlines, finbert):
     keywords = SYMBOL_KEYWORDS.get(symbol, [])
     relevant = [h for h in headlines if any(k in h.lower() for k in keywords)]
+    # Add NewsAPI headlines for better coverage
+    relevant += fetch_newsapi_headlines(symbol)
     if not relevant:
         return 0.0, "NEUTRAL", 0
     scores = []
