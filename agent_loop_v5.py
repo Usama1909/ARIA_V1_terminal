@@ -204,6 +204,18 @@ def kelly_size(symbol, confidence, sentiment, risk, world, portfolio_value):
     return max(100.0, size_usd), final, reasoning
 
 
+def get_episodic_modifier(symbol, direction, regime, fear_greed):
+    """Query episodic memory for historical win rate in similar conditions."""
+    try:
+        from aria_episodic_memory import recall
+        result = recall(symbol, direction, regime, fear_greed)
+        if result['sample_size'] >= 3:
+            log.info(f"  {symbol} EPISODIC: wr:{result['win_rate']:.0%} n:{result['sample_size']} modifier:{result['confidence_modifier']:+.2f}")
+        return result['confidence_modifier']
+    except Exception as e:
+        log.warning(f"Episodic memory failed: {e}")
+        return 0.0
+
 def get_nlp_sentiment(symbol):
     """Read latest NLP sentiment score from DB for this symbol."""
     try:
@@ -376,6 +388,13 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
             log.info(f"  {symbol} FOMC DOVISH GLD drag → conf:{final_conf:.3f}")
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
+
+    # ── Step 5: Episodic memory modifier ─────────────────
+    try:
+        ep_modifier = get_episodic_modifier(symbol, final_dir, regime, fg)
+        final_conf = min(0.92, max(0.45, final_conf + ep_modifier))
+    except Exception as e:
+        log.warning(f"Episodic modifier failed: {e}")
 
     return ('BUY' if final_dir == 'LONG' else 'SELL'), final_conf, final_dir
 
