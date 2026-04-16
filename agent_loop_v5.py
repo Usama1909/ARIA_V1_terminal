@@ -411,6 +411,22 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
 
+    # ── Step 6: Causal graph modifier ───────────────────────
+    try:
+        from aria_causal_graph import evaluate as causal_evaluate
+        nlp_data = get_nlp_sentiment(symbol)
+        causal = causal_evaluate(symbol, fomc_signal=nlp_data.get('fomc','NEUTRAL'), fear_greed=fg, regime=regime)
+        net = causal['net_modifier']
+        if abs(net) > 0.02:
+            if (final_dir == 'LONG' and net > 0) or (final_dir == 'SHORT' and net < 0):
+                final_conf = min(0.92, final_conf + abs(net))
+                log.info(f"  {symbol} CAUSAL BOOST: {causal['active_chains']} → conf:{final_conf:.3f}")
+            elif (final_dir == 'LONG' and net < 0) or (final_dir == 'SHORT' and net > 0):
+                final_conf = max(0.45, final_conf - abs(net))
+                log.info(f"  {symbol} CAUSAL DRAG: {causal['active_chains']} → conf:{final_conf:.3f}")
+    except Exception as e:
+        log.warning(f"Causal graph modifier failed: {e}")
+
     # ── Step 5: Episodic memory modifier ─────────────────
     try:
         ep_modifier = get_episodic_modifier(symbol, final_dir, regime, fg)
