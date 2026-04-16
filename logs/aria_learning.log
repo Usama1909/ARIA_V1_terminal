@@ -1,0 +1,69 @@
+2026-04-13 12:02:53,762 [LEARN] ============================================================
+2026-04-13 12:02:53,762 [LEARN] ARIA Layer 6 — Learning Loop
+2026-04-13 12:02:53,762 [LEARN] Retrains every Sunday 03:00 UTC or when 10+ new trades
+2026-04-13 12:02:53,762 [LEARN] ============================================================
+2026-04-13 12:02:53,782 [LEARN] [Cycle 1] Total closed trades: 0
+2026-04-13 12:02:53,782 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 12:02:53,782 [LEARN] System will retrain automatically when trades close
+2026-04-13 13:02:52,819 [LEARN] [Cycle 2] Total closed trades: 0
+2026-04-13 13:02:52,820 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 13:02:52,820 [LEARN] System will retrain automatically when trades close
+2026-04-13 14:02:52,839 [LEARN] [Cycle 3] Total closed trades: 0
+2026-04-13 14:02:52,839 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 14:02:52,839 [LEARN] System will retrain automatically when trades close
+2026-04-13 15:02:52,853 [LEARN] [Cycle 4] Total closed trades: 0
+2026-04-13 15:02:52,853 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 15:02:52,854 [LEARN] System will retrain automatically when trades close
+2026-04-13 16:02:52,874 [LEARN] [Cycle 5] Total closed trades: 0
+2026-04-13 16:02:52,875 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 16:02:52,875 [LEARN] System will retrain automatically when trades close
+2026-04-13 17:02:52,892 [LEARN] [Cycle 6] Total closed trades: 2
+/root/aria_learning_loop.py:96: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  conn=get_db(); cur=conn.cursor()
+2026-04-13 17:02:52,913 [LEARN] Watching — need 10+ recent trades to retrain (have 2)
+2026-04-13 18:02:52,932 [LEARN] [Cycle 7] Total closed trades: 2
+2026-04-13 18:02:52,951 [LEARN] Watching — need 10+ recent trades to retrain (have 2)
+2026-04-13 19:02:52,970 [LEARN] [Cycle 8] Total closed trades: 3
+2026-04-13 19:02:52,989 [LEARN] Watching — need 10+ recent trades to retrain (have 3)
+2026-04-13 20:02:53,009 [LEARN] [Cycle 9] Total closed trades: 3
+2026-04-13 20:02:53,027 [LEARN] Watching — need 10+ recent trades to retrain (have 3)
+2026-04-13 21:02:53,047 [LEARN] [Cycle 10] Total closed trades: 3
+2026-04-13 21:02:53,066 [LEARN] Watching — need 10+ recent trades to retrain (have 3)
+2026-04-13 22:02:53,085 [LEARN] [Cycle 11] Total closed trades: 3
+2026-04-13 22:02:53,104 [LEARN] Watching — need 10+ recent trades to retrain (have 3)
+2026-04-13 23:02:53,118 [LEARN] [Cycle 12] Total closed trades: 9
+2026-04-13 23:02:53,132 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 00:02:53,147 [LEARN] [Cycle 13] Total closed trades: 9
+2026-04-14 00:02:53,166 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 01:02:53,185 [LEARN] [Cycle 14] Total closed trades: 9
+2026-04-14 01:02:53,202 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 02:02:53,222 [LEARN] [Cycle 15] Total closed trades: 9
+2026-04-14 02:02:53,240 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 03:02:53,260 [LEARN] [Cycle 16] Total closed trades: 9
+2026-04-14 03:02:53,279 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 04:02:53,293 [LEARN] [Cycle 17] Total closed trades: 9
+2026-04-14 04:02:53,307 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 05:02:53,327 [LEARN] [Cycle 18] Total closed trades: 9
+2026-04-14 05:02:53,346 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 06:02:53,366 [LEARN] [Cycle 19] Total closed trades: 9
+2026-04-14 06:02:53,385 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 07:02:53,403 [LEARN] [Cycle 20] Total closed trades: 9
+2026-04-14 07:02:53,424 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 08:02:53,442 [LEARN] [Cycle 21] Total closed trades: 9
+2026-04-14 08:02:53,460 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 09:02:53,475 [LEARN] [Cycle 22] Total closed trades: 9
+2026-04-14 09:02:53,491 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 10:02:53,507 [LEARN] [Cycle 23] Total closed trades: 9
+2026-04-14 10:02:53,527 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 11:02:53,546 [LEARN] [Cycle 24] Total closed trades: 9
+2026-04-14 11:02:53,565 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 12:02:53,585 [LEARN] [Cycle 25] Total closed trades: 9
+2026-04-14 12:02:53,604 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 13:02:53,625 [LEARN] [Cycle 26] Total closed trades: 9
+2026-04-14 13:02:53,643 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 14:02:53,662 [LEARN] [Cycle 27] Total closed trades: 9
+2026-04-14 14:02:53,678 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 15:02:53,697 [LEARN] [Cycle 28] Total closed trades: 9
+2026-04-14 15:02:53,716 [LEARN] Watching — need 10+ recent trades to retrain (have 9)
+2026-04-14 16:02:53,737 [LEARN] [Cycle 29] Total closed trades: 9
+2026-04-14 16:02:53,755 [LEARN] Watching — need 10+ recent trades to retrain (have 9)

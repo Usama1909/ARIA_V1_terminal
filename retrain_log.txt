@@ -1,0 +1,233 @@
+nohup: ignoring input
+============================================================
+ARIA v5 - RETRAINING: XGBoost + RF + Neural Network
+Started: 2026-04-01 21:51 UTC
+============================================================
+
+Training BTC...
+  17365 candles
+  train=10183 val=3395 test=3395
+  XGBoost...
+  XGB=0.548
+  Random Forest...
+  RF=0.561
+  Neural Network...
+    NN ep20 val=0.548
+    NN ep40 val=0.553
+    NN ep60 val=0.544
+    NN ep80 val=0.541
+    NN ep100 val=0.540
+  NN=0.581
+  ENS=0.566
+  Saved /root/quant_engine_v3_BTC.pkl
+
+Training ETH...
+  17365 candles
+  train=10276 val=3425 test=3426
+  XGBoost...
+  XGB=0.552
+  Random Forest...
+  RF=0.559
+  Neural Network...
+    NN ep20 val=0.529
+    NN ep40 val=0.538
+    NN ep60 val=0.543
+    NN ep80 val=0.539
+    NN ep100 val=0.537
+  NN=0.571
+  ENS=0.561
+  Saved /root/quant_engine_v3_ETH.pkl
+
+Training AAPL...
+  3490 candles
+  train=2050 val=683 test=684
+  XGBoost...
+  XGB=0.513
+  Random Forest...
+  RF=0.506
+  Neural Network...
+    NN ep20 val=0.422
+    NN ep40 val=0.455
+    NN ep60 val=0.485
+    NN ep80 val=0.469
+    NN ep100 val=0.477
+  NN=0.499
+  ENS=0.516
+  Saved /root/quant_engine_v3_AAPL.pkl
+
+Training NVDA...
+  3490 candles
+  train=2050 val=683 test=684
+  XGBoost...
+  XGB=0.526
+  Random Forest...
+  RF=0.561
+  Neural Network...
+    NN ep20 val=0.512
+    NN ep40 val=0.526
+    NN ep60 val=0.529
+    NN ep80 val=0.512
+    NN ep100 val=0.518
+  NN=0.586
+  ENS=0.537
+  Saved /root/quant_engine_v3_NVDA.pkl
+
+Training TSLA...
+  3490 candles
+  train=2050 val=683 test=684
+  XGBoost...
+  XGB=0.531
+  Random Forest...
+  RF=0.556
+  Neural Network...
+    NN ep20 val=0.499
+    NN ep40 val=0.545
+    NN ep60 val=0.548
+    NN ep80 val=0.546
+    NN ep100 val=0.536
+  NN=0.579
+  ENS=0.539
+  Saved /root/quant_engine_v3_TSLA.pkl
+
+Training GLD...
+  3490 candles
+  train=2050 val=683 test=684
+  XGBoost...
+  XGB=0.494
+  Random Forest...
+  RF=0.507
+  Neural Network...
+    NN ep20 val=0.477
+    NN ep40 val=0.526
+    NN ep60 val=0.540
+    NN ep80 val=0.534
+    NN ep100 val=0.546
+  NN=0.515
+  ENS=0.509
+  Saved /root/quant_engine_v3_GLD.pkl
+
+============================================================
+COMPLETE
+  BTC: XGB=0.548 RF=0.561 NN=0.581 ENS=0.566
+  ETH: XGB=0.552 RF=0.559 NN=0.571 ENS=0.561
+  AAPL: XGB=0.513 RF=0.506 NN=0.498 ENS=0.516
+  NVDA: XGB=0.526 RF=0.561 NN=0.586 ENS=0.536
+  TSLA: XGB=0.531 RF=0.556 NN=0.579 ENS=0.539
+  GLD: XGB=0.494 RF=0.507 NN=0.515 ENS=0.509
+============================================================
+============================================================
+ARIA v5 - RETRAINING: XGBoost + RF + Neural Network
+Started: 2026-04-05 03:00 UTC
+============================================================
+
+Training BTC...
+  17364 candles
+  train=10189 val=3397 test=3397
+  XGBoost...
+  XGB=0.545
+  Random Forest...
+  RF=0.563
+  Neural Network...
+    NN ep20 val=0.501
+    NN ep40 val=0.536
+    NN ep60 val=0.537
+    NN ep80 val=0.536
+    NN ep100 val=0.538
+  NN=0.564
+  ENS=0.553
+  Saved /root/quant_engine_v3_BTC.pkl
+
+Training ETH...
+  17364 candles
+  train=10280 val=3427 test=3427
+  XGBoost...
+  XGB=0.544
+  Random Forest...
+  RF=0.567
+  Neural Network...
+    NN ep20 val=0.528
+    NN ep40 val=0.530
+    NN ep60 val=0.534
+    NN ep80 val=0.533
+    NN ep100 val=0.534
+  NN=0.563
+  ENS=0.563
+  Saved /root/quant_engine_v3_ETH.pkl
+
+Training AAPL...
+  3490 candles
+  train=2050 val=683 test=684
+  XGBoost...
+  XGB=0.529
+  Random Forest...
+  RF=0.499
+  Neural Network...
+    NN ep20 val=0.492
+    NN ep40 val=0.439
+    NN ep60 val=0.476
+    NN ep80 val=0.466
+    NN ep100 val=0.470
+  NN=0.567
+  ENS=0.542
+  Saved /root/quant_engine_v3_AAPL.pkl
+
+Training NVDA...
+  3490 candles
+  train=2050 val=683 test=684
+  XGBoost...
+  XGB=0.545
+  Random Forest...
+  RF=0.554
+  Neural Network...
+    NN ep20 val=0.545
+    NN ep40 val=0.530
+    NN ep60 val=0.515
+    NN ep80 val=0.515
+    NN ep100 val=0.507
+  NN=0.611
+  ENS=0.564
+  Saved /root/quant_engine_v3_NVDA.pkl
+
+Training TSLA...
+  3490 candles
+  train=2050 val=683 test=684
+  XGBoost...
+  XGB=0.541
+  Random Forest...
+  RF=0.572
+  Neural Network...
+    NN ep20 val=0.458
+    NN ep40 val=0.517
+    NN ep60 val=0.523
+    NN ep80 val=0.511
+    NN ep100 val=0.514
+  NN=0.570
+  ENS=0.547
+  Saved /root/quant_engine_v3_TSLA.pkl
+
+Training GLD...
+  3490 candles
+  train=2050 val=683 test=684
+  XGBoost...
+  XGB=0.488
+  Random Forest...
+  RF=0.485
+  Neural Network...
+    NN ep20 val=0.474
+    NN ep40 val=0.517
+    NN ep60 val=0.530
+    NN ep80 val=0.545
+    NN ep100 val=0.543
+  NN=0.532
+  ENS=0.482
+  Saved /root/quant_engine_v3_GLD.pkl
+
+============================================================
+COMPLETE
+  BTC: XGB=0.545 RF=0.563 NN=0.564 ENS=0.552
+  ETH: XGB=0.544 RF=0.567 NN=0.563 ENS=0.563
+  AAPL: XGB=0.529 RF=0.498 NN=0.567 ENS=0.542
+  NVDA: XGB=0.545 RF=0.554 NN=0.611 ENS=0.564
+  TSLA: XGB=0.541 RF=0.572 NN=0.570 ENS=0.547
+  GLD: XGB=0.488 RF=0.485 NN=0.532 ENS=0.482
+============================================================

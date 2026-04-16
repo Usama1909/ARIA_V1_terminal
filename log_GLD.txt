@@ -1,0 +1,23 @@
+============================================================
+ARIA PPO TRAINER v2 - GLD
+Training steps: 2,000,000
+Reward: Sharpe-adjusted + drawdown penalty
+============================================================
+  Fetching GLD training data (2y)...
+  Got 3483 candles for GLD
+Training data: 3434 samples
+Train: 2747 | Test: 687
+
+Starting PPO v2 training (2,000,000 steps)...
+This will take ~2 hours. Running in background.
+  New best return: -8.89% | trades: 424 | win rate: 42.9%
+  New best return: -8.54% | trades: 327 | win rate: 45.3%
+  New best return: -7.65% | trades: 282 | win rate: 41.8%
+  New best return: 2.29% | trades: 192 | win rate: 54.2%
+  New best return: 3.83% | trades: 181 | win rate: 50.8%
+  New best return: 4.28% | trades: 167 | win rate: 65.9%
+  New best return: 5.64% | trades: 156 | win rate: 71.2%
+  New best return: 6.59% | trades: 144 | win rate: 70.1%
+  New best return: 7.40% | trades: 146 | win rate: 61.6%
+  New best return: 7.78% | trades: 139 | win rate: 63.3%
+  New best return: 8.69% | trades: 147 | win rate: 66.7%

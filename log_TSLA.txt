@@ -1,0 +1,24 @@
+============================================================
+ARIA PPO TRAINER v2 - TSLA
+Training steps: 2,000,000
+Reward: Sharpe-adjusted + drawdown penalty
+============================================================
+  Fetching TSLA training data (2y)...
+  Got 3483 candles for TSLA
+Training data: 3434 samples
+Train: 2747 | Test: 687
+
+Starting PPO v2 training (2,000,000 steps)...
+This will take ~2 hours. Running in background.
+  New best return: -20.46% | trades: 442 | win rate: 44.8%
+  New best return: -2.11% | trades: 366 | win rate: 49.2%
+  New best return: 6.37% | trades: 307 | win rate: 50.2%
+  New best return: 7.51% | trades: 284 | win rate: 51.1%
+  New best return: 15.07% | trades: 237 | win rate: 48.9%
+  New best return: 15.52% | trades: 223 | win rate: 54.3%
+  New best return: 28.80% | trades: 214 | win rate: 59.8%
+  New best return: 29.69% | trades: 58 | win rate: 72.4%
+  New best return: 29.74% | trades: 62 | win rate: 77.4%
+  New best return: 31.43% | trades: 94 | win rate: 75.5%
+  New best return: 37.89% | trades: 95 | win rate: 73.7%
+  New best return: 38.12% | trades: 135 | win rate: 68.1%

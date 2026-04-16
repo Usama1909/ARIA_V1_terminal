@@ -1,0 +1,173 @@
+nohup: ignoring input
+2026-04-11 04:42:16,579 [LEARN] ============================================================
+2026-04-11 04:42:16,579 [LEARN] ARIA Layer 6 — Learning Loop
+2026-04-11 04:42:16,579 [LEARN] Retrains every Sunday 03:00 UTC or when 10+ new trades
+2026-04-11 04:42:16,579 [LEARN] ============================================================
+2026-04-11 04:42:16,589 [LEARN] [Cycle 1] Total closed trades: 0
+2026-04-11 04:42:16,589 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 04:42:16,590 [LEARN] System will retrain automatically when trades close
+2026-04-11 05:42:16,609 [LEARN] [Cycle 2] Total closed trades: 0
+2026-04-11 05:42:16,609 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 05:42:16,609 [LEARN] System will retrain automatically when trades close
+2026-04-11 06:42:16,629 [LEARN] [Cycle 3] Total closed trades: 0
+2026-04-11 06:42:16,629 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 06:42:16,629 [LEARN] System will retrain automatically when trades close
+2026-04-11 07:42:16,639 [LEARN] [Cycle 4] Total closed trades: 0
+2026-04-11 07:42:16,639 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 07:42:16,639 [LEARN] System will retrain automatically when trades close
+2026-04-11 08:42:16,655 [LEARN] [Cycle 5] Total closed trades: 0
+2026-04-11 08:42:16,656 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 08:42:16,656 [LEARN] System will retrain automatically when trades close
+2026-04-11 09:42:16,676 [LEARN] [Cycle 6] Total closed trades: 0
+2026-04-11 09:42:16,676 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 09:42:16,676 [LEARN] System will retrain automatically when trades close
+2026-04-11 10:42:16,700 [LEARN] [Cycle 7] Total closed trades: 0
+2026-04-11 10:42:16,700 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 10:42:16,700 [LEARN] System will retrain automatically when trades close
+2026-04-11 11:42:16,721 [LEARN] [Cycle 8] Total closed trades: 0
+2026-04-11 11:42:16,721 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 11:42:16,721 [LEARN] System will retrain automatically when trades close
+2026-04-11 12:42:16,738 [LEARN] [Cycle 9] Total closed trades: 0
+2026-04-11 12:42:16,738 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 12:42:16,738 [LEARN] System will retrain automatically when trades close
+2026-04-11 13:42:16,757 [LEARN] [Cycle 10] Total closed trades: 0
+2026-04-11 13:42:16,757 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 13:42:16,758 [LEARN] System will retrain automatically when trades close
+2026-04-11 14:42:16,778 [LEARN] [Cycle 11] Total closed trades: 0
+2026-04-11 14:42:16,778 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 14:42:16,778 [LEARN] System will retrain automatically when trades close
+2026-04-11 15:42:16,793 [LEARN] [Cycle 12] Total closed trades: 0
+2026-04-11 15:42:16,793 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 15:42:16,793 [LEARN] System will retrain automatically when trades close
+2026-04-11 16:42:16,808 [LEARN] [Cycle 13] Total closed trades: 0
+2026-04-11 16:42:16,808 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 16:42:16,808 [LEARN] System will retrain automatically when trades close
+2026-04-11 17:42:16,824 [LEARN] [Cycle 14] Total closed trades: 0
+2026-04-11 17:42:16,824 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 17:42:16,824 [LEARN] System will retrain automatically when trades close
+2026-04-11 18:42:16,833 [LEARN] [Cycle 15] Total closed trades: 0
+2026-04-11 18:42:16,833 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 18:42:16,834 [LEARN] System will retrain automatically when trades close
+2026-04-11 19:42:16,847 [LEARN] [Cycle 16] Total closed trades: 0
+2026-04-11 19:42:16,847 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 19:42:16,848 [LEARN] System will retrain automatically when trades close
+2026-04-11 20:42:16,859 [LEARN] [Cycle 17] Total closed trades: 0
+2026-04-11 20:42:16,859 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 20:42:16,860 [LEARN] System will retrain automatically when trades close
+2026-04-11 21:42:16,869 [LEARN] [Cycle 18] Total closed trades: 0
+2026-04-11 21:42:16,869 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 21:42:16,869 [LEARN] System will retrain automatically when trades close
+2026-04-11 22:42:16,881 [LEARN] [Cycle 19] Total closed trades: 0
+2026-04-11 22:42:16,881 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 22:42:16,881 [LEARN] System will retrain automatically when trades close
+2026-04-11 23:42:16,901 [LEARN] [Cycle 20] Total closed trades: 0
+2026-04-11 23:42:16,901 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-11 23:42:16,902 [LEARN] System will retrain automatically when trades close
+2026-04-12 00:42:16,918 [LEARN] [Cycle 21] Total closed trades: 0
+2026-04-12 00:42:16,918 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 00:42:16,918 [LEARN] System will retrain automatically when trades close
+2026-04-12 01:42:16,939 [LEARN] [Cycle 22] Total closed trades: 0
+2026-04-12 01:42:16,940 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 01:42:16,940 [LEARN] System will retrain automatically when trades close
+2026-04-12 02:42:16,959 [LEARN] [Cycle 23] Total closed trades: 0
+2026-04-12 02:42:16,959 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 02:42:16,959 [LEARN] System will retrain automatically when trades close
+2026-04-12 03:42:16,979 [LEARN] [Cycle 24] Total closed trades: 0
+2026-04-12 03:42:16,979 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 03:42:16,979 [LEARN] System will retrain automatically when trades close
+2026-04-12 04:42:17,001 [LEARN] [Cycle 25] Total closed trades: 0
+2026-04-12 04:42:17,001 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 04:42:17,001 [LEARN] System will retrain automatically when trades close
+2026-04-12 05:42:17,017 [LEARN] [Cycle 26] Total closed trades: 0
+2026-04-12 05:42:17,018 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 05:42:17,018 [LEARN] System will retrain automatically when trades close
+2026-04-12 06:42:17,038 [LEARN] [Cycle 27] Total closed trades: 0
+2026-04-12 06:42:17,038 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 06:42:17,038 [LEARN] System will retrain automatically when trades close
+2026-04-12 07:42:17,054 [LEARN] [Cycle 28] Total closed trades: 0
+2026-04-12 07:42:17,054 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 07:42:17,054 [LEARN] System will retrain automatically when trades close
+2026-04-12 08:42:17,070 [LEARN] [Cycle 29] Total closed trades: 0
+2026-04-12 08:42:17,071 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 08:42:17,071 [LEARN] System will retrain automatically when trades close
+2026-04-12 09:42:17,089 [LEARN] [Cycle 30] Total closed trades: 0
+2026-04-12 09:42:17,089 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 09:42:17,089 [LEARN] System will retrain automatically when trades close
+2026-04-12 10:42:17,113 [LEARN] [Cycle 31] Total closed trades: 0
+2026-04-12 10:42:17,113 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 10:42:17,113 [LEARN] System will retrain automatically when trades close
+2026-04-12 11:42:17,124 [LEARN] [Cycle 32] Total closed trades: 0
+2026-04-12 11:42:17,124 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 11:42:17,124 [LEARN] System will retrain automatically when trades close
+2026-04-12 12:42:17,141 [LEARN] [Cycle 33] Total closed trades: 0
+2026-04-12 12:42:17,141 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 12:42:17,141 [LEARN] System will retrain automatically when trades close
+2026-04-12 13:42:17,157 [LEARN] [Cycle 34] Total closed trades: 0
+2026-04-12 13:42:17,158 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 13:42:17,158 [LEARN] System will retrain automatically when trades close
+2026-04-12 14:42:17,177 [LEARN] [Cycle 35] Total closed trades: 0
+2026-04-12 14:42:17,177 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 14:42:17,177 [LEARN] System will retrain automatically when trades close
+2026-04-12 15:42:17,193 [LEARN] [Cycle 36] Total closed trades: 0
+2026-04-12 15:42:17,193 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 15:42:17,193 [LEARN] System will retrain automatically when trades close
+2026-04-12 16:42:17,210 [LEARN] [Cycle 37] Total closed trades: 0
+2026-04-12 16:42:17,210 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 16:42:17,210 [LEARN] System will retrain automatically when trades close
+2026-04-12 17:42:17,233 [LEARN] [Cycle 38] Total closed trades: 0
+2026-04-12 17:42:17,233 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 17:42:17,233 [LEARN] System will retrain automatically when trades close
+2026-04-12 18:42:17,248 [LEARN] [Cycle 39] Total closed trades: 0
+2026-04-12 18:42:17,248 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 18:42:17,248 [LEARN] System will retrain automatically when trades close
+2026-04-12 19:42:17,274 [LEARN] [Cycle 40] Total closed trades: 0
+2026-04-12 19:42:17,275 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 19:42:17,275 [LEARN] System will retrain automatically when trades close
+2026-04-12 20:42:17,295 [LEARN] [Cycle 41] Total closed trades: 0
+2026-04-12 20:42:17,295 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 20:42:17,295 [LEARN] System will retrain automatically when trades close
+2026-04-12 21:42:17,314 [LEARN] [Cycle 42] Total closed trades: 0
+2026-04-12 21:42:17,314 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 21:42:17,314 [LEARN] System will retrain automatically when trades close
+2026-04-12 22:42:17,334 [LEARN] [Cycle 43] Total closed trades: 0
+2026-04-12 22:42:17,334 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 22:42:17,334 [LEARN] System will retrain automatically when trades close
+2026-04-12 23:42:17,353 [LEARN] [Cycle 44] Total closed trades: 0
+2026-04-12 23:42:17,354 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-12 23:42:17,354 [LEARN] System will retrain automatically when trades close
+2026-04-13 00:42:17,374 [LEARN] [Cycle 45] Total closed trades: 0
+2026-04-13 00:42:17,375 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 00:42:17,375 [LEARN] System will retrain automatically when trades close
+2026-04-13 01:42:17,394 [LEARN] [Cycle 46] Total closed trades: 0
+2026-04-13 01:42:17,394 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 01:42:17,394 [LEARN] System will retrain automatically when trades close
+2026-04-13 02:42:17,414 [LEARN] [Cycle 47] Total closed trades: 0
+2026-04-13 02:42:17,414 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 02:42:17,414 [LEARN] System will retrain automatically when trades close
+2026-04-13 03:42:17,435 [LEARN] [Cycle 48] Total closed trades: 0
+2026-04-13 03:42:17,435 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 03:42:17,435 [LEARN] System will retrain automatically when trades close
+2026-04-13 04:42:17,455 [LEARN] [Cycle 49] Total closed trades: 0
+2026-04-13 04:42:17,455 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 04:42:17,455 [LEARN] System will retrain automatically when trades close
+2026-04-13 05:42:17,477 [LEARN] [Cycle 50] Total closed trades: 0
+2026-04-13 05:42:17,477 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 05:42:17,477 [LEARN] System will retrain automatically when trades close
+2026-04-13 06:42:17,497 [LEARN] [Cycle 51] Total closed trades: 0
+2026-04-13 06:42:17,497 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 06:42:17,497 [LEARN] System will retrain automatically when trades close
+2026-04-13 07:42:17,512 [LEARN] [Cycle 52] Total closed trades: 0
+2026-04-13 07:42:17,512 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 07:42:17,512 [LEARN] System will retrain automatically when trades close
+2026-04-13 08:42:17,529 [LEARN] [Cycle 53] Total closed trades: 0
+2026-04-13 08:42:17,529 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 08:42:17,529 [LEARN] System will retrain automatically when trades close
+2026-04-13 09:42:17,544 [LEARN] [Cycle 54] Total closed trades: 0
+2026-04-13 09:42:17,544 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 09:42:17,544 [LEARN] System will retrain automatically when trades close
+2026-04-13 10:42:17,564 [LEARN] [Cycle 55] Total closed trades: 0
+2026-04-13 10:42:17,564 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 10:42:17,564 [LEARN] System will retrain automatically when trades close
+2026-04-13 11:42:17,581 [LEARN] [Cycle 56] Total closed trades: 0
+2026-04-13 11:42:17,581 [LEARN] No closed trades yet — waiting for pattern library to fill
+2026-04-13 11:42:17,581 [LEARN] System will retrain automatically when trades close

@@ -1,0 +1,627 @@
+nohup: ignoring input
+2026-04-16 18:34:33,344 [NLP] NLP table ready
+2026-04-16 18:34:33,344 [NLP] Loading FinBERT model...
+2026-04-16 18:34:33,494 [NLP] HTTP Request: HEAD https://huggingface.co/ProsusAI/finbert/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-16 18:34:33,495 [NLP] Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-16 18:34:33,499 [NLP] HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/ProsusAI/finbert/4556d13015211d73dccd3fdd39d39232506f3e43/config.json "HTTP/1.1 200 OK"
+2026-04-16 18:34:33,648 [NLP] HTTP Request: HEAD https://huggingface.co/ProsusAI/finbert/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-04-16 18:34:33,783 [NLP] HTTP Request: GET https://huggingface.co/api/models/ProsusAI/finbert "HTTP/1.1 200 OK"
+2026-04-16 18:34:33,961 [NLP] HTTP Request: GET https://huggingface.co/api/models/ProsusAI/finbert/commits/main "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 51826.10it/s]
+[1mBertForSequenceClassification LOAD REPORT[0m from: ProsusAI/finbert
+Key                          | Status     |  | 
+-----------------------------+------------+--+-
+bert.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+2026-04-16 18:34:34,200 [NLP] HTTP Request: GET https://huggingface.co/api/models/ProsusAI/finbert/discussions?p=0 "HTTP/1.1 200 OK"
+2026-04-16 18:34:34,230 [NLP] HTTP Request: GET https://huggingface.co/api/models/ProsusAI/finbert/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-04-16 18:34:34,343 [NLP] HTTP Request: GET https://huggingface.co/api/models/ProsusAI/finbert/commits/refs%2Fpr%2F29 "HTTP/1.1 200 OK"
+2026-04-16 18:34:34,363 [NLP] HTTP Request: GET https://huggingface.co/api/models/ProsusAI/finbert/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-04-16 18:34:34,403 [NLP] FinBERT loaded. Starting NLP loop...
+2026-04-16 18:34:34,483 [NLP] HTTP Request: HEAD https://huggingface.co/ProsusAI/finbert/resolve/refs%2Fpr%2F29/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+2026-04-16 18:34:34,615 [NLP] HTTP Request: HEAD https://huggingface.co/ProsusAI/finbert/resolve/refs%2Fpr%2F29/model.safetensors "HTTP/1.1 302 Found"
+2026-04-16 18:34:37,047 [NLP] Fetched 120 headlines
+2026-04-16 18:34:37,292 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 18:34:37,651 [NLP]   BTC: NEGATIVE (-0.156) | 58 headlines | FOMC:HAWKISH
+2026-04-16 18:34:37,883 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 18:34:38,318 [NLP]   ETH: NEGATIVE (-0.148) | 23 headlines | FOMC:HAWKISH
+2026-04-16 18:34:38,538 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 18:34:38,903 [NLP]   AAPL: POSITIVE (+0.317) | 10 headlines | FOMC:HAWKISH
+2026-04-16 18:34:39,121 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 18:34:39,517 [NLP]   NVDA: NEGATIVE (-0.110) | 12 headlines | FOMC:HAWKISH
+2026-04-16 18:34:39,733 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 18:34:40,058 [NLP]   TSLA: NEUTRAL (+0.067) | 23 headlines | FOMC:HAWKISH
+2026-04-16 18:34:40,276 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 18:34:40,626 [NLP]   GLD: POSITIVE (+0.341) | 28 headlines | FOMC:HAWKISH
+2026-04-16 18:34:40,627 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 18:39:43,313 [NLP] Fetched 120 headlines
+2026-04-16 18:39:43,549 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 18:39:43,911 [NLP]   BTC: NEGATIVE (-0.156) | 58 headlines | FOMC:HAWKISH
+2026-04-16 18:39:44,135 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 18:39:44,525 [NLP]   ETH: NEGATIVE (-0.148) | 23 headlines | FOMC:HAWKISH
+2026-04-16 18:39:44,752 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 18:39:45,121 [NLP]   AAPL: POSITIVE (+0.317) | 10 headlines | FOMC:HAWKISH
+2026-04-16 18:39:45,334 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 18:39:45,709 [NLP]   NVDA: NEGATIVE (-0.110) | 12 headlines | FOMC:HAWKISH
+2026-04-16 18:39:45,929 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 18:39:46,249 [NLP]   TSLA: NEUTRAL (+0.067) | 23 headlines | FOMC:HAWKISH
+2026-04-16 18:39:46,470 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 18:39:46,811 [NLP]   GLD: POSITIVE (+0.341) | 28 headlines | FOMC:HAWKISH
+2026-04-16 18:39:46,812 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 18:44:49,610 [NLP] Fetched 120 headlines
+2026-04-16 18:44:49,852 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 18:44:50,193 [NLP]   BTC: NEGATIVE (-0.156) | 58 headlines | FOMC:HAWKISH
+2026-04-16 18:44:50,411 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 18:44:50,774 [NLP]   ETH: NEGATIVE (-0.148) | 23 headlines | FOMC:HAWKISH
+2026-04-16 18:44:50,992 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 18:44:51,337 [NLP]   AAPL: POSITIVE (+0.317) | 10 headlines | FOMC:HAWKISH
+2026-04-16 18:44:51,552 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 18:44:51,923 [NLP]   NVDA: NEGATIVE (-0.110) | 12 headlines | FOMC:HAWKISH
+2026-04-16 18:44:52,139 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 18:44:52,451 [NLP]   TSLA: NEUTRAL (+0.067) | 23 headlines | FOMC:HAWKISH
+2026-04-16 18:44:52,671 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 18:44:52,990 [NLP]   GLD: POSITIVE (+0.175) | 28 headlines | FOMC:HAWKISH
+2026-04-16 18:44:52,994 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 18:49:55,769 [NLP] Fetched 120 headlines
+2026-04-16 18:49:56,016 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 18:49:56,402 [NLP]   BTC: NEGATIVE (-0.224) | 59 headlines | FOMC:HAWKISH
+2026-04-16 18:49:56,613 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 18:49:56,980 [NLP]   ETH: NEGATIVE (-0.148) | 23 headlines | FOMC:HAWKISH
+2026-04-16 18:49:57,194 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 18:49:57,540 [NLP]   AAPL: POSITIVE (+0.317) | 10 headlines | FOMC:HAWKISH
+2026-04-16 18:49:57,785 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 18:49:58,170 [NLP]   NVDA: NEGATIVE (-0.110) | 12 headlines | FOMC:HAWKISH
+2026-04-16 18:49:58,388 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 18:49:58,714 [NLP]   TSLA: POSITIVE (+0.161) | 24 headlines | FOMC:HAWKISH
+2026-04-16 18:49:58,928 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 18:49:59,246 [NLP]   GLD: POSITIVE (+0.175) | 28 headlines | FOMC:HAWKISH
+2026-04-16 18:49:59,247 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 18:55:02,230 [NLP] Fetched 120 headlines
+2026-04-16 18:55:02,480 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 18:55:02,966 [NLP]   BTC: NEGATIVE (-0.224) | 58 headlines | FOMC:HAWKISH
+2026-04-16 18:55:03,183 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 18:55:03,549 [NLP]   ETH: NEGATIVE (-0.148) | 23 headlines | FOMC:HAWKISH
+2026-04-16 18:55:03,781 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 18:55:04,131 [NLP]   AAPL: POSITIVE (+0.156) | 10 headlines | FOMC:HAWKISH
+2026-04-16 18:55:04,360 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 18:55:04,757 [NLP]   NVDA: NEGATIVE (-0.110) | 12 headlines | FOMC:HAWKISH
+2026-04-16 18:55:05,091 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 18:55:05,416 [NLP]   TSLA: POSITIVE (+0.161) | 24 headlines | FOMC:HAWKISH
+2026-04-16 18:55:05,630 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 18:55:05,949 [NLP]   GLD: POSITIVE (+0.175) | 28 headlines | FOMC:HAWKISH
+2026-04-16 18:55:05,950 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:00:09,907 [NLP] Fetched 120 headlines
+2026-04-16 19:00:10,148 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:00:10,490 [NLP]   BTC: NEGATIVE (-0.224) | 58 headlines | FOMC:HAWKISH
+2026-04-16 19:00:10,710 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:00:11,083 [NLP]   ETH: NEGATIVE (-0.148) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:00:11,298 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:00:11,647 [NLP]   AAPL: POSITIVE (+0.156) | 10 headlines | FOMC:HAWKISH
+2026-04-16 19:00:11,865 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:00:12,211 [NLP]   NVDA: NEGATIVE (-0.115) | 13 headlines | FOMC:HAWKISH
+2026-04-16 19:00:12,430 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:00:12,747 [NLP]   TSLA: POSITIVE (+0.161) | 24 headlines | FOMC:HAWKISH
+2026-04-16 19:00:12,964 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:00:13,279 [NLP]   GLD: POSITIVE (+0.175) | 29 headlines | FOMC:HAWKISH
+2026-04-16 19:00:13,280 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:05:16,150 [NLP] Fetched 120 headlines
+2026-04-16 19:05:16,402 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:05:16,746 [NLP]   BTC: NEGATIVE (-0.224) | 60 headlines | FOMC:HAWKISH
+2026-04-16 19:05:16,961 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:05:17,328 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:05:17,553 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:05:17,910 [NLP]   AAPL: POSITIVE (+0.156) | 10 headlines | FOMC:HAWKISH
+2026-04-16 19:05:18,125 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:05:18,480 [NLP]   NVDA: NEGATIVE (-0.115) | 13 headlines | FOMC:HAWKISH
+2026-04-16 19:05:18,703 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:05:19,020 [NLP]   TSLA: POSITIVE (+0.161) | 25 headlines | FOMC:HAWKISH
+2026-04-16 19:05:19,240 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:05:19,555 [NLP]   GLD: POSITIVE (+0.145) | 27 headlines | FOMC:HAWKISH
+2026-04-16 19:05:19,556 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:10:22,850 [NLP] Fetched 120 headlines
+2026-04-16 19:10:23,110 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:10:23,448 [NLP]   BTC: NEGATIVE (-0.224) | 59 headlines | FOMC:HAWKISH
+2026-04-16 19:10:23,701 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:10:24,053 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:10:24,267 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:10:24,615 [NLP]   AAPL: POSITIVE (+0.156) | 10 headlines | FOMC:HAWKISH
+2026-04-16 19:10:24,829 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:10:25,158 [NLP]   NVDA: NEUTRAL (-0.022) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:10:25,417 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:10:25,751 [NLP]   TSLA: NEUTRAL (-0.021) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:10:25,970 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:10:26,289 [NLP]   GLD: POSITIVE (+0.145) | 27 headlines | FOMC:HAWKISH
+2026-04-16 19:10:26,291 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:15:29,175 [NLP] Fetched 120 headlines
+2026-04-16 19:15:29,488 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:15:29,834 [NLP]   BTC: NEGATIVE (-0.224) | 60 headlines | FOMC:HAWKISH
+2026-04-16 19:15:30,053 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:15:30,409 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:15:30,623 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:15:30,968 [NLP]   AAPL: POSITIVE (+0.156) | 10 headlines | FOMC:HAWKISH
+2026-04-16 19:15:31,188 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:15:31,524 [NLP]   NVDA: NEUTRAL (-0.022) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:15:31,749 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:15:32,067 [NLP]   TSLA: NEUTRAL (+0.073) | 22 headlines | FOMC:HAWKISH
+2026-04-16 19:15:32,282 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:15:32,605 [NLP]   GLD: POSITIVE (+0.145) | 27 headlines | FOMC:HAWKISH
+2026-04-16 19:15:32,606 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:20:35,481 [NLP] Fetched 119 headlines
+2026-04-16 19:20:35,726 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:20:36,070 [NLP]   BTC: NEGATIVE (-0.224) | 59 headlines | FOMC:HAWKISH
+2026-04-16 19:20:36,279 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:20:36,633 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:20:36,838 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:20:37,191 [NLP]   AAPL: NEUTRAL (-0.005) | 11 headlines | FOMC:HAWKISH
+2026-04-16 19:20:37,404 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:20:37,755 [NLP]   NVDA: NEUTRAL (-0.022) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:20:37,975 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:20:38,307 [NLP]   TSLA: NEUTRAL (-0.021) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:20:38,517 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:20:38,852 [NLP]   GLD: POSITIVE (+0.145) | 26 headlines | FOMC:HAWKISH
+2026-04-16 19:20:38,854 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:25:41,545 [NLP] Fetched 119 headlines
+2026-04-16 19:25:41,809 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:25:42,187 [NLP]   BTC: NEGATIVE (-0.224) | 59 headlines | FOMC:HAWKISH
+2026-04-16 19:25:42,401 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:25:42,741 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:25:42,954 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:25:43,348 [NLP]   AAPL: NEGATIVE (-0.118) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:25:43,564 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:25:43,905 [NLP]   NVDA: NEUTRAL (-0.022) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:25:44,130 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:25:44,461 [NLP]   TSLA: NEUTRAL (-0.021) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:25:44,681 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:25:45,007 [NLP]   GLD: POSITIVE (+0.145) | 26 headlines | FOMC:HAWKISH
+2026-04-16 19:25:45,009 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:30:47,704 [NLP] Fetched 119 headlines
+2026-04-16 19:30:47,946 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:30:48,372 [NLP]   BTC: NEGATIVE (-0.224) | 59 headlines | FOMC:HAWKISH
+2026-04-16 19:30:48,599 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:30:48,958 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:30:49,192 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:30:49,545 [NLP]   AAPL: NEUTRAL (-0.071) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:30:49,764 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:30:50,145 [NLP]   NVDA: NEUTRAL (-0.022) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:30:50,360 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:30:50,691 [NLP]   TSLA: NEUTRAL (-0.021) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:30:50,910 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:30:51,232 [NLP]   GLD: POSITIVE (+0.148) | 26 headlines | FOMC:HAWKISH
+2026-04-16 19:30:51,233 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:35:54,001 [NLP] Fetched 119 headlines
+2026-04-16 19:35:54,257 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:35:54,618 [NLP]   BTC: NEGATIVE (-0.224) | 59 headlines | FOMC:HAWKISH
+2026-04-16 19:35:54,837 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:35:55,193 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:35:55,407 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:35:55,754 [NLP]   AAPL: NEUTRAL (-0.071) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:35:55,962 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:35:56,320 [NLP]   NVDA: NEUTRAL (-0.022) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:35:56,537 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:35:56,901 [NLP]   TSLA: NEUTRAL (-0.021) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:35:57,121 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:35:57,490 [NLP]   GLD: POSITIVE (+0.148) | 26 headlines | FOMC:HAWKISH
+2026-04-16 19:35:57,491 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:41:02,683 [NLP] Fetched 119 headlines
+2026-04-16 19:41:02,931 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:41:03,287 [NLP]   BTC: NEGATIVE (-0.224) | 59 headlines | FOMC:HAWKISH
+2026-04-16 19:41:03,500 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:41:03,851 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:41:04,065 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:41:04,383 [NLP]   AAPL: NEUTRAL (-0.071) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:41:04,604 [NLP] NewsAPI: 10 headlines for NVDA
+2026-04-16 19:41:04,938 [NLP]   NVDA: NEUTRAL (+0.070) | 13 headlines | FOMC:HAWKISH
+2026-04-16 19:41:05,153 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:41:05,467 [NLP]   TSLA: NEUTRAL (+0.080) | 21 headlines | FOMC:HAWKISH
+2026-04-16 19:41:05,691 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:41:06,016 [NLP]   GLD: POSITIVE (+0.339) | 25 headlines | FOMC:HAWKISH
+2026-04-16 19:41:06,017 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:46:08,933 [NLP] Fetched 119 headlines
+2026-04-16 19:46:09,169 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:46:09,522 [NLP]   BTC: NEGATIVE (-0.224) | 61 headlines | FOMC:HAWKISH
+2026-04-16 19:46:09,739 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:46:10,096 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:46:10,313 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:46:10,648 [NLP]   AAPL: NEUTRAL (-0.071) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:46:10,862 [NLP] NewsAPI: 9 headlines for NVDA
+2026-04-16 19:46:11,218 [NLP]   NVDA: NEUTRAL (+0.070) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:46:11,425 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:46:11,758 [NLP]   TSLA: NEUTRAL (+0.080) | 21 headlines | FOMC:HAWKISH
+2026-04-16 19:46:11,976 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:46:12,301 [NLP]   GLD: POSITIVE (+0.339) | 25 headlines | FOMC:HAWKISH
+2026-04-16 19:46:12,302 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:51:14,987 [NLP] Fetched 119 headlines
+2026-04-16 19:51:15,233 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:51:15,598 [NLP]   BTC: NEGATIVE (-0.224) | 61 headlines | FOMC:HAWKISH
+2026-04-16 19:51:15,819 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:51:16,171 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:51:16,385 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:51:16,726 [NLP]   AAPL: NEUTRAL (+0.022) | 11 headlines | FOMC:HAWKISH
+2026-04-16 19:51:16,944 [NLP] NewsAPI: 9 headlines for NVDA
+2026-04-16 19:51:17,280 [NLP]   NVDA: NEUTRAL (+0.070) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:51:17,511 [NLP] NewsAPI: 8 headlines for TSLA
+2026-04-16 19:51:17,846 [NLP]   TSLA: NEUTRAL (+0.080) | 21 headlines | FOMC:HAWKISH
+2026-04-16 19:51:18,060 [NLP] NewsAPI: 10 headlines for GLD
+2026-04-16 19:51:18,398 [NLP]   GLD: POSITIVE (+0.339) | 25 headlines | FOMC:HAWKISH
+2026-04-16 19:51:18,399 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 19:56:21,149 [NLP] Fetched 119 headlines
+2026-04-16 19:56:21,399 [NLP] NewsAPI: 10 headlines for BTC
+2026-04-16 19:56:21,725 [NLP]   BTC: NEGATIVE (-0.224) | 61 headlines | FOMC:HAWKISH
+2026-04-16 19:56:21,939 [NLP] NewsAPI: 10 headlines for ETH
+2026-04-16 19:56:22,287 [NLP]   ETH: NEGATIVE (-0.215) | 23 headlines | FOMC:HAWKISH
+2026-04-16 19:56:22,497 [NLP] NewsAPI: 10 headlines for AAPL
+2026-04-16 19:56:22,836 [NLP]   AAPL: NEUTRAL (+0.022) | 11 headlines | FOMC:HAWKISH
+2026-04-16 19:56:23,053 [NLP] NewsAPI: 9 headlines for NVDA
+2026-04-16 19:56:23,384 [NLP]   NVDA: NEUTRAL (+0.070) | 12 headlines | FOMC:HAWKISH
+2026-04-16 19:56:23,583 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 19:56:23,888 [NLP]   TSLA: NEUTRAL (+0.080) | 13 headlines | FOMC:HAWKISH
+2026-04-16 19:56:24,076 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 19:56:24,415 [NLP]   GLD: POSITIVE (+0.244) | 15 headlines | FOMC:HAWKISH
+2026-04-16 19:56:24,415 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:01:27,312 [NLP] Fetched 119 headlines
+2026-04-16 20:01:27,524 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:01:27,880 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 20:01:28,067 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:01:28,435 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:01:28,622 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:01:28,654 [NLP]   AAPL: NEGATIVE (-0.605) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:01:28,849 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:01:28,931 [NLP]   NVDA: POSITIVE (+0.782) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:01:29,124 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:01:29,474 [NLP]   TSLA: NEGATIVE (-0.109) | 15 headlines | FOMC:HAWKISH
+2026-04-16 20:01:29,667 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:01:30,002 [NLP]   GLD: POSITIVE (+0.339) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:01:30,003 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:06:33,856 [NLP] Fetched 119 headlines
+2026-04-16 20:06:34,061 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:06:34,405 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 20:06:34,587 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:06:34,942 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:06:35,144 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:06:35,197 [NLP]   AAPL: NEGATIVE (-0.605) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:06:35,388 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:06:35,443 [NLP]   NVDA: POSITIVE (+0.922) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:06:35,642 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:06:35,981 [NLP]   TSLA: NEGATIVE (-0.109) | 15 headlines | FOMC:HAWKISH
+2026-04-16 20:06:36,165 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:06:36,481 [NLP]   GLD: POSITIVE (+0.339) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:06:36,482 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:11:39,355 [NLP] Fetched 119 headlines
+2026-04-16 20:11:39,571 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:11:39,905 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 20:11:40,093 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:11:40,455 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:11:40,643 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:11:40,686 [NLP]   AAPL: NEGATIVE (-0.605) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:11:40,868 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:11:40,923 [NLP]   NVDA: POSITIVE (+0.922) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:11:41,111 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:11:41,457 [NLP]   TSLA: NEGATIVE (-0.109) | 15 headlines | FOMC:HAWKISH
+2026-04-16 20:11:41,652 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:11:41,981 [NLP]   GLD: POSITIVE (+0.339) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:11:41,983 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:17:31,960 [NLP] Fetched 119 headlines
+2026-04-16 20:17:32,175 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:17:32,534 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 20:17:32,716 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:17:33,077 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:17:33,266 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:17:33,345 [NLP]   AAPL: NEGATIVE (-0.302) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:17:33,537 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:17:33,623 [NLP]   NVDA: POSITIVE (+0.894) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:17:33,811 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:17:34,241 [NLP]   TSLA: NEUTRAL (-0.014) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:17:34,439 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:17:34,780 [NLP]   GLD: POSITIVE (+0.339) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:17:34,781 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:22:37,844 [NLP] Fetched 119 headlines
+2026-04-16 20:22:38,044 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:22:38,403 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 20:22:38,596 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:22:39,083 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:22:39,270 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:22:39,336 [NLP]   AAPL: NEGATIVE (-0.302) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:22:39,528 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:22:39,615 [NLP]   NVDA: POSITIVE (+0.894) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:22:39,809 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:22:40,170 [NLP]   TSLA: NEUTRAL (-0.014) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:22:40,361 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:22:40,694 [NLP]   GLD: POSITIVE (+0.339) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:22:40,695 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:27:43,394 [NLP] Fetched 119 headlines
+2026-04-16 20:27:43,594 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:27:43,966 [NLP]   BTC: NEGATIVE (-0.224) | 49 headlines | FOMC:HAWKISH
+2026-04-16 20:27:44,158 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:27:44,599 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:27:44,786 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:27:44,862 [NLP]   AAPL: NEGATIVE (-0.302) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:27:45,064 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:27:45,150 [NLP]   NVDA: POSITIVE (+0.894) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:27:45,335 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:27:45,697 [NLP]   TSLA: NEUTRAL (-0.014) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:27:45,892 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:27:46,222 [NLP]   GLD: POSITIVE (+0.339) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:27:46,224 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:32:49,330 [NLP] Fetched 119 headlines
+2026-04-16 20:32:49,531 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:32:49,910 [NLP]   BTC: NEGATIVE (-0.224) | 49 headlines | FOMC:HAWKISH
+2026-04-16 20:32:50,104 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:32:50,708 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:32:50,900 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:32:50,989 [NLP]   AAPL: NEGATIVE (-0.302) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:32:51,180 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:32:51,270 [NLP]   NVDA: POSITIVE (+0.894) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:32:51,474 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:32:51,876 [NLP]   TSLA: NEUTRAL (-0.014) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:32:52,071 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:32:52,382 [NLP]   GLD: POSITIVE (+0.339) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:32:52,383 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:37:55,334 [NLP] Fetched 119 headlines
+2026-04-16 20:37:55,560 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:37:56,014 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 20:37:56,196 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:37:56,601 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:37:56,787 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:37:56,863 [NLP]   AAPL: NEGATIVE (-0.302) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:37:57,051 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:37:57,142 [NLP]   NVDA: POSITIVE (+0.894) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:37:57,338 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:37:57,678 [NLP]   TSLA: NEUTRAL (-0.014) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:37:57,865 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:37:58,215 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:37:58,216 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:43:00,938 [NLP] Fetched 119 headlines
+2026-04-16 20:43:01,177 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:43:01,522 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 20:43:01,711 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:43:02,065 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:43:02,250 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:43:02,309 [NLP]   AAPL: NEGATIVE (-0.302) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:43:02,504 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:43:02,569 [NLP]   NVDA: POSITIVE (+0.894) | 2 headlines | FOMC:HAWKISH
+2026-04-16 20:43:02,754 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:43:03,077 [NLP]   TSLA: NEUTRAL (-0.014) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:43:03,277 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:43:03,611 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:43:03,614 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:48:06,155 [NLP] Fetched 119 headlines
+2026-04-16 20:48:06,360 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:48:06,704 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 20:48:06,896 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:48:07,273 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:48:07,462 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:48:07,508 [NLP]   AAPL: NEUTRAL (+0.000) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:48:07,837 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:48:07,901 [NLP]   NVDA: POSITIVE (+0.867) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:48:08,090 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:48:08,422 [NLP]   TSLA: NEGATIVE (-0.109) | 15 headlines | FOMC:HAWKISH
+2026-04-16 20:48:08,608 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:48:08,929 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:48:08,933 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:53:11,467 [NLP] Fetched 119 headlines
+2026-04-16 20:53:11,677 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:53:12,024 [NLP]   BTC: NEGATIVE (-0.224) | 48 headlines | FOMC:HAWKISH
+2026-04-16 20:53:12,206 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:53:12,559 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:53:12,753 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:53:12,813 [NLP]   AAPL: NEUTRAL (+0.000) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:53:13,019 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:53:13,077 [NLP]   NVDA: POSITIVE (+0.867) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:53:13,279 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:53:13,620 [NLP]   TSLA: NEGATIVE (-0.109) | 15 headlines | FOMC:HAWKISH
+2026-04-16 20:53:13,807 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:53:14,138 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:53:14,139 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 20:58:16,931 [NLP] Fetched 119 headlines
+2026-04-16 20:58:17,135 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:58:17,473 [NLP]   BTC: NEGATIVE (-0.224) | 49 headlines | FOMC:HAWKISH
+2026-04-16 20:58:17,657 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:58:18,007 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 20:58:18,197 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:58:18,241 [NLP]   AAPL: NEUTRAL (+0.000) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:58:18,423 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:58:18,479 [NLP]   NVDA: POSITIVE (+0.867) | 1 headlines | FOMC:HAWKISH
+2026-04-16 20:58:18,673 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:58:19,029 [NLP]   TSLA: NEUTRAL (-0.015) | 16 headlines | FOMC:HAWKISH
+2026-04-16 20:58:19,218 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 20:58:19,592 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 20:58:19,593 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:03:22,349 [NLP] Fetched 119 headlines
+2026-04-16 21:03:22,556 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:03:22,902 [NLP]   BTC: NEGATIVE (-0.224) | 49 headlines | FOMC:HAWKISH
+2026-04-16 21:03:23,092 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:03:23,448 [NLP]   ETH: NEGATIVE (-0.215) | 13 headlines | FOMC:HAWKISH
+2026-04-16 21:03:23,630 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:03:23,678 [NLP]   AAPL: NEUTRAL (+0.000) | 1 headlines | FOMC:HAWKISH
+2026-04-16 21:03:23,872 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:03:23,928 [NLP]   NVDA: POSITIVE (+0.867) | 1 headlines | FOMC:HAWKISH
+2026-04-16 21:03:24,128 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:03:24,468 [NLP]   TSLA: NEUTRAL (-0.015) | 16 headlines | FOMC:HAWKISH
+2026-04-16 21:03:24,655 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:03:24,978 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:03:24,979 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:08:27,702 [NLP] Fetched 119 headlines
+2026-04-16 21:08:27,901 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:08:28,250 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 21:08:28,439 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:08:28,784 [NLP]   ETH: NEGATIVE (-0.215) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:08:28,975 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:08:29,027 [NLP]   AAPL: NEUTRAL (+0.000) | 1 headlines | FOMC:HAWKISH
+2026-04-16 21:08:29,248 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:08:29,336 [NLP]   NVDA: POSITIVE (+0.433) | 2 headlines | FOMC:HAWKISH
+2026-04-16 21:08:29,534 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:08:29,879 [NLP]   TSLA: NEUTRAL (-0.015) | 16 headlines | FOMC:HAWKISH
+2026-04-16 21:08:30,063 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:08:30,389 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:08:30,390 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:13:33,127 [NLP] Fetched 119 headlines
+2026-04-16 21:13:33,339 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:13:33,687 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 21:13:33,875 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:13:34,221 [NLP]   ETH: NEGATIVE (-0.215) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:13:34,418 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:13:34,462 [NLP]   AAPL: NEUTRAL (+0.000) | 1 headlines | FOMC:HAWKISH
+2026-04-16 21:13:34,675 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:13:34,808 [NLP]   NVDA: POSITIVE (+0.289) | 3 headlines | FOMC:HAWKISH
+2026-04-16 21:13:34,997 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:13:35,340 [NLP]   TSLA: NEUTRAL (-0.015) | 16 headlines | FOMC:HAWKISH
+2026-04-16 21:13:35,527 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:13:35,862 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:13:35,863 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:18:38,434 [NLP] Fetched 119 headlines
+2026-04-16 21:18:38,645 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:18:38,994 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 21:18:39,179 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:18:39,543 [NLP]   ETH: NEGATIVE (-0.215) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:18:39,726 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:18:39,773 [NLP]   AAPL: NEUTRAL (+0.000) | 1 headlines | FOMC:HAWKISH
+2026-04-16 21:18:39,956 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:18:40,090 [NLP]   NVDA: POSITIVE (+0.289) | 3 headlines | FOMC:HAWKISH
+2026-04-16 21:18:40,271 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:18:40,631 [NLP]   TSLA: NEUTRAL (-0.015) | 16 headlines | FOMC:HAWKISH
+2026-04-16 21:18:40,824 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:18:41,162 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:18:41,163 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:23:43,818 [NLP] Fetched 119 headlines
+2026-04-16 21:23:44,009 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:23:44,387 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 21:23:44,578 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:23:44,931 [NLP]   ETH: NEGATIVE (-0.215) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:23:45,114 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:23:45,192 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 21:23:45,374 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:23:45,586 [NLP]   NVDA: POSITIVE (+0.289) | 3 headlines | FOMC:HAWKISH
+2026-04-16 21:23:45,770 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:23:46,135 [NLP]   TSLA: NEUTRAL (-0.015) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:23:46,326 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:23:46,652 [NLP]   GLD: POSITIVE (+0.244) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:23:46,653 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:28:49,388 [NLP] Fetched 119 headlines
+2026-04-16 21:28:49,596 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:28:49,933 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 21:28:50,122 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:28:50,475 [NLP]   ETH: NEGATIVE (-0.215) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:28:50,658 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:28:50,738 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 21:28:50,931 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:28:51,070 [NLP]   NVDA: POSITIVE (+0.289) | 3 headlines | FOMC:HAWKISH
+2026-04-16 21:28:51,262 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:28:51,616 [NLP]   TSLA: NEUTRAL (-0.015) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:28:51,801 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:28:52,143 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 21:28:52,144 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:34:06,051 [NLP] Fetched 119 headlines
+2026-04-16 21:34:06,254 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:34:09,852 [NLP]   BTC: NEGATIVE (-0.224) | 49 headlines | FOMC:HAWKISH
+2026-04-16 21:34:10,041 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:34:18,155 [NLP]   ETH: NEGATIVE (-0.215) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:34:18,351 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:34:18,636 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 21:34:18,838 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:34:22,193 [NLP]   NVDA: POSITIVE (+0.379) | 4 headlines | FOMC:HAWKISH
+2026-04-16 21:34:22,400 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:34:22,732 [NLP]   TSLA: NEUTRAL (-0.015) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:34:22,918 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:34:23,245 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 21:34:23,246 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:39:26,030 [NLP] Fetched 119 headlines
+2026-04-16 21:39:26,224 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:39:28,353 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 21:39:28,539 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:39:36,302 [NLP]   ETH: NEGATIVE (-0.215) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:39:36,503 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:39:37,092 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 21:39:37,297 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:39:40,241 [NLP]   NVDA: POSITIVE (+0.379) | 4 headlines | FOMC:HAWKISH
+2026-04-16 21:39:40,430 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:39:40,775 [NLP]   TSLA: NEUTRAL (-0.015) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:39:40,956 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:39:41,273 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 21:39:41,274 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:44:43,897 [NLP] Fetched 119 headlines
+2026-04-16 21:44:44,094 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:44:47,002 [NLP]   BTC: NEGATIVE (-0.224) | 49 headlines | FOMC:HAWKISH
+2026-04-16 21:44:47,205 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:44:51,892 [NLP]   ETH: NEGATIVE (-0.215) | 14 headlines | FOMC:HAWKISH
+2026-04-16 21:44:52,103 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:44:52,184 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 21:44:52,373 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:44:55,680 [NLP]   NVDA: POSITIVE (+0.379) | 4 headlines | FOMC:HAWKISH
+2026-04-16 21:44:55,870 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:44:56,225 [NLP]   TSLA: NEUTRAL (+0.038) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:44:56,409 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:44:56,742 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 21:44:56,743 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:49:59,327 [NLP] Fetched 119 headlines
+2026-04-16 21:49:59,534 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:50:01,791 [NLP]   BTC: NEGATIVE (-0.224) | 49 headlines | FOMC:HAWKISH
+2026-04-16 21:50:01,994 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:50:04,471 [NLP]   ETH: NEGATIVE (-0.284) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:50:04,658 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:50:06,383 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 21:50:06,574 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:50:09,816 [NLP]   NVDA: POSITIVE (+0.379) | 4 headlines | FOMC:HAWKISH
+2026-04-16 21:50:10,003 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:50:18,200 [NLP]   TSLA: NEUTRAL (+0.038) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:50:18,385 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:50:18,698 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 21:50:18,700 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 21:55:21,065 [NLP] Fetched 119 headlines
+2026-04-16 21:55:21,264 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:55:26,949 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 21:55:27,136 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:55:31,077 [NLP]   ETH: NEGATIVE (-0.284) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:55:31,266 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:55:31,940 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 21:55:32,133 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:55:33,192 [NLP]   NVDA: POSITIVE (+0.216) | 3 headlines | FOMC:HAWKISH
+2026-04-16 21:55:33,389 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:55:36,481 [NLP]   TSLA: NEUTRAL (+0.038) | 15 headlines | FOMC:HAWKISH
+2026-04-16 21:55:36,691 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 21:55:39,829 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 21:55:39,830 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 22:00:42,658 [NLP] Fetched 119 headlines
+2026-04-16 22:00:42,859 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:00:46,940 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 22:00:47,140 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:00:52,938 [NLP]   ETH: NEGATIVE (-0.284) | 15 headlines | FOMC:HAWKISH
+2026-04-16 22:00:53,148 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:00:53,252 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 22:00:53,459 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:00:54,303 [NLP]   NVDA: POSITIVE (+0.216) | 3 headlines | FOMC:HAWKISH
+2026-04-16 22:00:54,501 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:00:57,353 [NLP]   TSLA: NEUTRAL (+0.038) | 15 headlines | FOMC:HAWKISH
+2026-04-16 22:00:57,551 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:00:59,621 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 22:00:59,622 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 22:06:02,663 [NLP] Fetched 119 headlines
+2026-04-16 22:06:02,878 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:06:05,519 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 22:06:05,707 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:06:08,461 [NLP]   ETH: NEGATIVE (-0.284) | 15 headlines | FOMC:HAWKISH
+2026-04-16 22:06:08,665 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:06:09,505 [NLP]   AAPL: NEUTRAL (+0.000) | 2 headlines | FOMC:HAWKISH
+2026-04-16 22:06:09,706 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:06:11,365 [NLP]   NVDA: POSITIVE (+0.216) | 3 headlines | FOMC:HAWKISH
+2026-04-16 22:06:11,566 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:06:17,150 [NLP]   TSLA: NEUTRAL (+0.038) | 15 headlines | FOMC:HAWKISH
+2026-04-16 22:06:17,370 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:06:24,996 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 22:06:24,999 [NLP] NLP cycle complete. Sleeping 5 minutes.
+2026-04-16 22:11:28,978 [NLP] Fetched 119 headlines
+2026-04-16 22:11:29,358 [NLP] NewsAPI failed for BTC: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:11:46,314 [NLP]   BTC: NEGATIVE (-0.224) | 50 headlines | FOMC:HAWKISH
+2026-04-16 22:11:46,521 [NLP] NewsAPI failed for ETH: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:11:53,554 [NLP]   ETH: NEGATIVE (-0.284) | 15 headlines | FOMC:HAWKISH
+2026-04-16 22:11:53,767 [NLP] NewsAPI failed for AAPL: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:11:55,242 [NLP]   AAPL: NEUTRAL (+0.000) | 1 headlines | FOMC:HAWKISH
+2026-04-16 22:11:55,462 [NLP] NewsAPI failed for NVDA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:11:58,714 [NLP]   NVDA: POSITIVE (+0.355) | 4 headlines | FOMC:HAWKISH
+2026-04-16 22:11:58,908 [NLP] NewsAPI failed for TSLA: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:12:06,958 [NLP]   TSLA: POSITIVE (+0.224) | 16 headlines | FOMC:HAWKISH
+2026-04-16 22:12:07,137 [NLP] NewsAPI failed for GLD: {'status': 'error', 'code': 'rateLimited', 'message': 'You have made too many requests recently. Developer accounts are limited to 100 requests over a 24 hour period (50 requests available every 12 hours). Please upgrade to a paid plan if you need more requests.'}
+2026-04-16 22:12:08,292 [NLP]   GLD: POSITIVE (+0.244) | 13 headlines | FOMC:HAWKISH
+2026-04-16 22:12:08,297 [NLP] NLP cycle complete. Sleeping 5 minutes.

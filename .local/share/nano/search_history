@@ -1,0 +1,12 @@
+step
+timesteps
+excute_paper_trade
+execute_paper_trade
+if action in
+MIN_CONFIDENCE=0.60
+if sentiment_signal == "EXTREME_FEAR"
+PAPER_USER = "aria-agent-system"
+print(f"  Approved: {len(approved)}/{len(raw_decisions)} decisions")
+
+
+

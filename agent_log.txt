@@ -1,0 +1,312 @@
+============================================================
+ARIA AUTONOMOUS AGENT SYSTEM - STARTING
+Agents: 10
+Interval: 60s
+Min confidence: 0.6
+============================================================
+
+[14:04:13] Cycle 1
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.69)
+  agent_eth: HOLD (0.69)
+  agent_tech: HOLD (0.64)
+  agent_gold: HOLD (0.58)
+  agent_aapl: HOLD (0.74)
+  agent_tsla: HOLD (0.67)
+  Approved trades: 0
+  Cycle 1 complete. Sleeping 60s...
+
+[14:05:18] Cycle 2
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.68)
+  agent_eth: HOLD (0.69)
+  agent_tech: HOLD (0.64)
+  agent_gold: HOLD (0.60)
+  agent_aapl: HOLD (0.74)
+  agent_tsla: HOLD (0.66)
+  Approved trades: 0
+  Cycle 2 complete. Sleeping 60s...
+
+[14:06:23] Cycle 3
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.68)
+  agent_eth: HOLD (0.68)
+  agent_tech: HOLD (0.65)
+  agent_gold: HOLD (0.61)
+  agent_aapl: HOLD (0.68)
+  agent_tsla: HOLD (0.64)
+  Approved trades: 0
+  Cycle 3 complete. Sleeping 60s...
+
+[14:07:28] Cycle 4
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.68)
+  agent_eth: HOLD (0.68)
+  agent_tech: HOLD (0.65)
+  agent_gold: HOLD (0.61)
+  agent_aapl: HOLD (0.74)
+  agent_tsla: HOLD (0.66)
+  Approved trades: 0
+  Cycle 4 complete. Sleeping 60s...
+
+[14:08:34] Cycle 5
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.73)
+  agent_eth: HOLD (0.71)
+  agent_tech: HOLD (0.65)
+  agent_gold: HOLD (0.61)
+  agent_aapl: HOLD (0.73)
+  agent_tsla: HOLD (0.66)
+  Approved trades: 0
+  Cycle 5 complete. Sleeping 60s...
+
+[14:09:39] Cycle 6
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.69)
+  agent_eth: HOLD (0.72)
+  agent_tech: HOLD (0.70)
+  agent_gold: HOLD (0.59)
+  agent_aapl: HOLD (0.73)
+  agent_tsla: HOLD (0.61)
+  Approved trades: 0
+  Cycle 6 complete. Sleeping 60s...
+
+[14:10:44] Cycle 7
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.69)
+  agent_eth: HOLD (0.71)
+  agent_tech: HOLD (0.68)
+  agent_gold: HOLD (0.60)
+  agent_aapl: HOLD (0.74)
+  agent_tsla: HOLD (0.61)
+  Approved trades: 0
+  Cycle 7 complete. Sleeping 60s...
+
+[14:11:49] Cycle 8
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.73)
+  agent_eth: HOLD (0.70)
+  agent_tech: HOLD (0.67)
+  agent_gold: HOLD (0.59)
+  agent_aapl: HOLD (0.67)
+  agent_tsla: HOLD (0.61)
+  Approved trades: 0
+  Cycle 8 complete. Sleeping 60s...
+
+[14:12:55] Cycle 9
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.71)
+  agent_eth: HOLD (0.68)
+  agent_tech: HOLD (0.69)
+  agent_gold: HOLD (0.59)
+  agent_aapl: HOLD (0.67)
+  agent_tsla: HOLD (0.62)
+  Approved trades: 0
+  Cycle 9 complete. Sleeping 60s...
+
+[14:14:00] Cycle 10
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.70)
+  agent_eth: HOLD (0.69)
+  agent_tech: HOLD (0.70)
+  agent_gold: HOLD (0.58)
+  agent_aapl: HOLD (0.66)
+  agent_tsla: HOLD (0.66)
+  Approved trades: 0
+  Cycle 10 complete. Sleeping 60s...
+
+[14:15:05] Cycle 11
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.65)
+  agent_eth: HOLD (0.63)
+  agent_tech: HOLD (0.70)
+  agent_gold: HOLD (0.58)
+  agent_aapl: HOLD (0.65)
+  agent_tsla: HOLD (0.63)
+  Approved trades: 0
+  Cycle 11 complete. Sleeping 60s...
+
+[14:16:10] Cycle 12
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.71)
+  agent_eth: HOLD (0.64)
+  agent_tech: HOLD (0.69)
+  agent_gold: HOLD (0.59)
+  agent_aapl: HOLD (0.65)
+  agent_tsla: HOLD (0.68)
+  Approved trades: 0
+  Cycle 12 complete. Sleeping 60s...
+
+[14:17:16] Cycle 13
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.67)
+  agent_eth: HOLD (0.70)
+  agent_tech: HOLD (0.68)
+  agent_gold: HOLD (0.58)
+  agent_aapl: HOLD (0.58)
+  agent_tsla: HOLD (0.66)
+  Approved trades: 0
+  Cycle 13 complete. Sleeping 60s...
+
+[14:18:21] Cycle 14
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.70)
+  agent_eth: HOLD (0.69)
+  agent_tech: HOLD (0.66)
+  agent_gold: HOLD (0.59)
+  agent_aapl: HOLD (0.57)
+  agent_tsla: HOLD (0.66)
+  Approved trades: 0
+  Cycle 14 complete. Sleeping 60s...
+
+[14:19:26] Cycle 15
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.72)
+  agent_eth: HOLD (0.66)
+  agent_tech: HOLD (0.69)
+  agent_gold: HOLD (0.58)
+  agent_aapl: HOLD (0.55)
+  agent_tsla: HOLD (0.66)
+  Approved trades: 0
+  Cycle 15 complete. Sleeping 60s...
+
+[14:20:31] Cycle 16
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.73)
+  agent_eth: HOLD (0.66)
+  agent_tech: HOLD (0.69)
+  agent_gold: HOLD (0.59)
+  agent_aapl: HOLD (0.64)
+  agent_tsla: HOLD (0.64)
+  Approved trades: 0
+  Cycle 16 complete. Sleeping 60s...
+
+[14:21:35] Cycle 17
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.69)
+  agent_eth: HOLD (0.68)
+  agent_tech: HOLD (0.69)
+  agent_gold: HOLD (0.59)
+  agent_aapl: HOLD (0.58)
+  agent_tsla: HOLD (0.64)
+  Approved trades: 0
+  Cycle 17 complete. Sleeping 60s...
+
+[14:22:40] Cycle 18
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.66)
+  agent_eth: HOLD (0.70)
+  agent_tech: HOLD (0.69)
+  agent_gold: HOLD (0.56)
+  agent_aapl: HOLD (0.53)
+  agent_tsla: HOLD (0.63)
+  Approved trades: 0
+  Cycle 18 complete. Sleeping 60s...
+
+[14:23:45] Cycle 19
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.56)
+  agent_eth: HOLD (0.61)
+  agent_tech: HOLD (0.68)
+  agent_gold: HOLD (0.60)
+  agent_aapl: HOLD (0.52)
+  agent_tsla: HOLD (0.63)
+  Approved trades: 0
+  Cycle 19 complete. Sleeping 60s...
+
+[14:24:51] Cycle 20
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.54)
+  agent_eth: HOLD (0.61)
+  agent_tech: HOLD (0.67)
+  agent_gold: HOLD (0.58)
+  agent_aapl: HOLD (0.53)
+  agent_tsla: HOLD (0.64)
+  Approved trades: 0
+  Cycle 20 complete. Sleeping 60s...
+
+[14:25:56] Cycle 21
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.65)
+  agent_eth: HOLD (0.64)
+  agent_tech: HOLD (0.67)
+  agent_gold: HOLD (0.63)
+  agent_aapl: HOLD (0.52)
+  agent_tsla: HOLD (0.64)
+  Approved trades: 0
+  Cycle 21 complete. Sleeping 60s...
+
+[14:27:01] Cycle 22
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.67)
+  agent_eth: HOLD (0.63)
+  agent_tech: HOLD (0.68)
+  agent_gold: HOLD (0.59)
+  agent_aapl: HOLD (0.51)
+  agent_tsla: HOLD (0.65)
+  Approved trades: 0
+  Cycle 22 complete. Sleeping 60s...
+
+[14:28:06] Cycle 23
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.66)
+  agent_eth: HOLD (0.60)
+  agent_tech: HOLD (0.69)
+  agent_gold: HOLD (0.60)
+  agent_aapl: HOLD (0.52)
+  agent_tsla: HOLD (0.63)
+  Approved trades: 0
+  Cycle 23 complete. Sleeping 60s...
+
+[14:29:12] Cycle 24
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.67)
+  agent_eth: HOLD (0.61)
+  agent_tech: HOLD (0.68)
+  agent_gold: HOLD (0.60)
+  agent_aapl: HOLD (0.50)
+  agent_tsla: HOLD (0.64)
+  Approved trades: 0
+  Cycle 24 complete. Sleeping 60s...
+
+[14:30:17] Cycle 25
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.71)
+  agent_eth: HOLD (0.72)
+  agent_tech: HOLD (0.53)
+  agent_gold: HOLD (0.60)
+  agent_aapl: HOLD (0.66)
+  agent_tsla: HOLD (0.59)
+  Approved trades: 0
+  Cycle 25 complete. Sleeping 60s...
+
+[14:31:22] Cycle 26
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.74)
+  agent_eth: HOLD (0.69)
+  agent_tech: HOLD (0.59)
+  agent_gold: HOLD (0.56)
+  agent_aapl: HOLD (0.62)
+  agent_tsla: HOLD (0.51)
+  Approved trades: 0
+  Cycle 26 complete. Sleeping 60s...
+
+[14:32:27] Cycle 27
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.74)
+  agent_eth: HOLD (0.70)
+  agent_tech: HOLD (0.58)
+  agent_gold: HOLD (0.50)
+  agent_aapl: HOLD (0.65)
+  agent_tsla: HOLD (0.52)
+  Approved trades: 0
+  Cycle 27 complete. Sleeping 60s...
+
+[14:33:32] Cycle 28
+  Macro:NEUTRAL Sentiment:EXTREME_FEAR Regime:SIDEWAYS
+  agent_btc: HOLD (0.74)
+  agent_eth: HOLD (0.70)
+  agent_tech: HOLD (0.53)
+  agent_gold: HOLD (0.58)
+  agent_aapl: HOLD (0.62)
+[200~nohup: command not found

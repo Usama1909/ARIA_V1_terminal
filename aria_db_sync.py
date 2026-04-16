@@ -64,6 +64,32 @@ def sync_system_state(hcur, rcur):
     except Exception as e:
         log.warning("system state sync skipped: " + str(e))
 
+
+def post_agent_reports(reports):
+    try:
+        payload = {'reports': reports}
+        resp = requests.post(RAILWAY_APP_URL + '/agent/reports/sync', json=payload, timeout=10)
+        log.info('Posted ' + str(len(reports)) + ' agent reports to frontend: ' + str(resp.status_code))
+    except Exception as e:
+        log.error('Agent reports POST failed: ' + str(e))
+
+def sync_agent_decisions(hcur):
+    try:
+        hcur.execute("""
+            SELECT agent_id, symbol, action, confidence, reasoning, timestamp 
+            FROM agent_decisions 
+            ORDER BY timestamp DESC LIMIT 100
+        """)
+        rows = hcur.fetchall()
+        reports = [{'agent_id': r[0], 'symbol': r[1], 'action': r[2], 
+                    'confidence': float(r[3]) if r[3] else 0.5, 
+                    'reasoning': r[4], 'timestamp': r[5].isoformat(),
+                    'agent_type': 'SPECIALIST'} for r in rows]
+        post_agent_reports(reports)
+        log.info('Synced ' + str(len(reports)) + ' agent decisions')
+    except Exception as e:
+        log.warning('Agent decisions sync skipped: ' + str(e))
+
 def run():
     log.info("DB Sync Bridge starting...")
     if not RAILWAY_URL:
@@ -104,28 +130,3 @@ def post_positions_to_frontend(positions):
 
 if __name__ == "__main__":
     run()
-
-def post_agent_reports(reports):
-    try:
-        payload = {'reports': reports}
-        resp = requests.post(RAILWAY_APP_URL + '/agent/reports/sync', json=payload, timeout=10)
-        log.info('Posted ' + str(len(reports)) + ' agent reports to frontend: ' + str(resp.status_code))
-    except Exception as e:
-        log.error('Agent reports POST failed: ' + str(e))
-
-def sync_agent_decisions(hcur):
-    try:
-        hcur.execute("""
-            SELECT agent_id, symbol, action, confidence, reasoning, timestamp 
-            FROM agent_decisions 
-            ORDER BY timestamp DESC LIMIT 100
-        """)
-        rows = hcur.fetchall()
-        reports = [{'agent_id': r[0], 'symbol': r[1], 'action': r[2], 
-                    'confidence': float(r[3]) if r[3] else 0.5, 
-                    'reasoning': r[4], 'timestamp': r[5].isoformat(),
-                    'agent_type': 'SPECIALIST'} for r in rows]
-        post_agent_reports(reports)
-        log.info('Synced ' + str(len(reports)) + ' agent decisions')
-    except Exception as e:
-        log.warning('Agent decisions sync skipped: ' + str(e))

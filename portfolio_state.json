@@ -1,0 +1,28 @@
+{
+  "aria-agent-system": {
+    "user_id": "aria-agent-system",
+    "balance": 10000.0,
+    "starting_balance": 10000.0,
+    "total_value": 10000.0,
+    "total_return_pct": 0.0,
+    "unrealised_pnl": 0.0,
+    "open_trades": [],
+    "open_count": 0,
+    "closed_count": 0,
+    "win_rate": 0,
+    "timestamp": "2026-03-30T12:50:42.501570"
+  },
+  "aria-agent-v4": {
+    "user_id": "aria-agent-v4",
+    "balance": 10000.0,
+    "starting_balance": 10000.0,
+    "total_value": 10000.0,
+    "total_return_pct": 0.0,
+    "unrealised_pnl": 0.0,
+    "open_trades": [],
+    "open_count": 0,
+    "closed_count": 0,
+    "win_rate": 0,
+    "timestamp": "2026-03-30T12:50:42.974813"
+  }
+}

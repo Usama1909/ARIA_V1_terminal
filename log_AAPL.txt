@@ -1,0 +1,19 @@
+============================================================
+ARIA PPO TRAINER v2 - AAPL
+Training steps: 2,000,000
+Reward: Sharpe-adjusted + drawdown penalty
+============================================================
+  Fetching AAPL training data (2y)...
+  Got 3483 candles for AAPL
+Training data: 3434 samples
+Train: 2747 | Test: 687
+
+Starting PPO v2 training (2,000,000 steps)...
+This will take ~2 hours. Running in background.
+  New best return: -13.61% | trades: 439 | win rate: 46.0%
+  New best return: -6.01% | trades: 361 | win rate: 48.8%
+  New best return: -4.58% | trades: 275 | win rate: 49.1%
+  New best return: -0.95% | trades: 240 | win rate: 54.2%
+  New best return: 6.15% | trades: 190 | win rate: 61.6%
+  New best return: 7.51% | trades: 150 | win rate: 67.3%
+  New best return: 8.32% | trades: 119 | win rate: 59.7%

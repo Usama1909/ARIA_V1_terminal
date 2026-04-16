@@ -1,0 +1,41 @@
+nohup: ignoring input
+============================================================
+ARIA PPO TRAINER v2 - BTC
+Training steps: 2,000,000
+Reward: Sharpe-adjusted + drawdown penalty
+============================================================
+  Fetching BTC training data (2y)...
+  Got 17365 candles for BTC
+Training data: 17004 samples
+Train: 13603 | Test: 3401
+
+Starting PPO v2 training (2,000,000 steps)...
+This will take ~2 hours. Running in background.
+  New best return: -42.28% | trades: 1771 | win rate: 44.1%
+  New best return: -12.41% | trades: 575 | win rate: 47.8%
+  New best return: 2.88% | trades: 296 | win rate: 55.4%
+  New best return: 4.37% | trades: 179 | win rate: 65.9%
+  New best return: 4.70% | trades: 256 | win rate: 68.4%
+  New best return: 7.62% | trades: 202 | win rate: 69.3%
+  New best return: 8.06% | trades: 173 | win rate: 61.3%
+  New best return: 8.38% | trades: 219 | win rate: 70.3%
+  New best return: 8.96% | trades: 210 | win rate: 64.3%
+  New best return: 9.64% | trades: 253 | win rate: 64.8%
+  New best return: 10.29% | trades: 152 | win rate: 70.4%
+  New best return: 10.90% | trades: 201 | win rate: 69.2%
+  New best return: 11.26% | trades: 169 | win rate: 70.4%
+  New best return: 12.08% | trades: 198 | win rate: 71.7%
+ 100% ━━━━━━━━━━━━━━━━━━━━ 2,000,896/2,000,000  [ 0:44:34 < 0:00:00 , 751 it/s ]
+
+Model saved: aria_ppo_btc.zip
+
+Testing on unseen data...
+
+============================================================
+FINAL TEST RESULTS:
+  Final Balance:  $9030.02
+  Total Return:   -9.70%
+  Total Trades:   17
+  Win Rate:       47.1%
+  Best Win Rate During Training: 75.1%
+============================================================

@@ -1,0 +1,23 @@
+============================================================
+ARIA PPO TRAINER v2 - NVDA
+Training steps: 2,000,000
+Reward: Sharpe-adjusted + drawdown penalty
+============================================================
+  Fetching NVDA training data (2y)...
+  Got 3483 candles for NVDA
+Training data: 3434 samples
+Train: 2747 | Test: 687
+
+Starting PPO v2 training (2,000,000 steps)...
+This will take ~2 hours. Running in background.
+  New best return: -7.91% | trades: 415 | win rate: 44.6%
+  New best return: -6.74% | trades: 358 | win rate: 51.4%
+  New best return: 2.84% | trades: 315 | win rate: 48.9%
+  New best return: 14.99% | trades: 219 | win rate: 49.3%
+  New best return: 16.08% | trades: 131 | win rate: 49.6%
+  New best return: 17.61% | trades: 117 | win rate: 54.7%
+  New best return: 17.79% | trades: 153 | win rate: 61.4%
+  New best return: 18.85% | trades: 121 | win rate: 65.3%
+  New best return: 18.94% | trades: 136 | win rate: 72.1%
+  New best return: 19.99% | trades: 118 | win rate: 69.5%
+  New best return: 20.13% | trades: 163 | win rate: 69.3%

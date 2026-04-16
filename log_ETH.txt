@@ -1,0 +1,39 @@
+nohup: ignoring input
+============================================================
+ARIA PPO TRAINER v2 - ETH
+Training steps: 2,000,000
+Reward: Sharpe-adjusted + drawdown penalty
+============================================================
+  Fetching ETH training data (2y)...
+  Got 17365 candles for ETH
+Training data: 17151 samples
+Train: 13720 | Test: 3431
+
+Starting PPO v2 training (2,000,000 steps)...
+This will take ~2 hours. Running in background.
+  New best return: -46.16% | trades: 1535 | win rate: 43.5%
+  New best return: -10.07% | trades: 462 | win rate: 47.6%
+  New best return: -0.31% | trades: 223 | win rate: 51.1%
+  New best return: 0.97% | trades: 115 | win rate: 61.7%
+  New best return: 2.08% | trades: 139 | win rate: 64.7%
+  New best return: 3.63% | trades: 61 | win rate: 52.5%
+  New best return: 6.41% | trades: 81 | win rate: 60.5%
+  New best return: 7.10% | trades: 40 | win rate: 57.5%
+  New best return: 9.58% | trades: 66 | win rate: 63.6%
+  New best return: 11.14% | trades: 32 | win rate: 56.2%
+  New best return: 11.60% | trades: 161 | win rate: 63.4%
+  New best return: 12.07% | trades: 166 | win rate: 59.6%
+ 100% ━━━━━━━━━━━━━━━━━━━━ 2,000,896/2,000,000  [ 1:38:53 < 0:00:00 , 183 it/s ]
+
+Model saved: aria_ppo_eth.zip
+
+Testing on unseen data...
+
+============================================================
+FINAL TEST RESULTS:
+  Final Balance:  $8935.63
+  Total Return:   -10.64%
+  Total Trades:   5
+  Win Rate:       20.0%
+  Best Win Rate During Training: 73.0%
+============================================================
