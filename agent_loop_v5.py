@@ -411,6 +411,21 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
 
+    # ── Step 7: Cross-asset chain modifier ──────────────────
+    try:
+        from aria_cross_asset import evaluate as cross_eval
+        cross = cross_eval(symbol, market_data)
+        cross_mod = cross['modifier']
+        if abs(cross_mod) > 0.01:
+            if (final_dir == 'LONG' and cross_mod > 0) or (final_dir == 'SHORT' and cross_mod < 0):
+                final_conf = min(0.92, final_conf + abs(cross_mod))
+                log.info(f"  {symbol} CROSS-ASSET BOOST: {cross['active']} → conf:{final_conf:.3f}")
+            else:
+                final_conf = max(0.45, final_conf - abs(cross_mod))
+                log.info(f"  {symbol} CROSS-ASSET DRAG: {cross['active']} → conf:{final_conf:.3f}")
+    except Exception as e:
+        log.warning(f"Cross-asset modifier failed: {e}")
+
     # ── Step 6: Causal graph modifier ───────────────────────
     try:
         from aria_causal_graph import evaluate as causal_evaluate
