@@ -196,8 +196,20 @@ def kelly_size(symbol, confidence, sentiment, risk, world, portfolio_value):
     vol_mult=max(0.3,min(1.0,0.05/max(var,0.01)))
     vel_mult=0.6 if velocity<-10 else (0.8 if velocity<-5 else 1.0)
     world_mult=world_state_multiplier(world)
+    # OOD check — reduce size if conditions are unusual
+    ood_mult = 1.0
+    try:
+        from aria_ood_detector import detect_ood
+        from aria_model_inference import build_feature_vector
+        features = build_feature_vector(symbol)
+        ood = detect_ood(symbol, features)
+        ood_mult = ood['size_multiplier']
+        if ood_mult < 1.0:
+            log.info(f"  {symbol} OOD: {ood['reason']} size_mult:{ood_mult}")
+    except Exception as e:
+        pass
     max_pct={'BTC':0.15,'ETH':0.12,'GLD':0.15,'NVDA':0.10,'AAPL':0.10,'TSLA':0.08}.get(symbol,0.10)
-    adjusted=kelly*regime_mult*fg_mult*vol_mult*vel_mult*world_mult
+    adjusted=kelly*regime_mult*fg_mult*vol_mult*vel_mult*world_mult*ood_mult
     final=min(adjusted,max_pct,0.50)
     size_usd=round(portfolio_value*final,2)
     reasoning=f"Kelly:{kelly*100:.1f}% adj:{final*100:.1f}% regime:{regime_mult}x fg:{fg_mult}x vol:{vol_mult:.2f}x world:{world_mult}x VaR:{var*100:.1f}%"
