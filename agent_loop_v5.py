@@ -572,6 +572,23 @@ def main():
                     continue
                 size_usd, kelly_frac, kelly_reasoning = kelly_size(symbol, confidence, sentiment, risk, world, portfolio_value)
                 if size_usd < 50: continue
+                # Cap 6: Multi-agent debate
+                try:
+                    from aria_debate import debate
+                    from aria_episodic_memory import recall
+                    from aria_causal_graph import evaluate as causal_eval
+                    nlp_data = get_nlp_sentiment(symbol)
+                    causal_data = causal_eval(symbol, fomc_signal=nlp_data.get('fomc','NEUTRAL'), fear_greed=sentiment.get('fear_greed',50), regime=sentiment.get('regime','NORMAL'))
+                    ep_data = recall(symbol, direction, sentiment.get('regime','NORMAL'), sentiment.get('fear_greed',50))
+                    verdict = debate(symbol, action, confidence, market, sentiment, nlp_data, causal_data, ep_data)
+                    if verdict['verdict'] == 'REJECT':
+                        log.info(f"  {symbol} DEBATE REJECTED — skipping")
+                        continue
+                    elif verdict['verdict'] == 'REDUCE':
+                        size_usd = size_usd * 0.5
+                        log.info(f"  {symbol} DEBATE REDUCED size to ${size_usd:.0f}")
+                except Exception as e:
+                    log.warning(f"Debate failed for {symbol}: {e}")
                 decisions.append({
                     'symbol': symbol, 'action': action, 'direction': direction,
                     'size_usd': size_usd, 'confidence': confidence,
