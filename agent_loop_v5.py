@@ -411,6 +411,21 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
 
+    # ── Step 10: Microstructure signal ──────────────────────
+    try:
+        from aria_microstructure import compute_microstructure
+        micro = compute_microstructure(symbol)
+        micro_mod = micro['modifier']
+        if abs(micro_mod) > 0:
+            if (final_dir == 'LONG' and micro_mod > 0) or (final_dir == 'SHORT' and micro_mod < 0):
+                final_conf = min(0.92, final_conf + abs(micro_mod))
+                log.info(f"  {symbol} MICRO BOOST: {micro['signal']} → conf:{final_conf:.3f}")
+            elif (final_dir == 'LONG' and micro_mod < 0) or (final_dir == 'SHORT' and micro_mod > 0):
+                final_conf = max(0.45, final_conf - abs(micro_mod))
+                log.info(f"  {symbol} MICRO DRAG: {micro['signal']} → conf:{final_conf:.3f}")
+    except Exception as e:
+        log.warning(f"Microstructure modifier failed: {e}")
+
     # ── Step 9: Hypothesis engine ───────────────────────────
     try:
         from aria_hypothesis import apply_hypothesis
