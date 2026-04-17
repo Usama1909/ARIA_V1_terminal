@@ -411,6 +411,16 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
 
+    # ── Step 9: Hypothesis engine ───────────────────────────
+    try:
+        from aria_hypothesis import apply_hypothesis
+        hyp_mod, hyp_reason = apply_hypothesis(symbol, final_dir, regime)
+        if hyp_mod > 0:
+            final_conf = min(0.92, final_conf + hyp_mod)
+            log.info(f"  {symbol} HYPOTHESIS BOOST: {hyp_reason} conf:{final_conf:.3f}")
+    except Exception as e:
+        log.warning(f"Hypothesis engine failed: {e}")
+
     # ── Step 8: Adversarial self-test ───────────────────────
     try:
         from aria_adversarial import adversarial_check
@@ -631,6 +641,16 @@ def main():
                         log.error(f"positions_live write failed: {pe}")
                     log.info(f"  ORDER: {d['action']} {d['symbol']} ${d['size_usd']:.0f}")
 
+            # Cap 9: Self-improvement check every 60 cycles
+            if cycle % 60 == 0:
+                try:
+                    from aria_self_improvement import run_improvement_check
+                    results = run_improvement_check()
+                    for r in results:
+                        if r['action'] != 'STABLE':
+                            log.warning(f"  SELF-IMPROVE {r['symbol']}: {r['action']} recent:{r['recent']:.0%} baseline:{r['baseline']:.0%}")
+                except Exception as e:
+                    log.warning(f"Self-improvement check failed: {e}")
             log_cycle(cycle, sentiment, world)
             log.info(f"  Decisions:{len(decisions)} | Open:{len(open_positions)} | Portfolio:${portfolio_value:.0f}")
 
