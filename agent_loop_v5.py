@@ -411,6 +411,18 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
 
+    # ── Step 12: Regime memory modifier ────────────────────
+    try:
+        from aria_regime_memory import get_regime_modifier
+        from aria_world_model import get_world_state
+        world_full = get_world_state() if hasattr(__builtins__, '__import__') else {}
+        reg_mod, reg_reason = get_regime_modifier(symbol, final_dir, narrative, world.get('macro_phase','UNKNOWN'), world.get('risk_appetite','MODERATE'))
+        if abs(reg_mod) > 0:
+            final_conf = min(0.92, max(0.45, final_conf + reg_mod))
+            log.info(f"  {symbol} REGIME MEMORY: {reg_reason} conf:{final_conf:.3f}")
+    except Exception as e:
+        log.warning(f"Regime memory failed: {e}")
+
     # ── Step 11: Narrative engine modifier ──────────────────
     try:
         from aria_narrative import get_narrative_modifier
