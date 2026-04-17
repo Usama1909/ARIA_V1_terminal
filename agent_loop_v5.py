@@ -411,6 +411,16 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
 
+    # ── Step 8: Adversarial self-test ───────────────────────
+    try:
+        from aria_adversarial import adversarial_check
+        adv_penalty, adv_reason = adversarial_check(symbol, final_dir, regime, fg)
+        if adv_penalty < 0:
+            final_conf = max(0.45, final_conf + adv_penalty)
+            log.info(f"  {symbol} ADVERSARIAL PENALTY: {adv_reason} → conf:{final_conf:.3f}")
+    except Exception as e:
+        log.warning(f"Adversarial check failed: {e}")
+
     # ── Step 7: Cross-asset chain modifier ──────────────────
     try:
         from aria_cross_asset import evaluate as cross_eval
