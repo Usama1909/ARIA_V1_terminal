@@ -411,6 +411,16 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
 
+    # ── Step 11: Narrative engine modifier ──────────────────
+    try:
+        from aria_narrative import get_narrative_modifier
+        narr_mod, narr_reason = get_narrative_modifier(symbol, final_dir)
+        if abs(narr_mod) > 0:
+            final_conf = min(0.92, max(0.45, final_conf + narr_mod))
+            log.info(f"  {symbol} NARRATIVE: {narr_reason} modifier:{narr_mod:+.3f} conf:{final_conf:.3f}")
+    except Exception as e:
+        log.warning(f"Narrative modifier failed: {e}")
+
     # ── Step 10: Microstructure signal ──────────────────────
     try:
         from aria_microstructure import compute_microstructure
