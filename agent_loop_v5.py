@@ -688,6 +688,13 @@ def main():
                             log.warning(f"  SELF-IMPROVE {r['symbol']}: {r['action']} recent:{r['recent']:.0%} baseline:{r['baseline']:.0%}")
                 except Exception as e:
                     log.warning(f"Self-improvement check failed: {e}")
+            # Cap 13: DRL VWAP execution check
+            try:
+                from aria_drl_vwap import get_vwap_recommendation, is_ready_to_activate
+                if is_ready_to_activate() and cycle % 10 == 0:
+                    log.info(f"  DRL VWAP: Active and ready for execution")
+            except Exception as e:
+                log.warning(f"DRL VWAP check failed: {e}")
             log_cycle(cycle, sentiment, world)
             log.info(f"  Decisions:{len(decisions)} | Open:{len(open_positions)} | Portfolio:${portfolio_value:.0f}")
 
