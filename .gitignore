@@ -6,3 +6,5 @@ __pycache__/
 .env
 *.bin
 *.so
+nlp_service.log
+.bash_history
