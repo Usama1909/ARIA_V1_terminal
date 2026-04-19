@@ -79,7 +79,7 @@ def sync_system_state(hcur, rcur):
 
 def sync_closed_trades(hcur, rcur):
     try:
-        hcur.execute("SELECT symbol, direction, entry_price, exit_price, pnl_usd, pnl_pct, size_usd, outcome, exit_time FROM closed_trades ORDER BY id DESC LIMIT 500")
+        hcur.execute("SELECT symbol, direction, entry_price, exit_price, pnl_usd, pnl_pct, size_usd, outcome, exit_time FROM closed_trades ORDER BY id DESC")
         trades = hcur.fetchall()
         rcur.execute("DELETE FROM closed_trades_sync")
         for t in trades:
