@@ -35,6 +35,9 @@ RAILWAY_DB_URL = os.environ.get('DATABASE_URL', '')
 
 def get_railway_db():
     import psycopg2
+    # If running on Hetzner, use local DB directly
+    if not RAILWAY_DB_URL or 'localhost' in str(os.environ.get('DATABASE_URL','')):
+        return psycopg2.connect(host='localhost', port=5432, dbname='aria_db', user='postgres', password='aria_secure_2026')
     return psycopg2.connect(RAILWAY_DB_URL)
 
 def init_railway_db():
@@ -1300,7 +1303,7 @@ def get_live_portfolio():
         conn = get_railway_db(); cur = conn.cursor()
         cur.execute("SELECT symbol, direction, entry_price, size_usd FROM positions_live WHERE status='OPEN'")
         open_pos = cur.fetchall()
-        cur.execute("SELECT COUNT(*), SUM(CASE WHEN outcome='WIN' THEN 1 ELSE 0 END), SUM(pnl_usd) FROM closed_trades_sync")
+        cur.execute("SELECT COUNT(*), SUM(CASE WHEN outcome='WIN' THEN 1 ELSE 0 END), SUM(pnl_usd) FROM closed_trades_sync" if RAILWAY_DB_URL else "SELECT COUNT(*), SUM(CASE WHEN outcome='WIN' THEN 1 ELSE 0 END), SUM(pnl_usd) FROM closed_trades")
         closed_row = cur.fetchone()
         cur.close(); conn.close()
         symbols = [p[0] for p in open_pos]
