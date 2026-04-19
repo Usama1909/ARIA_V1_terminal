@@ -87,3 +87,7 @@ def main():
 
 if __name__=='__main__':
     main()
+
+def get_world_state():
+    """Alias for get_current_data — returns sentiment, regime, market data."""
+    return get_current_data()
