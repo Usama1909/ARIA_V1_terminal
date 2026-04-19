@@ -18,7 +18,7 @@ from scipy import stats
 from scipy.stats import t as student_t
 warnings.filterwarnings('ignore')
 
-from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -1316,8 +1316,9 @@ async def websocket_live(websocket: WebSocket):
         manager.disconnect(websocket)
 
 @app.post("/ws/broadcast")
-async def broadcast_update(data: dict):
+async def broadcast_update(request: Request):
     import json
+    data = await request.json()
     await manager.broadcast(json.dumps(data))
     return {"sent": len(manager.active_connections)}
 
