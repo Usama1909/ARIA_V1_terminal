@@ -200,6 +200,28 @@ def save_signal_to_history(symbol, signal, confidence, price, sentiment, rsi):
 
 # ── FASTAPI APP ───────────────────────────────────────────
 app = FastAPI(title="ARIA - Advanced Retail Intelligence & Analytics", version="2.0.0")
+# ── WEBSOCKET CONNECTION MANAGER ─────────────────────────
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections = []
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+    def disconnect(self, websocket: WebSocket):
+        if websocket in self.active_connections:
+            self.active_connections.remove(websocket)
+    async def broadcast(self, message: str):
+        dead = []
+        for connection in self.active_connections:
+            try:
+                await connection.send_text(message)
+            except:
+                dead.append(connection)
+        for d in dead:
+            self.disconnect(d)
+
+manager = ConnectionManager()
+
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 class ChatRequest(BaseModel):
