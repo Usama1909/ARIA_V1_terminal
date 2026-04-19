@@ -1276,7 +1276,7 @@ def agents_status():
 def get_live_portfolio():
     try:
         conn = get_railway_db(); cur = conn.cursor()
-        cur.execute("SELECT symbol, direction, entry_price, size_usd, entry_time, regime_at_entry FROM positions_live WHERE status='OPEN'")
+        cur.execute("SELECT symbol, direction, entry_price, size_usd FROM positions_live WHERE status='OPEN'")
         open_pos = cur.fetchall()
         cur.execute("SELECT COUNT(*), SUM(CASE WHEN outcome='WIN' THEN 1 ELSE 0 END), SUM(pnl_usd) FROM closed_trades")
         closed_row = cur.fetchone()
@@ -1286,7 +1286,7 @@ def get_live_portfolio():
         open_trades = []
         unrealised_pnl = 0
         for p in open_pos:
-            sym, direction, entry_price, size_usd, entry_time, regime = p
+            sym, direction, entry_price, size_usd = p
             current = prices.get(sym, {})
             current_price = current.get("price", entry_price) if current else entry_price
             if direction == "LONG": pnl_usd = ((current_price - entry_price) / entry_price) * size_usd
