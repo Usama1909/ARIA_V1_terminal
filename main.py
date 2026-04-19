@@ -1292,7 +1292,7 @@ def get_live_portfolio():
             if direction == "LONG": pnl_usd = ((current_price - entry_price) / entry_price) * size_usd
             else: pnl_usd = ((entry_price - current_price) / entry_price) * size_usd
             unrealised_pnl += pnl_usd
-            open_trades.append({"symbol": sym, "direction": direction, "entry_price": round(entry_price, 4), "current_price": round(current_price, 4), "size_usd": round(size_usd, 2), "pnl_usd": round(pnl_usd, 2), "pnl_pct": round((pnl_usd / size_usd) * 100, 2) if size_usd else 0, "regime_at_entry": regime, "entry_time": str(entry_time)})
+            open_trades.append({"symbol": sym, "direction": direction, "entry_price": round(entry_price, 4), "current_price": round(current_price, 4), "size_usd": round(size_usd, 2), "pnl_usd": round(pnl_usd, 2), "pnl_pct": round((pnl_usd / size_usd) * 100, 2) if size_usd else 0})
         total_closed, total_wins, total_pnl = closed_row
         total_closed = total_closed or 0; total_wins = total_wins or 0; total_pnl = total_pnl or 0
         win_rate = round((total_wins / total_closed) * 100, 1) if total_closed else 0
@@ -1302,33 +1302,6 @@ def get_live_portfolio():
     except Exception as e: raise HTTPException(status_code=500, detail=str(e))
 
 
-
-@app.get("/live/portfolio")
-def get_live_portfolio():
-    try:
-        conn = get_railway_db(); cur = conn.cursor()
-        cur.execute("SELECT symbol, direction, entry_price, size_usd FROM positions_live WHERE status='OPEN'")
-        open_pos = cur.fetchall()
-        cur.execute("SELECT COUNT(*), SUM(CASE WHEN outcome='WIN' THEN 1 ELSE 0 END), COALESCE(SUM(pnl_usd),0) FROM closed_trades_sync")
-        closed_row = cur.fetchone()
-        cur.close(); conn.close()
-        open_trades = []
-        unrealised_pnl = 0
-        for p in open_pos:
-            sym, direction, entry_price, size_usd = p
-            price_data = get_live_price_only(sym)
-            current_price = price_data['price'] if price_data else entry_price
-            if direction == 'LONG': pnl_usd = ((current_price - entry_price) / entry_price) * size_usd
-            else: pnl_usd = ((entry_price - current_price) / entry_price) * size_usd
-            unrealised_pnl += pnl_usd
-            open_trades.append({"symbol": sym, "direction": direction, "entry_price": round(entry_price, 4), "current_price": round(current_price, 4), "size_usd": round(size_usd, 2), "pnl_usd": round(pnl_usd, 2), "pnl_pct": round((pnl_usd / size_usd) * 100, 2) if size_usd else 0})
-        total_closed, total_wins, total_pnl = closed_row
-        total_closed = total_closed or 0; total_wins = int(total_wins or 0); total_pnl = float(total_pnl or 0)
-        win_rate = round((total_wins / total_closed) * 100, 1) if total_closed else 0
-        portfolio_value = 10000 + total_pnl + unrealised_pnl
-        total_return = round(((portfolio_value - 10000) / 10000) * 100, 2)
-        return {"balance": round(portfolio_value, 2), "starting_balance": 10000, "total_return_pct": total_return, "unrealised_pnl": round(unrealised_pnl, 2), "open_trades": open_trades, "open_count": len(open_trades), "closed_count": total_closed, "win_rate": win_rate, "total_realised_pnl": round(total_pnl, 2), "timestamp": datetime.now().isoformat()}
-    except Exception as e: raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/swarm/positions")
 def get_swarm_positions():
