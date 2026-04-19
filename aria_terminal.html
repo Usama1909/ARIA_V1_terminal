@@ -520,7 +520,7 @@ async function loadPortfolio(silent) {
   var container = document.getElementById("portfolioContainer");
   if (!silent) container.innerHTML = "<div class=\"loading\">Loading portfolio...</div>";
   try {
-    var port = await fetch(API + "/paper/portfolio/" + currentUserId).then(function(r) { return r.json(); });
+    var port = await fetch(API + "/live/portfolio").then(function(r) { return r.json(); });
     var returnColor = port.total_return_pct >= 0 ? "var(--accent-green)" : "var(--accent-red)";
     var pnlColor    = port.unrealised_pnl >= 0 ? "var(--accent-green)" : "var(--accent-red)";
     var lastRefresh = new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
@@ -782,8 +782,7 @@ async function loadSwarm(silent) {
     var reportsData = await fetch(API + "/agent/reports").then(function(r) { return r.json(); });
     var reports = reportsData.reports || [];
     var agentStatus = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
-    var port = await fetch(API + "/paper/portfolio/aria-agent-system").then(function(r) { return r.json(); });
-    var port = await fetch(API + "/paper/portfolio/aria-agent-system").then(function(r) { return r.json(); });
+    var port = await fetch(API + "/live/portfolio").then(function(r) { return r.json(); });
 var swarmPos = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
 var allPositions = swarmPos.positions || [];  
 
