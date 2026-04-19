@@ -1309,7 +1309,7 @@ def get_live_portfolio():
         conn = get_railway_db(); cur = conn.cursor()
         cur.execute("SELECT symbol, direction, entry_price, size_usd FROM positions_live WHERE status='OPEN'")
         open_pos = cur.fetchall()
-        cur.execute("SELECT COUNT(*), SUM(CASE WHEN outcome='WIN' THEN 1 ELSE 0 END), COALESCE(SUM(pnl_usd),0) FROM closed_trades_sync")
+        cur.execute("SELECT COUNT(*), SUM(CASE WHEN outcome='WIN' THEN 1 ELSE 0 END), COALESCE(SUM(pnl_usd),0) FROM closed_trades_sync_sync")
         closed_row = cur.fetchone()
         cur.close(); conn.close()
         open_trades = []
