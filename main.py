@@ -224,7 +224,7 @@ class PositionsUpdate(BaseModel):
 # ── PRICE CACHE ───────────────────────────────────────────
 _price_cache = {}
 _price_cache_time = {}
-CACHE_SECONDS = 60
+CACHE_SECONDS = 5
 
 # ── PAPER TRADING ─────────────────────────────────────────
 PAPER_TRADES_FILE = 'paper_trades.json'
