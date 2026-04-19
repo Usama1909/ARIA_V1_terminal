@@ -358,6 +358,98 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
 </div>
 <script>
 var API = "";
+
+// ── WEBSOCKET LIVE CONNECTION ─────────────────────────
+var wsLive = null;
+var wsReconnectTimer = null;
+
+function connectWebSocket() {
+  var wsUrl = (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host + "/ws/live";
+  wsLive = new WebSocket(wsUrl);
+  
+  wsLive.onopen = function() {
+    console.log("WebSocket connected — live updates active");
+    if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null; }
+  };
+  
+  wsLive.onmessage = function(event) {
+    try {
+      var data = JSON.parse(event.data);
+      if (data.type === "live_update") {
+        // Update watchlist prices instantly
+        if (data.positions) {
+          data.positions.forEach(function(p) {
+            var el = document.getElementById("price-" + p.symbol);
+            if (el) el.innerText = "$" + parseFloat(p.entry_price).toLocaleString();
+          });
+        }
+        // Update last-update indicator
+        var ts = document.getElementById("ws-indicator");
+        if (ts) { ts.innerText = "LIVE"; ts.style.color = "var(--accent-green)"; }
+      }
+    } catch(e) {}
+  };
+  
+  wsLive.onclose = function() {
+    console.log("WebSocket disconnected — reconnecting in 3s");
+    var ts = document.getElementById("ws-indicator");
+    if (ts) { ts.innerText = "RECONNECTING"; ts.style.color = "var(--accent-red)"; }
+    wsReconnectTimer = setTimeout(connectWebSocket, 3000);
+  };
+  
+  wsLive.onerror = function() { wsLive.close(); };
+}
+
+// Start WebSocket on page load
+setTimeout(connectWebSocket, 1000);
+
+
+
+// ── WEBSOCKET LIVE CONNECTION ─────────────────────────
+var wsLive = null;
+var wsReconnectTimer = null;
+
+function connectWebSocket() {
+  var wsUrl = (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host + "/ws/live";
+  wsLive = new WebSocket(wsUrl);
+  
+  wsLive.onopen = function() {
+    console.log("WebSocket connected — live updates active");
+    if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null; }
+  };
+  
+  wsLive.onmessage = function(event) {
+    try {
+      var data = JSON.parse(event.data);
+      if (data.type === "live_update") {
+        // Update watchlist prices instantly
+        if (data.positions) {
+          data.positions.forEach(function(p) {
+            var el = document.getElementById("price-" + p.symbol);
+            if (el) el.innerText = "$" + parseFloat(p.entry_price).toLocaleString();
+          });
+        }
+        // Update last-update indicator
+        var ts = document.getElementById("ws-indicator");
+        if (ts) { ts.innerText = "LIVE"; ts.style.color = "var(--accent-green)"; }
+      }
+    } catch(e) {}
+  };
+  
+  wsLive.onclose = function() {
+    console.log("WebSocket disconnected — reconnecting in 3s");
+    var ts = document.getElementById("ws-indicator");
+    if (ts) { ts.innerText = "RECONNECTING"; ts.style.color = "var(--accent-red)"; }
+    wsReconnectTimer = setTimeout(connectWebSocket, 3000);
+  };
+  
+  wsLive.onerror = function() { wsLive.close(); };
+}
+
+// Start WebSocket on page load
+setTimeout(connectWebSocket, 1000);
+
+
 var userMode = "beginner";
 var selectedAsset = "BTC";
 var assetData = {};
@@ -402,7 +494,7 @@ function startPortfolioAutoRefresh() {
   stopPortfolioAutoRefresh();
   portfolioRefreshTimer = setInterval(function() {
     if (isPortfolioTabActive) loadPortfolio(true);
-  }, 30000);
+  }, 5000);
 }
 
 function stopPortfolioAutoRefresh() {
@@ -413,7 +505,7 @@ function startSwarmAutoRefresh() {
   stopSwarmAutoRefresh();
   swarmRefreshTimer = setInterval(function() {
     if (isSwarmTabActive) loadSwarm(true);
-  }, 30000);
+  }, 5000);
 }
 
 function stopSwarmAutoRefresh() {

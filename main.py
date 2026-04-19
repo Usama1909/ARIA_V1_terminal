@@ -18,7 +18,7 @@ from scipy import stats
 from scipy.stats import t as student_t
 warnings.filterwarnings('ignore')
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
@@ -1304,6 +1304,22 @@ def get_live_portfolio():
     except Exception as e: raise HTTPException(status_code=500, detail=str(e))
 
 
+
+
+@app.websocket("/ws/live")
+async def websocket_live(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            await websocket.receive_text()
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
+
+@app.post("/ws/broadcast")
+async def broadcast_update(data: dict):
+    import json
+    await manager.broadcast(json.dumps(data))
+    return {"sent": len(manager.active_connections)}
 
 @app.get("/swarm/positions")
 def get_swarm_positions():
