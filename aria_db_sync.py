@@ -47,7 +47,7 @@ def ensure_railway_tables(rcur):
     """)
     rcur.execute("""
         CREATE TABLE IF NOT EXISTS closed_trades_sync (
-            id SERIAL PRIMARY KEY,
+            id INTEGER PRIMARY KEY,
             symbol VARCHAR(10),
             direction VARCHAR(10),
             entry_price FLOAT,
