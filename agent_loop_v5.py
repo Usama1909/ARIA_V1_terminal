@@ -9,7 +9,7 @@ PATCH 2: world_state wired into signal generation and risk sizing.
 PATCH 3: XGBoost+RF ensemble wired into generate_signal via aria_model_inference.
 """
 import time, json, logging, numpy as np
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import psycopg2, psycopg2.extras
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s [ARIAv5] %(message)s')
@@ -35,7 +35,7 @@ def read_sentiment():
         cur.execute("SELECT score,stance,velocity,regime,fear_greed,updated_at FROM sentiment_latest ORDER BY updated_at DESC LIMIT 1")
         row=cur.fetchone(); cur.close(); conn.close()
         if row:
-            age=(datetime.now(timezone.utc)-row[5].replace(tzinfo=None)).total_seconds()
+            age=(datetime.utcnow()-row[5].replace(tzinfo=None)).total_seconds()
             return {'score':float(row[0]),'stance':str(row[1]),'velocity':float(row[2]),
                     'regime':str(row[3]),'fear_greed':int(row[4]),'age_seconds':age,'stale':age>STALE_SENTIMENT}
     except Exception as e:
@@ -49,7 +49,7 @@ def read_market():
         rows=cur.fetchall(); cur.close(); conn.close()
         market={}
         for row in rows:
-            age=(datetime.now(timezone.utc)-row[3].replace(tzinfo=None)).total_seconds()
+            age=(datetime.utcnow()-row[3].replace(tzinfo=None)).total_seconds()
             market[row[0]]={'price':float(row[1]),'change_24h':float(row[2]),'age_seconds':age,'stale':age>STALE_MARKET}
         return market
     except Exception as e:
@@ -64,7 +64,7 @@ def read_world_state():
                        FROM world_state ORDER BY updated_at DESC LIMIT 1""")
         row=cur.fetchone(); cur.close(); conn.close()
         if row:
-            age=(datetime.now(timezone.utc)-row[6].replace(tzinfo=None)).total_seconds()
+            age=(datetime.utcnow()-row[6].replace(tzinfo=None)).total_seconds()
             return {
                 'narrative':       str(row[0]),
                 'macro_phase':     str(row[1]),
@@ -136,7 +136,7 @@ def close_position(symbol, pos, exit_price, exit_reason, sentiment, world, cycle
         entry_price = pos.get('entry_price', 0)
         direction   = pos.get('direction', 'LONG')
         size_usd    = pos.get('size_usd', 0)
-        entry_time  = pos.get('entry_time', datetime.now(timezone.utc))
+        entry_time  = pos.get('entry_time', datetime.utcnow())
         hold_cycles = pos.get('hold_cycles', 0)
         if direction == 'LONG':
             pnl_pct = (exit_price - entry_price) / entry_price if entry_price > 0 else 0
@@ -609,7 +609,7 @@ def main():
                     # Time stop: close if open 48h+ and PnL between -2% and +2%
                     entry_time = pos.get('entry_time')
                     if entry_time:
-                        hours_open = (datetime.now(timezone.utc) - entry_time.replace(tzinfo=None)).total_seconds() / 3600
+                        hours_open = (datetime.utcnow() - entry_time.replace(tzinfo=None)).total_seconds() / 3600
                         if hours_open >= 48 and abs(pnl_pct) < 0.02:
                             log.info(f"TIME STOP: {symbol} open {hours_open:.1f}h pnl:{pnl_pct*100:.1f}% — closing flat")
                             if close_position(symbol, open_positions[symbol], current, 'TIME_STOP', sentiment, world, cycle):
@@ -670,7 +670,7 @@ def main():
                 success = write_order(d['symbol'], d['action'], d['direction'], d['size_usd'],
                                       d['confidence'], d['kelly_fraction'], d['reasoning'], cycle)
                 if success:
-                    d['entry_time']  = datetime.now(timezone.utc)
+                    d['entry_time']  = datetime.utcnow()
                     d['hold_cycles'] = 0
                     d['entry_price'] = market.get(d['symbol'], {}).get('price', 0)
                     open_positions[d['symbol']] = d
