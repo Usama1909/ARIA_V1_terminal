@@ -1289,7 +1289,9 @@ def get_live_portfolio():
             sym, direction, entry_price, size_usd = p
             current = prices.get(sym, {})
             current_price = current.get("price", entry_price) if current else entry_price
-            if direction == "LONG": pnl_usd = ((current_price - entry_price) / entry_price) * size_usd
+            if entry_price == 0 or size_usd == 0:
+                pnl_usd = 0
+            elif direction == "LONG": pnl_usd = ((current_price - entry_price) / entry_price) * size_usd
             else: pnl_usd = ((entry_price - current_price) / entry_price) * size_usd
             unrealised_pnl += pnl_usd
             open_trades.append({"symbol": sym, "direction": direction, "entry_price": round(entry_price, 4), "current_price": round(current_price, 4), "size_usd": round(size_usd, 2), "pnl_usd": round(pnl_usd, 2), "pnl_pct": round((pnl_usd / size_usd) * 100, 2) if size_usd else 0})
