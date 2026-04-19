@@ -563,6 +563,19 @@ def main():
                     'entry_time': row[6], 'hold_cycles': 0
                 }
         log.info(f"Restored {len(open_positions)} open positions: {list(open_positions.keys())}")
+        # Sync restored positions to positions_live
+        if open_positions:
+            conn2 = get_db(); cur2 = conn2.cursor()
+            for sym, pos in open_positions.items():
+                cur2.execute("""
+                    INSERT INTO positions_live (symbol, direction, entry_price, size_usd, status, updated_at)
+                    VALUES (%s, %s, %s, %s, 'OPEN', NOW())
+                    ON CONFLICT (symbol) DO UPDATE SET
+                    direction=EXCLUDED.direction, entry_price=EXCLUDED.entry_price,
+                    size_usd=EXCLUDED.size_usd, status='OPEN', updated_at=NOW()
+                """, (sym, pos['direction'], pos['entry_price'], pos['size_usd']))
+            conn2.commit(); cur2.close(); conn2.close()
+            log.info(f"Synced {len(open_positions)} positions to positions_live")
     except Exception as e:
         log.warning(f"Could not restore positions: {e}")
 

@@ -21,8 +21,13 @@ def sync_positions():
                   FROM orders_outbox WHERE status='EXECUTED' ORDER BY created_at""")
     executed=cur.fetchall()
     # Get all closed orders
-    cur.execute("SELECT symbol FROM orders_outbox WHERE status='CLOSED'")
-    closed_symbols={r[0] for r in cur.fetchall()}
+    # Only consider symbol closed if its most recent order is CLOSED
+    cur.execute("""
+        SELECT DISTINCT ON (symbol) symbol, status
+        FROM orders_outbox
+        ORDER BY symbol, created_at DESC
+    """)
+    closed_symbols={r[0] for r in cur.fetchall() if r[1] == 'CLOSED'}
     # Get current sentiment for context
     cur.execute("SELECT score,regime,fear_greed,velocity FROM sentiment_latest LIMIT 1")
     sent=cur.fetchone()
@@ -41,7 +46,7 @@ def sync_positions():
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,'OPEN',NOW())
             ON CONFLICT (symbol) DO UPDATE SET
             direction=EXCLUDED.direction, entry_price=EXCLUDED.entry_price,
-            updated_at=NOW()""",
+            status='OPEN', updated_at=NOW()""",
             [symbol,direction,entry_price,created_at,size_usd,regime,sentiment,fg])
     conn.commit()
     cur.execute("SELECT COUNT(*) FROM positions_live")
@@ -66,9 +71,10 @@ def check_and_close_positions():
         pnl_pct=((current-entry_price)/entry_price) if direction=='LONG' else ((entry_price-current)/entry_price)
         pnl_usd=round(size_usd*pnl_pct,2)
         # Check if closed in orders_outbox
-        cur.execute("SELECT COUNT(*) FROM orders_outbox WHERE symbol=%s AND status='CLOSED'",[symbol])
-        is_closed=cur.fetchone()[0]>0
-        if is_closed or abs(pnl_pct)>=0.05:
+        cur.execute("""SELECT status FROM orders_outbox WHERE symbol=%s ORDER BY created_at DESC LIMIT 1""", [symbol])
+        latest = cur.fetchone()
+        is_closed = latest and latest[0] == 'CLOSED'
+        if is_closed or pnl_pct<=-0.05 or pnl_pct>=0.08:
             outcome='WIN' if pnl_pct>0 else 'LOSS'
             hold_hours=int((datetime.utcnow()-entry_time.replace(tzinfo=None)).total_seconds()/3600) if entry_time else 0
             cur.execute("""INSERT INTO closed_trades
