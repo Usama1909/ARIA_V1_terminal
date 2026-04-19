@@ -659,6 +659,7 @@ def main():
                 if success:
                     d['entry_time']  = datetime.utcnow()
                     d['hold_cycles'] = 0
+                    d['entry_price'] = market.get(d['symbol'], {}).get('price', 0)
                     open_positions[d['symbol']] = d
                     try:
                         conn2 = get_db()
@@ -669,7 +670,7 @@ def main():
                             ON CONFLICT (symbol) DO UPDATE SET
                             direction=EXCLUDED.direction, entry_price=EXCLUDED.entry_price,
                             size_usd=EXCLUDED.size_usd, status='OPEN', updated_at=NOW()
-                        """, (d['symbol'], d['direction'], d.get('entry_price', 0),
+                        """, (d['symbol'], d['direction'], market.get(d['symbol'], {}).get('price', d.get('entry_price', 0)),
                                d['size_usd'], d.get('regime','NORMAL'),
                                d.get('sentiment_score', 0), d.get('fear_greed', 21)))
                         conn2.commit()
