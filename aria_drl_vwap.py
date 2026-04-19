@@ -129,4 +129,4 @@ if __name__ == "__main__":
     agent = SimpleVWAPAgent()
     state = env.reset()
     print(f"Environment state: {state}")
-    print("Cap 13 skeleton complete — will activate at {MIN_TRADES_TO_ACTIVATE} trades")
+    print(f"Cap 13 skeleton complete — will activate at {MIN_TRADES_TO_ACTIVATE} trades")
