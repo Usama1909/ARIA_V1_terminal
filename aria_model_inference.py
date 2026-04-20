@@ -43,7 +43,7 @@ def load_model(symbol):
         import warnings
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            with open(f'/root/backup_20260401/quant_engine_v3_{symbol}.pkl','rb') as f:
+            with open(f'/root/temp_aria/quant_engine_v3_{symbol}.pkl','rb') as f:
                 m = pickle.load(f)
         MODEL_CACHE[symbol] = m
         log.info(f"Model loaded for {symbol} | acc:{m['overall_accuracy']:.3f} wf:{m['walk_forward_acc']:.3f}")
