@@ -1228,6 +1228,16 @@ def sync_agent_reports(data: dict):
     return {"success": True, "count": len(_agent_reports)}
 @app.get("/agent/reports")
 def get_agent_reports():
+    if not RAILWAY_DB_URL:
+        try:
+            conn = get_railway_db(); cur = conn.cursor()
+            cur.execute("SELECT agent_id, symbol, action, confidence, reasoning, timestamp FROM agent_decisions ORDER BY timestamp DESC LIMIT 100")
+            rows = cur.fetchall()
+            cur.close(); conn.close()
+            reports = [{'agent_id': r[0], 'symbol': r[1], 'action': r[2], 'confidence': float(r[3]) if r[3] else 0.5, 'reasoning': r[4], 'timestamp': r[5].isoformat(), 'agent_type': 'SPECIALIST'} for r in rows]
+            return {"reports": reports, "count": len(reports), "timestamp": datetime.now().isoformat()}
+        except Exception as e:
+            return {"reports": [], "count": 0, "error": str(e), "timestamp": datetime.now().isoformat()}
     return {"reports": _agent_reports[:50], "count": len(_agent_reports), "timestamp": datetime.now().isoformat()}
 
 # ── POSITIONS WEBHOOK (Hetzner pushes here every cycle) ───
