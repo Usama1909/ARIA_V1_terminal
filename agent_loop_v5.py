@@ -45,12 +45,12 @@ def read_sentiment():
 def read_market():
     try:
         conn=get_db(); cur=conn.cursor()
-        cur.execute("SELECT symbol,price,change_24h,updated_at FROM market_state_latest")
+        cur.execute("SELECT symbol,price,change_24h,updated_at,funding_rate,oi_change_pct FROM market_state_latest")
         rows=cur.fetchall(); cur.close(); conn.close()
         market={}
         for row in rows:
             age=(datetime.now()-row[3].replace(tzinfo=None)).total_seconds()
-            market[row[0]]={'price':float(row[1]),'change_24h':float(row[2]),'age_seconds':age,'stale':age>STALE_MARKET}
+            market[row[0]]={'price':float(row[1]),'change_24h':float(row[2]),'age_seconds':age,'stale':age>STALE_MARKET,'funding_rate':float(row[4]) if row[4] else 0.0,'oi_change_pct':float(row[5]) if len(row)>5 and row[5] else 0.0}
         return market
     except Exception as e:
         log.warning(f"Market read failed: {e}")
@@ -410,6 +410,56 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
             log.info(f"  {symbol} FOMC DOVISH GLD drag → conf:{final_conf:.3f}")
     except Exception as e:
         log.warning(f"NLP modifier failed for {symbol}: {e}")
+
+
+    # ── Step 5: Funding Rate Signal (Crypto only) ────────
+    if symbol in ['BTC', 'ETH']:
+        try:
+            funding_rate = market_data.get(symbol, {}).get('funding_rate', 0.0)
+            if funding_rate < -0.01:
+                # Very negative funding = shorts overleveraged = squeeze likely = boost LONG
+                if final_dir == 'LONG':
+                    final_conf = min(0.92, final_conf + 0.04)
+                    log.info(f"  {symbol} FUNDING BOOST: rate:{funding_rate:.4f}% (short squeeze likely) → conf:{final_conf:.3f}")
+                elif final_dir == 'SHORT':
+                    final_conf = max(0.45, final_conf - 0.04)
+                    log.info(f"  {symbol} FUNDING DRAG: rate:{funding_rate:.4f}% (short squeeze risk) → conf:{final_conf:.3f}")
+            elif funding_rate > 0.01:
+                # Very positive funding = longs overleveraged = dump likely = boost SHORT
+                if final_dir == 'SHORT':
+                    final_conf = min(0.92, final_conf + 0.04)
+                    log.info(f"  {symbol} FUNDING BOOST: rate:{funding_rate:.4f}% (long squeeze likely) → conf:{final_conf:.3f}")
+                elif final_dir == 'LONG':
+                    final_conf = max(0.45, final_conf - 0.04)
+                    log.info(f"  {symbol} FUNDING DRAG: rate:{funding_rate:.4f}% (long squeeze risk) → conf:{final_conf:.3f}")
+        except Exception as e:
+            log.warning(f"Funding rate signal failed {symbol}: {e}")
+
+    # ── Step 6: Open Interest Signal (Crypto only) ──────────
+    if symbol in ['BTC', 'ETH']:
+        try:
+            oi_change = market_data.get(symbol, {}).get('oi_change_pct', 0.0)
+            price_change = market_data.get(symbol, {}).get('change_24h', 0.0)
+            if oi_change > 0.05 and price_change > 0:
+                # Rising OI + Rising Price = BULLISH
+                if final_dir == 'LONG':
+                    final_conf = min(0.92, final_conf + 0.05)
+                    log.info(f"  {symbol} OI BULLISH: oi:{oi_change:.3f}% price:{price_change:.2f}% → conf:{final_conf:.3f}")
+                elif final_dir == 'SHORT':
+                    final_conf = max(0.45, final_conf - 0.05)
+                    log.info(f"  {symbol} OI BEARISH for SHORT: oi:{oi_change:.3f}% → conf:{final_conf:.3f}")
+            elif oi_change < -0.05 and price_change > 0:
+                # Falling OI + Rising Price = SHORT SQUEEZE — avoid shorting
+                if final_dir == 'SHORT':
+                    final_conf = max(0.45, final_conf - 0.08)
+                    log.info(f"  {symbol} OI SQUEEZE WARNING: oi:{oi_change:.3f}% price up → conf:{final_conf:.3f}")
+            elif oi_change > 0.05 and price_change < 0:
+                # Rising OI + Falling Price = BEARISH
+                if final_dir == 'SHORT':
+                    final_conf = min(0.92, final_conf + 0.05)
+                    log.info(f"  {symbol} OI BEARISH CONFIRMED: oi:{oi_change:.3f}% price down → conf:{final_conf:.3f}")
+        except Exception as e:
+            log.warning(f"OI signal failed {symbol}: {e}")
 
     # ── Step 12: Regime memory modifier ────────────────────
     try:

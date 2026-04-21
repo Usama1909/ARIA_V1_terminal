@@ -16,6 +16,36 @@ BINANCE_FAPI = "https://fapi.binance.com/fapi"
 CRYPTO = ['BTC', 'ETH']
 STOCKS = ['AAPL', 'NVDA', 'TSLA', 'GLD']
 _ws_prices = {}
+_funding_rates = {}
+_oi_changes = {}
+
+
+def get_open_interest_signal(symbol):
+    """
+    Returns OI signal: BULLISH, BEARISH, SQUEEZE, or NEUTRAL
+    Rising OI + Rising Price = BULLISH
+    Rising OI + Falling Price = BEARISH  
+    Falling OI + Rising Price = SQUEEZE (short squeeze)
+    Falling OI + Falling Price = WEAK
+    """
+    try:
+        r = requests.get("https://fapi.binance.com/futures/data/openInterestHist",
+                        params={'symbol': f'{symbol}USDT', 'period': '5m', 'limit': 3}, timeout=5)
+        data = r.json()
+        if len(data) < 2:
+            return 'NEUTRAL', 0.0
+        oi_latest = float(data[-1]['sumOpenInterest'])
+        oi_prev = float(data[-2]['sumOpenInterest'])
+        oi_change_pct = ((oi_latest - oi_prev) / oi_prev) * 100
+        # Store in DB
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("INSERT INTO crypto_signals (symbol, open_interest, oi_change_pct, funding_rate) VALUES (%s,%s,%s,%s)",
+                   [symbol, oi_latest, oi_change_pct, _funding_rates.get(symbol, 0.0)])
+        conn.commit(); cur.close(); conn.close()
+        return oi_change_pct
+    except Exception as e:
+        log.warning(f"OI signal failed {symbol}: {e}")
+        return 0.0
 
 def get_funding_rate(symbol):
     try:
@@ -63,11 +93,11 @@ def get_dxy():
         log.warning(f"DXY fetch failed: {e}")
     return 0.0, 0.0
 
-def write_market_state(symbol, price, change, signal):
+def write_market_state(symbol, price, change, signal, funding_rate=0.0, oi_change_pct=0.0):
     try:
         conn = psycopg2.connect(**DB); cur = conn.cursor()
         cur.execute("DELETE FROM market_state_latest WHERE symbol=%s", [symbol])
-        cur.execute("INSERT INTO market_state_latest (symbol, price, change_24h, signal, updated_at) VALUES (%s,%s,%s,%s,NOW())", [symbol, price, change, signal])
+        cur.execute("INSERT INTO market_state_latest (symbol, price, change_24h, signal, funding_rate, oi_change_pct, updated_at) VALUES (%s,%s,%s,%s,%s,%s,NOW())", [symbol, price, change, signal, funding_rate, oi_change_pct])
         conn.commit(); cur.close(); conn.close()
     except Exception as e:
         log.error(f"DB write failed {symbol}: {e}")
@@ -91,7 +121,9 @@ def binance_websocket_thread():
                 price = float(d.get('c', 0))
                 change = float(d.get('P', 0))
                 _ws_prices[symbol] = {'price': price, 'change': change, 'ts': time.time()}
-                write_market_state(symbol, price, change, 'HOLD')
+                fr = _funding_rates.get(symbol, 0.0)
+                oi = _oi_changes.get(symbol, 0.0)
+                write_market_state(symbol, price, change, 'HOLD', fr, oi)
                 write_price_data(symbol, price, change)
                 log.info(f"WS {symbol}: ${price:.2f} ({change:+.2f}%)")
         except Exception as e:
@@ -137,8 +169,19 @@ def main():
                 log.error(f"DXY: {e}")
             for symbol in CRYPTO:
                 try:
+                    oi_change = get_open_interest_signal(symbol)
+                    _oi_changes[symbol] = oi_change
+                    log.info(f"{symbol} OI change: {oi_change:.4f}%")
+                except Exception as e:
+                    log.warning(f"OI {symbol}: {e}")
+            for symbol in CRYPTO:
+                try:
                     fr = get_funding_rate(symbol)
                     if fr != 0:
+                        _funding_rates[symbol] = fr
+                        conn = psycopg2.connect(**DB); cur = conn.cursor()
+                        cur.execute("UPDATE market_state_latest SET funding_rate=%s WHERE symbol=%s", [fr, symbol])
+                        conn.commit(); cur.close(); conn.close()
                         log.info(f"{symbol} funding rate: {fr:.4f}%")
                 except Exception as e:
                     log.warning(f"Funding rate {symbol}: {e}")
