@@ -286,10 +286,15 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
         return 'HOLD', 0.5, None
 
     # ── Step 1: Get model signal ──────────────────────────
-    # Crypto uses rules only until 500+ trades accumulated
+    # Crypto uses dedicated rules engine until 500+ trades accumulated
     if symbol in ['BTC', 'ETH']:
-        model_dir, model_conf, model_reason = None, 0.52, "crypto_rules_only"
-        log.info(f"  {symbol} CRYPTO MODE: rules-only (insufficient trade history)")
+        try:
+            from aria_crypto_engine import get_crypto_signal
+            model_dir, model_conf, model_reason = get_crypto_signal(symbol)
+            log.info(f"  {symbol} CRYPTO ENGINE: {model_dir} conf:{model_conf:.3f} | {model_reason}")
+        except Exception as e:
+            log.warning(f"Crypto engine failed: {e}")
+            model_dir, model_conf, model_reason = None, 0.52, "crypto_engine_error"
     else:
         try:
             from aria_model_inference import get_model_signal
