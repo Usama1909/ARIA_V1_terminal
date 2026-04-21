@@ -286,7 +286,7 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
         return 'HOLD', 0.5, None
 
     # ── Step 1: Get model signal ──────────────────────────
-    # Crypto uses dedicated rules engine until 500+ trades accumulated
+    # Asset-specific signal engines
     if symbol in ['BTC', 'ETH']:
         try:
             from aria_crypto_engine import get_crypto_signal
@@ -295,6 +295,14 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
         except Exception as e:
             log.warning(f"Crypto engine failed: {e}")
             model_dir, model_conf, model_reason = None, 0.52, "crypto_engine_error"
+    elif symbol == 'GLD':
+        try:
+            from aria_gld_engine import get_gld_signal
+            model_dir, model_conf, model_reason = get_gld_signal()
+            log.info(f"  GLD ENGINE: {model_dir} conf:{model_conf:.3f} | {model_reason}")
+        except Exception as e:
+            log.warning(f"GLD engine failed: {e}")
+            model_dir, model_conf, model_reason = None, 0.52, "gld_engine_error"
     else:
         try:
             from aria_model_inference import get_model_signal
