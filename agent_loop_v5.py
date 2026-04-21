@@ -286,12 +286,17 @@ def generate_signal(symbol, market_data, sentiment, risk, world):
         return 'HOLD', 0.5, None
 
     # ── Step 1: Get model signal ──────────────────────────
-    try:
-        from aria_model_inference import get_model_signal
-        model_dir, model_conf, model_reason = get_model_signal(symbol)
-    except Exception as e:
-        log.warning(f"Model inference import failed: {e}")
-        model_dir, model_conf, model_reason = None, 0.52, "import_error"
+    # Crypto uses rules only until 500+ trades accumulated
+    if symbol in ['BTC', 'ETH']:
+        model_dir, model_conf, model_reason = None, 0.52, "crypto_rules_only"
+        log.info(f"  {symbol} CRYPTO MODE: rules-only (insufficient trade history)")
+    else:
+        try:
+            from aria_model_inference import get_model_signal
+            model_dir, model_conf, model_reason = get_model_signal(symbol)
+        except Exception as e:
+            log.warning(f"Model inference import failed: {e}")
+            model_dir, model_conf, model_reason = None, 0.52, "import_error"
 
     # ── Step 2: Get rules signal ──────────────────────────
     rules_dir  = None
@@ -601,31 +606,21 @@ def main():
     open_positions={}
     try:
         conn=get_db(); cur=conn.cursor()
-        cur.execute("""SELECT symbol, side, direction, size_usd, confidence, entry_price, created_at
-            FROM orders_outbox WHERE status='EXECUTED' ORDER BY created_at DESC""")
+        # Single source of truth — always restore from positions_live
+        cur.execute("""SELECT symbol, direction, size_usd, entry_price, entry_time
+            FROM positions_live WHERE status='OPEN' ORDER BY entry_time DESC""")
         rows=cur.fetchall(); cur.close(); conn.close()
         for row in rows:
             if row[0] not in open_positions:
                 open_positions[row[0]]={
-                    'side': row[1], 'direction': row[2],
-                    'size_usd': float(row[3]), 'confidence': float(row[4]),
-                    'entry_price': float(row[5]) if row[5] else 0.0,
-                    'entry_time': row[6], 'hold_cycles': 0
+                    'side': 'BUY' if row[1]=='LONG' else 'SELL',
+                    'direction': row[1],
+                    'size_usd': float(row[2]),
+                    'confidence': 0.6,
+                    'entry_price': float(row[3]) if row[3] else 0.0,
+                    'entry_time': row[4], 'hold_cycles': 0
                 }
-        log.info(f"Restored {len(open_positions)} open positions: {list(open_positions.keys())}")
-        # Sync restored positions to positions_live
-        if open_positions:
-            conn2 = get_db(); cur2 = conn2.cursor()
-            for sym, pos in open_positions.items():
-                cur2.execute("""
-                    INSERT INTO positions_live (symbol, direction, entry_price, size_usd, status, updated_at)
-                    VALUES (%s, %s, %s, %s, 'OPEN', NOW())
-                    ON CONFLICT (symbol) DO UPDATE SET
-                    direction=EXCLUDED.direction, entry_price=EXCLUDED.entry_price,
-                    size_usd=EXCLUDED.size_usd, status='OPEN', updated_at=NOW()
-                """, (sym, pos['direction'], pos['entry_price'], pos['size_usd']))
-            conn2.commit(); cur2.close(); conn2.close()
-            log.info(f"Synced {len(open_positions)} positions to positions_live")
+        log.info(f"Restored {len(open_positions)} open positions from positions_live: {list(open_positions.keys())}")
     except Exception as e:
         log.warning(f"Could not restore positions: {e}")
 
