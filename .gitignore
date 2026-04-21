@@ -8,3 +8,4 @@ __pycache__/
 *.so
 nlp_service.log
 .bash_history
+ensemble_log.txt
