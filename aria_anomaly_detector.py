@@ -29,11 +29,11 @@ THRESHOLDS = {
     'market_state': {
         'BTC':  120,   # 2 mins — crypto updates every 60s
         'ETH':  120,
-        'AAPL': 300,   # 5 mins — stocks
-        'NVDA': 300,
-        'TSLA': 300,
-        'GLD':  300,
-        'DXY':  600,   # 10 mins — macro
+        'AAPL': 28800,  # 8 hours — stocks only update during market hours
+        'NVDA': 28800,
+        'TSLA': 28800,
+        'GLD':  28800,
+        'DXY':  28800, # 8 hours — macro index
     },
     'sentiment':  600,   # 10 mins
     'world_state': 1800, # 30 mins
@@ -44,7 +44,7 @@ THRESHOLDS = {
         'NVDA': 300,
         'TSLA': 300,
         'GLD':  300,
-        'DXY':  600,
+        'DXY':  28800,
     }
 }
 
