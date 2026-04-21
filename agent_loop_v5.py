@@ -691,9 +691,24 @@ def main():
                 time.sleep(LOOP_INTERVAL); continue
 
             decisions=[]
+            # Count recent trades per symbol to prevent concentration
+            try:
+                conn_c = get_db(); cur_c = conn_c.cursor()
+                cur_c.execute("SELECT symbol, COUNT(*) FROM closed_trades WHERE exit_time > NOW() - INTERVAL '7 days' GROUP BY symbol")
+                recent_counts = {r[0]: r[1] for r in cur_c.fetchall()}
+                cur_c.close(); conn_c.close()
+            except:
+                recent_counts = {}
+            total_recent = sum(recent_counts.values()) or 1
+
             for symbol in SYMBOLS:
                 if len(open_positions) >= MAX_OPEN_TRADES: break
                 if symbol in open_positions: continue
+                # Concentration check — no symbol > 40% of recent trades
+                symbol_pct = (recent_counts.get(symbol, 0) / total_recent) * 100
+                if symbol_pct > 40:
+                    log.info(f"  {symbol} CONCENTRATION LIMIT: {symbol_pct:.0f}% of recent trades — skipping")
+                    continue
                 risk = read_risk(symbol)
                 action, confidence, direction = generate_signal(symbol, market, sentiment, risk, world)
                 if action == 'HOLD' or confidence < MIN_CONFIDENCE:
