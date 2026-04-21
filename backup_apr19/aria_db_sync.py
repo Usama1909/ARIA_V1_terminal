@@ -10,7 +10,7 @@ log = logging.getLogger()
 HETZNER_DB = {"host":"localhost","port":5432,"dbname":"aria_db","user":"postgres","password":"aria_secure_2026"}
 RAILWAY_URL = os.getenv("RAILWAY_DATABASE_URL", "")
 RAILWAY_APP_URL = 'https://web-production-548c0.up.railway.app'
-SYNC_INTERVAL = 15
+SYNC_INTERVAL = 60
 
 def get_hetzner():
     return psycopg2.connect(**HETZNER_DB)
@@ -47,7 +47,7 @@ def ensure_railway_tables(rcur):
     """)
     rcur.execute("""
         CREATE TABLE IF NOT EXISTS closed_trades_sync (
-            id INTEGER PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             symbol VARCHAR(10),
             direction VARCHAR(10),
             entry_price FLOAT,
@@ -79,7 +79,7 @@ def sync_system_state(hcur, rcur):
 
 def sync_closed_trades(hcur, rcur):
     try:
-        hcur.execute("SELECT symbol, direction, entry_price, exit_price, pnl_usd, pnl_pct, size_usd, outcome, exit_time FROM closed_trades ORDER BY id DESC")
+        hcur.execute("SELECT symbol, direction, entry_price, exit_price, pnl_usd, pnl_pct, size_usd, outcome, exit_time FROM closed_trades ORDER BY id DESC LIMIT 500")
         trades = hcur.fetchall()
         rcur.execute("DELETE FROM closed_trades_sync")
         for t in trades:
@@ -121,46 +121,8 @@ def post_positions_to_frontend(positions):
     except Exception as e:
         log.error('Frontend POST failed: ' + str(e))
 
-
-def broadcast_live_state(positions, system_state):
-    try:
-        import json
-        payload = {
-            "type": "live_update",
-            "positions": [{"symbol": p[0], "direction": p[1], "entry_price": p[2], "size_usd": p[3], "status": p[4]} for p in positions],
-            "system": system_state,
-            "timestamp": time.time()
-        }
-        resp = requests.post(RAILWAY_APP_URL + "/ws/broadcast", json=payload, timeout=5)
-        log.info("Broadcasted live state to " + str(resp.json().get("sent", 0)) + " clients")
-    except Exception as e:
-        log.warning("Broadcast failed: " + str(e))
-
-def fast_sync():
-    log.info("Fast sync starting (5s interval)...")
-    if not RAILWAY_URL:
-        return
-    while True:
-        try:
-            hconn = get_hetzner()
-            hcur = hconn.cursor()
-            hcur.execute("SELECT symbol, direction, entry_price, size_usd, status FROM positions_live WHERE status='OPEN'")
-            positions = hcur.fetchall()
-            hcur.execute("SELECT mode, score FROM system_health ORDER BY id DESC LIMIT 1")
-            sys_row = hcur.fetchone()
-            system_state = {"mode": sys_row[0], "score": sys_row[1]} if sys_row else {}
-            hcur.close(); hconn.close()
-            broadcast_live_state(positions, system_state)
-        except Exception as e:
-            log.warning("Fast sync error: " + str(e))
-        time.sleep(5)
-
 def run():
     log.info("DB Sync Bridge starting...")
-    import threading
-    fast_thread = threading.Thread(target=fast_sync, daemon=True)
-    fast_thread.start()
-    log.info("Fast sync thread started (5s interval)")
     if not RAILWAY_URL:
         log.error("RAILWAY_DATABASE_URL not set")
         return

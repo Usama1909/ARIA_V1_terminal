@@ -81,5 +81,21 @@
       }
     ],
     "created_at": "2026-03-17T12:37:05.810331"
+  },
+  "aria-agent-system": {
+    "user_id": "aria-agent-system",
+    "balance": 10000.0,
+    "starting_balance": 10000.0,
+    "open_trades": [],
+    "closed_trades": [],
+    "created_at": "2026-04-19T22:29:35.763471"
+  },
+  "aria-agent-v4": {
+    "user_id": "aria-agent-v4",
+    "balance": 10000.0,
+    "starting_balance": 10000.0,
+    "open_trades": [],
+    "closed_trades": [],
+    "created_at": "2026-04-19T22:40:18.437564"
   }
 }

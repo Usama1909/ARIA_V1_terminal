@@ -1,0 +1,10 @@
+aria-env/
+.cache/
+*.log
+__pycache__/
+*.pyc
+.env
+*.bin
+*.so
+nlp_service.log
+.bash_history

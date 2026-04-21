@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARIA Terminal - Financial Intelligence</title>
+<title>ARIA - Autonomous Reasoning & Intelligence Architecture</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,6 +32,8 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
 .header-right { display:flex; align-items:center; gap:20px; }
 .risk-badge { padding:4px 12px; border-radius:4px; font-size:11px; font-weight:700; letter-spacing:1px; }
 .risk-critical { background:rgba(239,68,68,0.12); color:var(--accent-red); border:1px solid rgba(239,68,68,0.4); }
+.risk-warning { background:rgba(245,158,11,0.12); color:var(--accent-gold); border:1px solid rgba(245,158,11,0.4); }
+.risk-safe { background:rgba(34,197,94,0.12); color:var(--accent-green); border:1px solid rgba(34,197,94,0.4); }
 .mode-toggle { display:flex; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; overflow:hidden; }
 .mode-btn { padding:6px 14px; font-size:11px; cursor:pointer; border:none; background:transparent; color:var(--text-secondary); font-family:inherit; letter-spacing:1px; transition:all 0.2s; }
 .mode-btn.active { background:var(--accent-purple); color:white; }
@@ -166,13 +168,108 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
 .btn-short:hover { background:var(--accent-red); color:white; }
 .leaderboard-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:12px; }
 .rank-badge { width:24px; height:24px; border-radius:50%; background:var(--accent-purple); color:white; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; flex-shrink:0; }
+/* ── AGENT PANEL STYLES ── */
+.agent-container { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:10px; }
+.agent-header-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; }
+.agent-header-title { font-size:10px; color:var(--text-secondary); letter-spacing:2px; flex:1; }
+.agent-refresh-btn { padding:4px 12px; background:var(--bg-card); border:1px solid var(--border); border-radius:4px; font-size:10px; color:var(--text-secondary); cursor:pointer; font-family:inherit; transition:all 0.2s; }
+.agent-refresh-btn:hover { border-color:var(--accent); color:var(--accent); }
+.agent-card { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:12px; display:flex; align-items:center; gap:12px; transition:border-color 0.2s; }
+.agent-card:hover { border-color:var(--accent-purple); }
+.agent-card.action-buy     { border-left:3px solid var(--accent-green); }
+.agent-card.action-sell    { border-left:3px solid var(--accent-red); }
+.agent-card.action-hold    { border-left:3px solid var(--text-dim); }
+.agent-card.action-reverse { border-left:3px solid var(--accent-gold); }
+.agent-card.action-close   { border-left:3px solid var(--accent); }
+.agent-card.action-risk_on  { border-left:3px solid var(--accent-green); }
+.agent-card.action-risk_off { border-left:3px solid var(--accent-red); }
+.agent-card.action-approved { border-left:3px solid var(--accent-green); }
+.agent-card.action-veto     { border-left:3px solid var(--accent-red); }
+.agent-badge { border-radius:6px; padding:4px 8px; font-size:10px; font-weight:700; color:white; white-space:nowrap; min-width:64px; text-align:center; }
+.badge-specialist { background:#7c3aed; }
+.badge-macro      { background:#0284c7; }
+.badge-sentiment  { background:#b45309; }
+.badge-regime     { background:#047857; }
+.badge-risk       { background:#b91c1c; }
+.badge-ensemble   { background:#1e3a5f; border:1px solid #6366f1; color:#6366f1; }
+.badge-data       { background:#0f4c75; }
+.badge-analysis   { background:#1b4332; }
+.badge-strategy   { background:#4a1942; }
+.badge-meta       { background:#2d2d2d; border:1px solid var(--accent-gold); color:var(--accent-gold); }
+.agent-info { flex:1; }
+.agent-reasoning { font-size:12px; color:var(--text-primary); margin-bottom:3px; line-height:1.4; }
+.agent-meta { font-size:10px; color:var(--text-secondary); }
+.agent-action { font-size:14px; font-weight:700; min-width:64px; text-align:right; }
+.agent-conf { font-size:11px; color:var(--text-secondary); min-width:36px; text-align:right; }
+.agent-summary-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px; }
+.agent-stat { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center; }
+.agent-stat-label { font-size:9px; color:var(--text-secondary); letter-spacing:2px; margin-bottom:6px; }
+.agent-stat-value { font-size:20px; font-weight:700; }
+.portfolio-refresh-indicator { font-size:9px; color:var(--text-dim); text-align:right; padding:4px 0; }
+
+/* ── SWARM DASHBOARD STYLES ── */
+.swarm-container { flex:1; overflow-y:auto; padding:20px; display:flex; flex-direction:column; gap:16px; }
+.swarm-header-bar { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.swarm-stat { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:14px; text-align:center; }
+.swarm-stat-label { font-size:9px; color:var(--text-secondary); letter-spacing:2px; margin-bottom:6px; }
+.swarm-stat-value { font-size:22px; font-weight:700; }
+.swarm-stat-sub { font-size:10px; color:var(--text-dim); margin-top:3px; }
+.swarm-section { background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:16px; }
+.swarm-section-title { font-size:10px; color:var(--text-secondary); letter-spacing:2px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; }
+.swarm-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:12px; gap:8px; }
+.swarm-row:last-child { border-bottom:none; }
+.swarm-agent-name { font-weight:700; font-size:12px; width:140px; color:var(--text-primary); }
+.swarm-personality { font-size:10px; color:var(--text-dim); width:100px; }
+.swarm-pnl { font-weight:700; font-size:13px; min-width:70px; text-align:right; }
+.swarm-trades { font-size:11px; color:var(--text-secondary); min-width:50px; text-align:center; }
+.swarm-winrate { font-size:11px; font-weight:600; min-width:50px; text-align:center; }
+.swarm-gen { font-size:10px; color:var(--text-dim); min-width:40px; text-align:center; }
+.swarm-status-badge { font-size:9px; padding:2px 8px; border-radius:3px; font-weight:700; min-width:60px; text-align:center; }
+.status-active  { background:rgba(34,197,94,0.12); color:var(--accent-green); }
+.status-mutated { background:rgba(245,158,11,0.12); color:var(--accent-gold); }
+.status-dead    { background:rgba(239,68,68,0.12); color:var(--accent-red); }
+.swarm-winbar { flex:1; height:4px; background:var(--bg-secondary); border-radius:2px; overflow:hidden; margin:0 8px; }
+.swarm-winbar-fill { height:100%; border-radius:2px; }
+.position-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); font-size:12px; gap:8px; }
+.position-row:last-child { border-bottom:none; }
+.position-symbol { font-weight:700; font-size:14px; width:48px; }
+.position-dir { padding:2px 8px; border-radius:3px; font-size:10px; font-weight:700; }
+.position-exchange { font-size:10px; color:var(--text-dim); width:80px; }
+.position-entry { color:var(--text-secondary); }
+.position-pnl { font-weight:700; }
+.storm-banner { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:8px; padding:12px 16px; display:flex; align-items:center; gap:12px; }
+.storm-icon { font-size:20px; }
+.storm-text { font-size:12px; color:var(--accent-red); font-weight:600; }
+.storm-sub { font-size:10px; color:var(--text-secondary); margin-top:2px; }
+.clear-banner { background:rgba(34,197,94,0.08); border:1px solid rgba(34,197,94,0.3); border-radius:8px; padding:12px 16px; display:flex; align-items:center; gap:12px; }
+.clear-text { font-size:12px; color:var(--accent-green); font-weight:600; }
+.pattern-count { font-size:32px; font-weight:700; color:var(--accent-purple); }
+.pattern-sub { font-size:11px; color:var(--text-secondary); margin-top:4px; }
+.mutation-log { font-size:11px; color:var(--text-secondary); line-height:1.8; }
+.mutation-entry { padding:4px 0; border-bottom:1px solid var(--border); display:flex; gap:8px; align-items:center; }
+.mutation-entry:last-child { border-bottom:none; }
+.layer-badge { font-size:9px; padding:1px 6px; border-radius:3px; font-weight:700; }
+.layer-1 { background:rgba(2,132,199,0.15); color:#38bdf8; }
+.layer-2 { background:rgba(4,120,87,0.15); color:#34d399; }
+.layer-3 { background:rgba(124,58,237,0.15); color:#a78bfa; }
+.layer-4 { background:rgba(180,83,9,0.15); color:var(--accent-gold); }
+.swarm-refresh-btn { padding:4px 12px; background:var(--bg-secondary); border:1px solid var(--border); border-radius:4px; font-size:10px; color:var(--text-secondary); cursor:pointer; font-family:inherit; transition:all 0.2s; }
+.swarm-refresh-btn:hover { border-color:var(--accent); color:var(--accent); }
+.trade-feed-item { display:flex; gap:10px; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:11px; }
+.trade-feed-item:last-child { border-bottom:none; }
+.feed-time { color:var(--text-dim); width:50px; flex-shrink:0; }
+.feed-symbol { font-weight:700; width:36px; }
+.feed-dir { padding:1px 6px; border-radius:3px; font-size:9px; font-weight:700; }
+.feed-exchange { color:var(--text-dim); width:80px; }
+.feed-price { color:var(--text-secondary); flex:1; }
+.feed-status { font-weight:700; }
 </style>
 </head>
 <body>
 <div class="header">
   <div class="logo">
     <div class="logo-text">ARIA</div>
-    <div class="logo-sub">ADVANCED RETAIL INTELLIGENCE & ANALYTICS</div>
+    <div class="logo-sub">AUTONOMOUS REASONING & INTELLIGENCE ARCHITECTURE</div>
   </div>
   <div class="header-right">
     <div id="riskBadge" class="risk-badge risk-critical">CRITICAL RISK</div>
@@ -195,7 +292,10 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
       <div class="tab" onclick="switchTab(this,'portfolio')">PORTFOLIO</div>
       <div class="tab" onclick="switchTab(this,'intelligence')">INTELLIGENCE</div>
       <div class="tab" onclick="switchTab(this,'news')">NEWS FEED</div>
+      <div class="tab" onclick="switchTab(this,'agents')">AGENTS &#9679;</div>
+      <div class="tab" onclick="switchTab(this,'swarm')" style="color:#8b5cf6">SWARM &#9956;</div>
     </div>
+    <!-- EXISTING TAB CONTENTS — UNCHANGED -->
     <div class="tab-content active" id="tab-chat">
       <div class="chat-container" id="chatContainer">
         <div class="welcome-message">
@@ -224,6 +324,19 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
     </div>
     <div class="tab-content" id="tab-intelligence"><div class="intelligence-grid" id="intelligenceGrid"><div class="loading">Loading intelligence data...</div></div></div>
     <div class="tab-content" id="tab-news"><div class="news-list" id="newsList"><div class="loading">Loading live news...</div></div></div>
+    <div class="tab-content" id="tab-agents">
+      <div class="agent-container" id="agentContainer">
+        <div class="loading">Loading agent activity...</div>
+      </div>
+    </div>
+
+    <!-- ── NEW SWARM TAB ── -->
+    <div class="tab-content" id="tab-swarm">
+      <div class="swarm-container" id="swarmContainer">
+        <div class="loading">Loading swarm intelligence...</div>
+      </div>
+    </div>
+
   </div>
   <div class="right-panel">
     <div class="panel-header">GEOPOLITICAL RISK</div>
@@ -244,11 +357,107 @@ body { background:var(--bg-primary); color:var(--text-primary); font-family:'Int
   </div>
 </div>
 <script>
-var API = "http://127.0.0.1:8001";
+var API = "";
+
+// ── WEBSOCKET LIVE CONNECTION ─────────────────────────
+var wsLive = null;
+var wsReconnectTimer = null;
+
+function connectWebSocket() {
+  var wsUrl = (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host + "/ws/live";
+  wsLive = new WebSocket(wsUrl);
+  
+  wsLive.onopen = function() {
+    console.log("WebSocket connected — live updates active");
+    if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null; }
+  };
+  
+  wsLive.onmessage = function(event) {
+    try {
+      var data = JSON.parse(event.data);
+      if (data.type === "live_update") {
+        // Update watchlist prices instantly
+        if (data.positions) {
+          data.positions.forEach(function(p) {
+            var el = document.getElementById("price-" + p.symbol);
+            if (el) el.innerText = "$" + parseFloat(p.entry_price).toLocaleString();
+          });
+        }
+        // Update last-update indicator
+        var ts = document.getElementById("ws-indicator");
+        if (ts) { ts.innerText = "LIVE"; ts.style.color = "var(--accent-green)"; }
+      }
+    } catch(e) {}
+  };
+  
+  wsLive.onclose = function() {
+    console.log("WebSocket disconnected — reconnecting in 3s");
+    var ts = document.getElementById("ws-indicator");
+    if (ts) { ts.innerText = "RECONNECTING"; ts.style.color = "var(--accent-red)"; }
+    wsReconnectTimer = setTimeout(connectWebSocket, 3000);
+  };
+  
+  wsLive.onerror = function() { wsLive.close(); };
+}
+
+// Start WebSocket on page load
+setTimeout(connectWebSocket, 1000);
+
+
+
+// ── WEBSOCKET LIVE CONNECTION ─────────────────────────
+var wsLive = null;
+var wsReconnectTimer = null;
+
+function connectWebSocket() {
+  var wsUrl = (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host + "/ws/live";
+  wsLive = new WebSocket(wsUrl);
+  
+  wsLive.onopen = function() {
+    console.log("WebSocket connected — live updates active");
+    if (wsReconnectTimer) { clearTimeout(wsReconnectTimer); wsReconnectTimer = null; }
+  };
+  
+  wsLive.onmessage = function(event) {
+    try {
+      var data = JSON.parse(event.data);
+      if (data.type === "live_update") {
+        // Update watchlist prices instantly
+        if (data.positions) {
+          data.positions.forEach(function(p) {
+            var el = document.getElementById("price-" + p.symbol);
+            if (el) el.innerText = "$" + parseFloat(p.entry_price).toLocaleString();
+          });
+        }
+        // Update last-update indicator
+        var ts = document.getElementById("ws-indicator");
+        if (ts) { ts.innerText = "LIVE"; ts.style.color = "var(--accent-green)"; }
+      }
+    } catch(e) {}
+  };
+  
+  wsLive.onclose = function() {
+    console.log("WebSocket disconnected — reconnecting in 3s");
+    var ts = document.getElementById("ws-indicator");
+    if (ts) { ts.innerText = "RECONNECTING"; ts.style.color = "var(--accent-red)"; }
+    wsReconnectTimer = setTimeout(connectWebSocket, 3000);
+  };
+  
+  wsLive.onerror = function() { wsLive.close(); };
+}
+
+// Start WebSocket on page load
+setTimeout(connectWebSocket, 1000);
+
+
 var userMode = "beginner";
 var selectedAsset = "BTC";
 var assetData = {};
-var currentUserId = "aria-user";
+var currentUserId = "aria-agent-system";
+var portfolioRefreshTimer = null;
+var swarmRefreshTimer = null;
+var isPortfolioTabActive = false;
+var isSwarmTabActive = false;
 
 function setMode(btn, mode) {
   userMode = mode;
@@ -262,7 +471,45 @@ function switchTab(tab, name) {
   tab.classList.add("active");
   document.getElementById("tab-" + name).classList.add("active");
   if (name === "news") loadNews();
-  if (name === "portfolio") loadPortfolio();
+  if (name === "portfolio") {
+    isPortfolioTabActive = true;
+    loadPortfolio();
+    startPortfolioAutoRefresh();
+  } else {
+    isPortfolioTabActive = false;
+    stopPortfolioAutoRefresh();
+  }
+  if (name === "agents") loadAgents();
+  if (name === "swarm") {
+    isSwarmTabActive = true;
+    loadSwarm();
+    startSwarmAutoRefresh();
+  } else {
+    isSwarmTabActive = false;
+    stopSwarmAutoRefresh();
+  }
+}
+
+function startPortfolioAutoRefresh() {
+  stopPortfolioAutoRefresh();
+  portfolioRefreshTimer = setInterval(function() {
+    if (isPortfolioTabActive) loadPortfolio(true);
+  }, 5000);
+}
+
+function stopPortfolioAutoRefresh() {
+  if (portfolioRefreshTimer) { clearInterval(portfolioRefreshTimer); portfolioRefreshTimer = null; }
+}
+
+function startSwarmAutoRefresh() {
+  stopSwarmAutoRefresh();
+  swarmRefreshTimer = setInterval(function() {
+    if (isSwarmTabActive) loadSwarm(true);
+  }, 5000);
+}
+
+function stopSwarmAutoRefresh() {
+  if (swarmRefreshTimer) { clearInterval(swarmRefreshTimer); swarmRefreshTimer = null; }
 }
 
 function selectAsset(symbol) {
@@ -312,7 +559,6 @@ async function loadAssets() {
   document.getElementById("updateTime").textContent = new Date().toLocaleTimeString("en-GB", {hour:"2-digit", minute:"2-digit"});
 }
 
-// ── RISK PANEL ────────────────────────────────────────
 async function loadRiskPanel() {
   var symEl = document.getElementById("tradeSymbol");
   var amtEl = document.getElementById("tradeAmount");
@@ -337,60 +583,39 @@ async function loadRiskPanel() {
     var recColor   = rec.includes("NEGATIVE EV")||rec.includes("AVOID")?"var(--accent-red)":rec.includes("FAVOURABLE")?"var(--accent-green)":"var(--accent-gold)";
     var score      = d.risk_metrics.risk_score;
     var scoreColor = score>70?"var(--accent-red)":score>40?"var(--accent-gold)":"var(--accent-green)";
+    var badge = document.getElementById("riskBadge");
+    if(badge){ badge.textContent = score>70?"HIGH RISK":score>40?"MODERATE":("LOW RISK"); badge.className = "risk-badge " + (score>70?"risk-critical":score>40?"risk-warning":"risk-safe"); }
     var wr         = d.win_rate_data.win_rate;
     var var95      = d.risk_metrics.var_95;
     panel.innerHTML =
       "<div style=\"border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--bg-secondary);margin-top:10px\">" +
         "<div style=\"font-size:10px;color:var(--text-secondary);letter-spacing:2px;margin-bottom:10px\">RISK ANALYSIS</div>" +
         "<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px\">" +
-          "<div style=\"background:var(--bg-card);border-radius:6px;padding:8px;text-align:center\">" +
-            "<div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">REGIME</div>" +
-            "<div style=\"font-size:12px;font-weight:700;color:" + regColor + "\">" + regime + "</div>" +
-          "</div>" +
-          "<div style=\"background:var(--bg-card);border-radius:6px;padding:8px;text-align:center\">" +
-            "<div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">KELLY SIZE</div>" +
-            "<div style=\"font-size:12px;font-weight:700;color:" + kellyColor + "\">" + kelly + "</div>" +
-          "</div>" +
-          "<div style=\"background:var(--bg-card);border-radius:6px;padding:8px;text-align:center\">" +
-            "<div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">RISK SCORE</div>" +
-            "<div style=\"font-size:12px;font-weight:700;color:" + scoreColor + "\">" + score + "/100</div>" +
-          "</div>" +
+          "<div style=\"background:var(--bg-card);border-radius:6px;padding:8px;text-align:center\"><div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">REGIME</div><div style=\"font-size:12px;font-weight:700;color:" + regColor + "\">" + regime + "</div></div>" +
+          "<div style=\"background:var(--bg-card);border-radius:6px;padding:8px;text-align:center\"><div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">KELLY SIZE</div><div style=\"font-size:12px;font-weight:700;color:" + kellyColor + "\">" + kelly + "</div></div>" +
+          "<div style=\"background:var(--bg-card);border-radius:6px;padding:8px;text-align:center\"><div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">RISK SCORE</div><div style=\"font-size:12px;font-weight:700;color:" + scoreColor + "\">" + score + "/100</div></div>" +
         "</div>" +
         "<div style=\"display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:8px\">" +
-          "<div style=\"background:var(--bg-card);border-radius:6px;padding:6px;text-align:center\">" +
-            "<div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">WIN RATE</div>" +
-            "<div style=\"font-size:11px;font-weight:700;color:var(--text-primary)\">" + wr + "%</div>" +
-          "</div>" +
-          "<div style=\"background:var(--bg-card);border-radius:6px;padding:6px;text-align:center\">" +
-            "<div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">MONTE CARLO</div>" +
-            "<div style=\"font-size:11px;font-weight:700;color:" + mcColor + "\">" + mc + "%</div>" +
-          "</div>" +
-          "<div style=\"background:var(--bg-card);border-radius:6px;padding:6px;text-align:center\">" +
-            "<div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">EXP VALUE</div>" +
-            "<div style=\"font-size:11px;font-weight:700;color:" + evColor + "\">" + (ev>=0?"+":"") + "$" + ev + "</div>" +
-          "</div>" +
-          "<div style=\"background:var(--bg-card);border-radius:6px;padding:6px;text-align:center\">" +
-            "<div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">VAR 95%</div>" +
-            "<div style=\"font-size:11px;font-weight:700;color:var(--accent-red)\">-$" + var95 + "</div>" +
-          "</div>" +
+          "<div style=\"background:var(--bg-card);border-radius:6px;padding:6px;text-align:center\"><div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">WIN RATE</div><div style=\"font-size:11px;font-weight:700;color:var(--text-primary)\">" + wr + "%</div></div>" +
+          "<div style=\"background:var(--bg-card);border-radius:6px;padding:6px;text-align:center\"><div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">MONTE CARLO</div><div style=\"font-size:11px;font-weight:700;color:" + mcColor + "\">" + mc + "%</div></div>" +
+          "<div style=\"background:var(--bg-card);border-radius:6px;padding:6px;text-align:center\"><div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">EXP VALUE</div><div style=\"font-size:11px;font-weight:700;color:" + evColor + "\">" + (ev>=0?"+":"") + "$" + ev + "</div></div>" +
+          "<div style=\"background:var(--bg-card);border-radius:6px;padding:6px;text-align:center\"><div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:3px\">VAR 95%</div><div style=\"font-size:11px;font-weight:700;color:var(--accent-red)\">-$" + var95 + "</div></div>" +
         "</div>" +
-        "<div style=\"background:var(--bg-card);border-radius:6px;padding:10px;border-left:3px solid " + recColor + "\">" +
-          "<div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:4px\">ARIA RECOMMENDATION</div>" +
-          "<div style=\"font-size:11px;color:" + recColor + ";line-height:1.5\">" + rec + "</div>" +
-        "</div>" +
+        "<div style=\"background:var(--bg-card);border-radius:6px;padding:10px;border-left:3px solid " + recColor + "\"><div style=\"font-size:9px;color:var(--text-secondary);margin-bottom:4px\">ARIA RECOMMENDATION</div><div style=\"font-size:11px;color:" + recColor + ";line-height:1.5\">" + rec + "</div></div>" +
       "</div>";
   } catch(e) {
     panel.innerHTML = "<div style=\"color:var(--text-dim);font-size:11px;padding:8px\">Risk analysis unavailable</div>";
   }
 }
 
-async function loadPortfolio() {
+async function loadPortfolio(silent) {
   var container = document.getElementById("portfolioContainer");
-  container.innerHTML = "<div class=\"loading\">Loading portfolio...</div>";
+  if (!silent) container.innerHTML = "<div class=\"loading\">Loading portfolio...</div>";
   try {
-    var port = await fetch(API + "/paper/portfolio/" + currentUserId).then(function(r) { return r.json(); });
+    var port = await fetch(API + "/live/portfolio").then(function(r) { return r.json(); });
     var returnColor = port.total_return_pct >= 0 ? "var(--accent-green)" : "var(--accent-red)";
     var pnlColor    = port.unrealised_pnl >= 0 ? "var(--accent-green)" : "var(--accent-red)";
+    var lastRefresh = new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
     var html = "";
     html += "<div class=\"portfolio-header\">" +
       "<div class=\"stat-card\"><div class=\"stat-label\">BALANCE</div><div class=\"stat-value\">$" + port.balance.toLocaleString("en-US",{maximumFractionDigits:0}) + "</div><div class=\"stat-sub\">of $10,000 starting</div></div>" +
@@ -413,9 +638,10 @@ async function loadPortfolio() {
       for (var i = 0; i < port.open_trades.length; i++) {
         var t = port.open_trades[i];
         var tPnlColor = t.pnl_usd >= 0 ? "var(--accent-green)" : "var(--accent-red)";
+        var dirClass  = (t.direction || "").toLowerCase() === "short" ? "dir-short" : "dir-long";
         html += "<div class=\"trade-row\">" +
           "<span class=\"trade-symbol\">" + t.symbol + "</span>" +
-          "<span class=\"trade-dir dir-" + t.direction.toLowerCase() + "\">" + t.direction + "</span>" +
+          "<span class=\"trade-dir " + dirClass + "\">" + (t.direction || "").toUpperCase() + "</span>" +
           "<span style=\"color:var(--text-secondary)\">Entry: $" + t.entry_price.toLocaleString() + "</span>" +
           "<span style=\"color:var(--text-secondary)\">Now: $" + (t.current_price || t.entry_price).toLocaleString() + "</span>" +
           "<span class=\"trade-pnl\" style=\"color:" + tPnlColor + "\">" + (t.pnl_usd >= 0 ? "+" : "") + "$" + (t.pnl_usd || 0).toFixed(2) + "</span>" +
@@ -443,8 +669,10 @@ async function loadPortfolio() {
         html += "</div>";
       }
     } catch(e) {}
+    html += "<div class=\"trade-section\"><div class=\"trade-section-title\">A/B TEST — V3 vs V4</div><div id=\"abTestContainer\">Loading...</div></div>";
+      loadABTest();
+      html += "<div class=\"portfolio-refresh-indicator\">Auto-refreshes every 30s &bull; Last update: " + lastRefresh + "</div>";
     container.innerHTML = html;
-    setTimeout(loadRiskPanel, 100);
   } catch(e) {
     container.innerHTML = "<div class=\"loading\">Portfolio unavailable. Check connection.</div>";
   }
@@ -551,6 +779,253 @@ async function loadRightPanel() {
   } catch(e) {}
 }
 
+async function toggleKillSwitch() {
+  var btn = document.getElementById('killSwitchBtn');
+  try {
+    var status = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
+    var endpoint = status.stopped ? "/agents/resume" : "/agents/stop";
+    await fetch(API + endpoint, {method: "POST"});
+    if (status.stopped) {
+      btn.textContent = "⚠ KILL SWITCH";
+      btn.style.background = "rgba(239,68,68,0.12)";
+      btn.style.color = "var(--accent-red)";
+    } else {
+      btn.textContent = "✅ RESUME AGENTS";
+      btn.style.background = "rgba(34,197,94,0.12)";
+      btn.style.color = "var(--accent-green)";
+    }
+  } catch(e) {
+    alert("Kill switch error: " + e.message);
+  }
+}
+
+async function loadAgents() {
+  var container = document.getElementById("agentContainer");
+  container.innerHTML = "<div class='loading'>Fetching agent activity...</div>";
+  try {
+    var data = await fetch(API + "/agent/reports").then(function(r) { return r.json(); });
+    var reports = data.reports || [];
+    if (reports.length === 0) {
+      container.innerHTML = "<div class='loading'>No agent activity yet. Agents run every 60s on Hetzner.</div>";
+      setTimeout(loadAgents, 10000);
+      return;
+    }
+    var buys     = reports.filter(function(r) { return r.action === "BUY"; }).length;
+    var sells    = reports.filter(function(r) { return r.action === "SELL"; }).length;
+    var vetos    = reports.filter(function(r) { return r.action === "VETO"; }).length;
+    var reverses = reports.filter(function(r) { return r.action === "REVERSE"; }).length;
+    var html = "";
+    html += "<div class='agent-summary-bar'>" +
+      "<div class='agent-stat'><div class='agent-stat-label'>DECISIONS</div><div class='agent-stat-value' style='color:var(--accent)'>" + reports.length + "</div></div>" +
+      "<div class='agent-stat'><div class='agent-stat-label'>BUY SIGNALS</div><div class='agent-stat-value' style='color:var(--accent-green)'>" + buys + "</div></div>" +
+      "<div class='agent-stat'><div class='agent-stat-label'>SELL SIGNALS</div><div class='agent-stat-value' style='color:var(--accent-red)'>" + sells + "</div></div>" +
+      "<div class='agent-stat'><div class='agent-stat-label'>RISK VETOS</div><div class='agent-stat-value' style='color:var(--accent-gold)'>" + vetos + "</div></div>" +
+    "</div>";
+    html += "<div class='agent-header-bar'>" +
+      "<div class='agent-header-title'>LIVE AGENT DECISIONS — " + reports.length + " TOTAL</div>" +
+      "<button class='agent-refresh-btn' onclick='loadAgents()'>&#8635; REFRESH</button>" +
+      "<button class='agent-refresh-btn' id='killSwitchBtn' onclick='toggleKillSwitch()' style='background:rgba(239,68,68,0.12);border-color:rgba(239,68,68,0.4);color:var(--accent-red)'>&#9888; KILL SWITCH</button>" +
+    "</div>";
+    var badgeClass = {
+      "SPECIALIST": "badge-specialist",
+      "MACRO":      "badge-macro",
+      "SENTIMENT":  "badge-sentiment",
+      "REGIME":     "badge-regime",
+      "RISK":       "badge-risk",
+      "ENSEMBLE":   "badge-ensemble",
+      "DATA":       "badge-data",
+      "ANALYSIS":   "badge-analysis",
+      "STRATEGY":   "badge-strategy",
+      "META":       "badge-meta"
+    };
+    for (var i = 0; i < reports.length; i++) {
+      var r = reports[i];
+      var action = (r.action || "HOLD").toUpperCase();
+      var actionColor = action==="BUY"?"var(--accent-green)":action==="SELL"?"var(--accent-red)":action==="HOLD"?"var(--text-dim)":action==="REVERSE"?"var(--accent-gold)":action==="APPROVED"?"var(--accent-green)":action==="VETO"?"var(--accent-red)":action==="CLOSE"?"var(--accent)":"var(--accent-gold)";
+      var conf = (r.confidence * 100).toFixed(0);
+      var time = new Date(r.timestamp).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+      var agentName = (r.agent_id || "").replace("agent_","").replace("ensemble_","").toUpperCase();
+      var bClass = badgeClass[r.agent_type] || "badge-specialist";
+      var cardClass = "agent-card action-" + action.toLowerCase();
+      html += "<div class='" + cardClass + "'>" +
+        "<div class='agent-badge " + bClass + "'>" + agentName + "</div>" +
+        "<div class='agent-info'>" +
+          "<div class='agent-reasoning'>" + (r.reasoning || "") + "</div>" +
+          "<div class='agent-meta'>" + (r.agent_type||"") + (r.symbol ? " &bull; " + r.symbol : "") + " &bull; " + time + "</div>" +
+        "</div>" +
+        "<div class='agent-action' style='color:" + actionColor + "'>" + action + "</div>" +
+        "<div class='agent-conf'>" + conf + "%</div>" +
+      "</div>";
+    }
+    container.innerHTML = html;
+  } catch(e) {
+    container.innerHTML = "<div class='loading'>Agent data unavailable. Check Hetzner connection.</div>";
+  }
+  setTimeout(loadAgents, 30000);
+}
+
+/* ── SWARM DASHBOARD ── */
+async function loadSwarm(silent) {
+  var container = document.getElementById("swarmContainer");
+  if (!silent) container.innerHTML = "<div class='loading'>Loading swarm intelligence...</div>";
+
+  try {
+    // Fetch agent reports for swarm data
+    var reportsData = await fetch(API + "/agent/reports").then(function(r) { return r.json(); });
+    var reports = reportsData.reports || [];
+    var agentStatus = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
+    var port = await fetch(API + "/live/portfolio").then(function(r) { return r.json(); });
+var swarmPos = await fetch(API + "/agents/status").then(function(r) { return r.json(); });
+var allPositions = swarmPos.positions || [];  
+
+    // Derive swarm stats from reports
+    var uniqueAgents = {};
+    for (var i = 0; i < reports.length; i++) {
+      var rep = reports[i];
+      var aid = rep.agent_id;
+      if (!uniqueAgents[aid]) {
+        uniqueAgents[aid] = { id: aid, type: rep.agent_type, decisions: 0, buys: 0, sells: 0 };
+      }
+      uniqueAgents[aid].decisions++;
+      if (rep.action === "BUY") uniqueAgents[aid].buys++;
+      if (rep.action === "SELL") uniqueAgents[aid].sells++;
+    }
+
+    var agentList = Object.values(uniqueAgents);
+    var totalDecisions = reports.length;
+    var totalBuys = reports.filter(function(r) { return r.action === "BUY"; }).length;
+    var totalSells = reports.filter(function(r) { return r.action === "SELL"; }).length;
+    var openCount = port.open_count || 0;
+    var balance = port.balance || 10000;
+    var returnPct = port.total_return_pct || 0;
+    var returnColor = returnPct >= 0 ? "var(--accent-green)" : "var(--accent-red)";
+    var stormActive = agentStatus.stopped || false;
+
+    var html = "";
+
+    // ── Storm / Clear banner
+    if (stormActive) {
+      html += "<div class='storm-banner'><div class='storm-icon'>🌩️</div><div><div class='storm-text'>KILL SWITCH ACTIVE — ALL AGENTS HALTED</div><div class='storm-sub'>Resume agents to restore trading</div></div><button onclick='resumeSwarm()' style='margin-left:auto;padding:6px 14px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.4);border-radius:4px;color:var(--accent-green);font-size:11px;cursor:pointer;font-family:inherit'>RESUME</button></div>";
+    } else {
+      html += "<div class='clear-banner'><div style='font-size:20px'>☀️</div><div><div class='clear-text'>SWARM ACTIVE — 6 AGENTS RUNNING</div><div style='font-size:10px;color:var(--text-secondary);margin-top:2px'>Storm Protocol armed &bull; Black Box saving every 15min &bull; Mutation at 2AM</div></div><button onclick='haltSwarm()' style='margin-left:auto;padding:6px 14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);border-radius:4px;color:var(--accent-red);font-size:11px;cursor:pointer;font-family:inherit'>⚠ HALT</button></div>";
+    }
+
+    // ── Top stats
+    html += "<div class='swarm-header-bar'>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>SWARM BALANCE</div><div class='swarm-stat-value' style='color:" + returnColor + "'>$" + balance.toLocaleString("en-US",{maximumFractionDigits:0}) + "</div><div class='swarm-stat-sub'>" + (returnPct>=0?"+":"") + returnPct + "% all time</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>OPEN POSITIONS</div><div class='swarm-stat-value' style='color:var(--accent)'>" + openCount + "</div><div class='swarm-stat-sub'>of 6 max</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>ACTIVE AGENTS</div><div class='swarm-stat-value' style='color:var(--accent-purple)'>" + agentList.length + "</div><div class='swarm-stat-sub'>of 6 total</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>BUY SIGNALS</div><div class='swarm-stat-value' style='color:var(--accent-green)'>" + totalBuys + "</div><div class='swarm-stat-sub'>this session</div></div>" +
+      "<div class='swarm-stat'><div class='swarm-stat-label'>SELL SIGNALS</div><div class='swarm-stat-value' style='color:var(--accent-red)'>" + totalSells + "</div><div class='swarm-stat-sub'>this session</div></div>" +
+    "</div>";
+
+    // ── Open Positions
+    html += "<div class='swarm-section'><div class='swarm-section-title'><span>LIVE POSITIONS</span><span style='color:var(--text-dim);font-size:9px'>Binance Testnet + ARIA Paper</span></div>";
+    if (allPositions.length > 0) {
+      for (var j = 0; j < allPositions.length; j++) {
+        var t = allPositions[j];
+        var pnlColor = (t.pnl_usd || 0) >= 0 ? "var(--accent-green)" : "var(--accent-red)";
+        var dirClass = (t.direction||"").toLowerCase() === "short" ? "dir-short" : "dir-long";
+        html += "<div class='position-row'>" +
+          "<span class='position-symbol'>" + t.symbol + "</span>" +
+          "<span class='position-dir " + dirClass + "'>" + (t.direction||"LONG").toUpperCase() + "</span>" +
+          "<span class='position-exchange'>" + t.exchange + "</span>" +
+          "<span class='position-entry' style='color:var(--text-secondary)'>Entry: $" + (t.entry_price||0).toLocaleString() + "</span>" +
+          "<span style='color:var(--text-secondary)'>Now: $" + (t.current_price||0).toLocaleString() + "</span>" +
+          "<span class='position-pnl' style='color:" + pnlColor + "'>" + ((t.pnl_usd||0)>=0?"+":"") + "$" + (t.pnl_usd||0).toFixed(2) + " (" + ((t.pnl_pct||0)>=0?"+":"") + (t.pnl_pct||0).toFixed(2) + "%)</span>" + 
+        "</div>";
+      }
+    } else {
+      html += "<div class='loading' style='padding:12px'>No open positions</div>";
+    }
+    html += "</div>";
+
+    // ── Agent Activity Feed
+    html += "<div class='swarm-section'><div class='swarm-section-title'><span>AGENT LEADERBOARD</span><span style='font-size:9px;color:var(--text-dim)'>" + agentList.length + " active agents</span></div>";
+    html += "<div style='display:grid;grid-template-columns:140px 80px 60px 60px 60px;gap:4px;padding:4px 0 8px;border-bottom:1px solid var(--border);font-size:9px;color:var(--text-dim);letter-spacing:1px'>" +
+      "<span>AGENT</span><span style='text-align:center'>TYPE</span><span style='text-align:center'>BUYS</span><span style='text-align:center'>SELLS</span><span style='text-align:center'>DECISIONS</span></div>";
+
+    // Sort by decisions
+    agentList.sort(function(a,b) { return b.decisions - a.decisions; });
+    var layerColors = {"DATA":"layer-1","ANALYSIS":"layer-2","STRATEGY":"layer-3","SPECIALIST":"layer-3","META":"layer-4","RISK":"layer-4"};
+
+    for (var k = 0; k < agentList.length; k++) {
+      var ag = agentList[k];
+      var lClass = layerColors[ag.type] || "layer-3";
+      var agName = ag.id.replace("agent_","").replace("specialist_","").replace("_agent","").toUpperCase();
+      html += "<div class='swarm-row'>" +
+        "<span class='swarm-agent-name'>" + agName + "</span>" +
+        "<span style='text-align:center'><span class='layer-badge " + lClass + "'>" + ag.type + "</span></span>" +
+        "<span class='swarm-trades' style='color:var(--accent-green)'>" + ag.buys + "</span>" +
+        "<span class='swarm-trades' style='color:var(--accent-red)'>" + ag.sells + "</span>" +
+        "<span class='swarm-trades' style='color:var(--accent)'>" + ag.decisions + "</span>" +
+      "</div>";
+    }
+    html += "</div>";
+
+    // ── Live Trade Feed
+    html += "<div class='swarm-section'><div class='swarm-section-title'><span>LIVE SIGNAL FEED</span><button class='swarm-refresh-btn' onclick='loadSwarm()'>&#8635; REFRESH</button></div>";
+    var recentReports = reports.slice(0, 20);
+    if (recentReports.length > 0) {
+      for (var m = 0; m < recentReports.length; m++) {
+        var rep2 = recentReports[m];
+        var act = (rep2.action||"HOLD").toUpperCase();
+        var actColor = act==="BUY"?"var(--accent-green)":act==="SELL"?"var(--accent-red)":act==="APPROVED"?"var(--accent-green)":act==="VETO"?"var(--accent-red)":act==="REVERSE"?"var(--accent-gold)":"var(--text-dim)";
+        var feedTime = new Date(rep2.timestamp).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+        var feedName = (rep2.agent_id||"").replace("agent_","").replace("specialist_","").toUpperCase();
+        html += "<div class='trade-feed-item'>" +
+          "<span class='feed-time'>" + feedTime + "</span>" +
+          "<span class='feed-symbol'>" + feedName + "</span>" +
+          "<span class='feed-dir " + (act==="BUY"?"dir-long":act==="SELL"?"dir-short":"") + "' style='color:" + actColor + ";font-weight:700'>" + act + "</span>" +
+          "<span class='feed-exchange'>" + (rep2.symbol||"MULTI") + "</span>" +
+          "<span class='feed-price' style='color:var(--text-secondary)'>" + (rep2.reasoning||"").substring(0,40) + (rep2.reasoning&&rep2.reasoning.length>40?"...":"") + "</span>" +
+        "</div>";
+      }
+    } else {
+      html += "<div class='loading' style='padding:12px'>No signals yet. Waiting for next cycle...</div>";
+    }
+    html += "</div>";
+
+    // ── System Info
+    html += "<div class='swarm-section'><div class='swarm-section-title'>SYSTEM STATUS</div>" +
+      "<div style='display:grid;grid-template-columns:1fr 1fr;gap:12px'>" +
+        "<div style='font-size:12px;color:var(--text-secondary);line-height:2'>" +
+          "<div>🧠 <span style='color:var(--text-primary)'>Pattern Memory</span> — PostgreSQL (grows per trade)</div>" +
+          "<div>⚡ <span style='color:var(--text-primary)'>Signal Bus</span> — Shared across all 20 agents</div>" +
+          "<div>🌩️ <span style='color:var(--text-primary)'>Storm Protocol</span> — Armed (VIX/Funding/Sentiment)</div>" +
+          "<div>💾 <span style='color:var(--text-primary)'>Black Box</span> — Saves every 15 minutes</div>" +
+        "</div>" +
+        "<div style='font-size:12px;color:var(--text-secondary);line-height:2'>" +
+          "<div>🧬 <span style='color:var(--text-primary)'>Mutation Engine</span> — Fires at 2AM UTC</div>" +
+          "<div>🎯 <span style='color:var(--text-primary)'>Binance Testnet</span> — BTC, ETH real orders</div>" +
+          "<div>📊 <span style='color:var(--text-primary)'>ARIA Paper</span> — AAPL, NVDA, TSLA, GLD</div>" +
+          "<div>⏱️ <span style='color:var(--text-primary)'>Cycle</span> — Every 60 seconds</div>" +
+        "</div>" +
+      "</div></div>";
+
+    html += "<div class='portfolio-refresh-indicator'>Auto-refreshes every 30s &bull; Last update: " + new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",second:"2-digit"}) + "</div>";
+
+    container.innerHTML = html;
+
+  } catch(e) {
+    container.innerHTML = "<div class='loading'>Swarm data unavailable. Check connection.<br><br><small>" + e.message + "</small></div>";
+  }
+}
+
+async function haltSwarm() {
+  try {
+    await fetch(API + "/agents/stop", {method:"POST"});
+    loadSwarm();
+  } catch(e) { alert("Halt failed: " + e.message); }
+}
+
+async function resumeSwarm() {
+  try {
+    await fetch(API + "/agents/resume", {method:"POST"});
+    loadSwarm();
+  } catch(e) { alert("Resume failed: " + e.message); }
+}
+
 function handleKey(e) {
   if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
@@ -641,7 +1116,47 @@ function formatPrice(price) {
   return price.toFixed(4);
 }
 
+async function loadABTest() {
+  var container = document.getElementById("abTestContainer");
+  if (!container) return;
+  try {
+    var v3 = await fetch(API + "/paper/portfolio/aria-agent-system").then(function(r) { return r.json(); });
+    var v4 = await fetch(API + "/paper/portfolio/aria-agent-v4").then(function(r) { return r.json(); });
+    var v3color = v3.total_return_pct >= 0 ? "var(--accent-green)" : "var(--accent-red)";
+    var v4color = v4.total_return_pct >= 0 ? "var(--accent-green)" : "var(--accent-red)";
+    container.innerHTML =
+      "<div style=\"display:grid;grid-template-columns:1fr 1fr;gap:12px\">" +
+        "<div style=\"background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;padding:12px\">" +
+          "<div style=\"font-size:10px;color:var(--text-secondary);letter-spacing:2px;margin-bottom:8px\">V3 — 10 AGENTS</div>" +
+          "<div style=\"font-size:20px;font-weight:700;color:" + v3color + "\">" + (v3.total_return_pct >= 0 ? "+" : "") + v3.total_return_pct + "%</div>" +
+          "<div style=\"font-size:11px;color:var(--text-secondary);margin-top:4px\">$" + v3.balance.toLocaleString() + " | " + v3.open_count + " open | " + v3.win_rate + "% WR</div>" +
+        "</div>" +
+        "<div style=\"background:var(--bg-secondary);border:1px solid var(--accent);border-radius:8px;padding:12px\">" +
+          "<div style=\"font-size:10px;color:var(--accent);letter-spacing:2px;margin-bottom:8px\">V5 — 6 AGENTS &#9956;</div>" +
+          "<div style=\"font-size:20px;font-weight:700;color:" + v4color + "\">" + (v4.total_return_pct >= 0 ? "+" : "") + v4.total_return_pct + "%</div>" +
+          "<div style=\"font-size:11px;color:var(--text-secondary);margin-top:4px\">$" + v4.balance.toLocaleString() + " | " + v4.open_count + " open | " + v4.win_rate + "% WR</div>" +
+        "</div>" +
+      "</div>";
+  } catch(e) {
+    if (container) container.innerHTML = "<div style=\"color:var(--text-dim);font-size:11px\">A/B data unavailable</div>";
+  }
+}
+
+async function updateRiskBadge() {
+  try {
+    var r = await fetch(API + "/riskscore/BTC?direction=LONG&amount_usd=100&user_id=aria-agent-system");
+    var d = await r.json();
+    var score = d.risk_metrics.risk_score;
+    var badge = document.getElementById("riskBadge");
+    if (!badge) return;
+    if (score > 70) { badge.textContent = "CRITICAL RISK"; badge.className = "risk-badge risk-critical"; }
+    else if (score > 40) { badge.textContent = "MODERATE RISK"; badge.className = "risk-badge risk-warning"; }
+    else { badge.textContent = "LOW RISK"; badge.className = "risk-badge risk-safe"; }
+  } catch(e) {}
+}
 async function init() {
+  updateRiskBadge();
+  setInterval(updateRiskBadge, 300000);
   await Promise.all([loadAssets(), loadIntelligence(), loadRightPanel()]);
   setInterval(loadAssets, 300000);
 }

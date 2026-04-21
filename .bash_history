@@ -1,2000 +1,2000 @@
-lines.append('                    new += 1\n')
-lines.append('            print(\"[REED] \" + keyword + \" in \" + location + \": \" + str(new) + \" new jobs\")\n')
-lines.append('            return new\n')
-lines.append('        except Exception as e:\n')
-lines.append('            print(\"[REED] Error: \" + str(e))\n')
-lines.append('            return 0\n')
-lines.append('\n')
-open('scrapers/job_scraper.py', 'a').writelines(lines)
-print('chunk 2 done')
-"
-python3 -c "
-lines = []
-lines.append('    def scrape_adzuna(self, keyword, location):\n')
-lines.append('        if not ADZUNA_APP_ID or not ADZUNA_APP_KEY:\n')
-lines.append('            print(\"[ADZUNA] No API keys found\")\n')
-lines.append('            return 0\n')
-lines.append('        country = \"gb\"\n')
-lines.append('        url = \"https://api.adzuna.com/v1/api/jobs/\" + country + \"/search/1\"\n')
-lines.append('        params = {\n')
-lines.append('            \"app_id\": ADZUNA_APP_ID,\n')
-lines.append('            \"app_key\": ADZUNA_APP_KEY,\n')
-lines.append('            \"what\": keyword,\n')
-lines.append('            \"where\": location,\n')
-lines.append('            \"results_per_page\": 50,\n')
-lines.append('            \"content-type\": \"application/json\"\n')
-lines.append('        }\n')
-lines.append('        try:\n')
-lines.append('            resp = requests.get(url, params=params, timeout=10)\n')
-lines.append('            if resp.status_code != 200:\n')
-lines.append('                print(\"[ADZUNA] Status \" + str(resp.status_code))\n')
-lines.append('                return 0\n')
-lines.append('            jobs = resp.json().get(\"results\", [])\n')
-lines.append('            new = 0\n')
-lines.append('            for j in jobs:\n')
-lines.append('                job = {\n')
-lines.append('                    \"title\": j.get(\"title\", \"\"),\n')
-lines.append('                    \"company\": j.get(\"company\", {}).get(\"display_name\", \"Unknown\"),\n')
-lines.append('                    \"location\": j.get(\"location\", {}).get(\"display_name\", location),\n')
-lines.append('                    \"description\": j.get(\"description\", \"\"),\n')
-lines.append('                    \"url\": j.get(\"redirect_url\", \"\"),\n')
-lines.append('                    \"source\": \"adzuna\",\n')
-lines.append('                    \"date_posted\": j.get(\"created\", \"\")[:10]\n')
-lines.append('                }\n')
-lines.append('                if self._save_job(job):\n')
-lines.append('                    new += 1\n')
-lines.append('            print(\"[ADZUNA] \" + keyword + \" in \" + location + \": \" + str(new) + \" new jobs\")\n')
-lines.append('            return new\n')
-lines.append('        except Exception as e:\n')
-lines.append('            print(\"[ADZUNA] Error: \" + str(e))\n')
-lines.append('            return 0\n')
-lines.append('\n')
-open('scrapers/job_scraper.py', 'a').writelines(lines)
-print('chunk 3 done')
-"
-python3 -c "
-lines = []
-lines.append('    def scrape_linkedin_rss(self, keyword, location):\n')
-lines.append('        import xml.etree.ElementTree as ET\n')
-lines.append('        keyword_enc = keyword.replace(\" \", \"%20\")\n')
-lines.append('        location_enc = location.replace(\" \", \"%20\").replace(\",\", \"\")\n')
-lines.append('        url = \"https://www.linkedin.com/jobs/search/?keywords=\" + keyword_enc + \"&location=\" + location_enc + \"&f_TPR=r86400\"\n')
-lines.append('        try:\n')
-lines.append('            resp = requests.get(url, timeout=10, headers={\"User-Agent\": \"Mozilla/5.0\"})\n')
-lines.append('            if resp.status_code != 200:\n')
-lines.append('                print(\"[LINKEDIN] Status \" + str(resp.status_code))\n')
-lines.append('                return 0\n')
-lines.append('            root = ET.fromstring(resp.text)\n')
-lines.append('            items = root.findall(\".//item\")\n')
-lines.append('            new = 0\n')
-lines.append('            for item in items:\n')
-lines.append('                title = item.findtext(\"title\", \"\").strip()\n')
-lines.append('                link = item.findtext(\"link\", \"\").strip()\n')
-lines.append('                desc = item.findtext(\"description\", \"\").strip()\n')
-lines.append('                job = {\"title\": title, \"company\": \"Unknown\", \"location\": location,\n')
-lines.append('                       \"description\": desc, \"url\": link, \"source\": \"linkedin\"}\n')
-lines.append('                if self._save_job(job):\n')
-lines.append('                    new += 1\n')
-lines.append('            print(\"[LINKEDIN] \" + keyword + \" in \" + location + \": \" + str(new) + \" new jobs\")\n')
-lines.append('            return new\n')
-lines.append('        except Exception as e:\n')
-lines.append('            print(\"[LINKEDIN] Error: \" + str(e))\n')
-lines.append('            return 0\n')
-lines.append('\n')
-lines.append('    def scrape(self, keywords, locations):\n')
-lines.append('        total = 0\n')
-lines.append('        for keyword in keywords:\n')
-lines.append('            for location in locations:\n')
-lines.append('                print(\"[SCRAPER] \" + keyword + \" in \" + location)\n')
-lines.append('                total += self.scrape_reed(keyword, location)\n')
-lines.append('                total += self.scrape_adzuna(keyword, location)\n')
-lines.append('                total += self.scrape_linkedin_rss(keyword, location)\n')
-lines.append('        print(\"[SCRAPER] Done. \" + str(total) + \" new jobs saved.\")\n')
-lines.append('        return total\n')
-lines.append('\n')
-lines.append('if __name__ == \"__main__\":\n')
-lines.append('    import sys\n')
-lines.append('    sys.path.insert(0, \"/root/JobPilot\")\n')
-lines.append('    from profile_manager import get_active_profile\n')
-lines.append('    profile = get_active_profile()\n')
-lines.append('    if profile:\n')
-lines.append('        scraper = JobScraper()\n')
-lines.append('        scraper.scrape(profile[\"keywords\"], profile[\"locations\"])\n')
-open('scrapers/job_scraper.py', 'a').writelines(lines)
-print('chunk 4 done')
-"
-python3 -c "
-with open('main.py', 'r') as f:
-    content = f.read()
-content = content.replace(
-    'from scrapers.rss_scraper import RSSJobScraper',
-    'from scrapers.job_scraper import JobScraper'
-)
-content = content.replace(
-    'scraper = RSSJobScraper()',
-    'scraper = JobScraper()'
-)
-with open('main.py', 'w') as f:
-    f.write(content)
-print('updated')
-"
-python3 main.py scrape
-python3 main.py score
-sudo -u postgres psql -d aria_db -c "CREATE UNIQUE INDEX IF NOT EXISTS api_usage_date_idx ON api_usage(date);" 2>/dev/null || sqlite3 jobpilot.db "CREATE UNIQUE INDEX IF NOT EXISTS api_usage_date_idx ON api_usage(date);"
-apt install sqlite3 -y
-sqlite3 jobpilot.db "CREATE UNIQUE INDEX IF NOT EXISTS api_usage_date_idx ON api_usage(date);"
-python3 main.py score
-python3 -c "
-with open('scoring/claude_scorer.py', 'r') as f:
+journalctl -u aria_loop_v5.service -n 10 --no-pager | grep -i "deprecat\|model load\|AAPL\|error"
+sed -n '65,70p' /root/agent_loop_v5.py
+sed -i '67s/datetime.utcnow()/datetime.now()/' /root/agent_loop_v5.py
+# Check for any remaining utcnow
+grep -n "utcnow" /root/agent_loop_v5.py
+sed -i 's/datetime.utcnow()/datetime.now()/g' /root/agent_loop_v5.py
+grep -n "utcnow" /root/agent_loop_v5.py
+systemctl restart aria_loop_v5.service
+sleep 15
+journalctl -u aria_loop_v5.service -n 5 --no-pager | grep -i "deprecat\|error\|failed"
+git add agent_loop_v5.py aria_model_inference.py && git commit -m "fix: remove all utcnow deprecations, fix AAPL model path to temp_aria"
+git push origin master && git push v1 master
+grep -n "agent/reports\|agent_decisions" /root/main.py | head -10
+sed -n '1229,1250p' /root/main.py
+python3 << 'EOF'
+with open('/root/main.py', 'r') as f:
     content = f.read()
 
-old = 'result = json.loads(message.content[0].text)'
-new = '''raw = message.content[0].text.strip()
-            for marker in [\"\`\`\`json\", \"\`\`\`\"]:
-                raw = raw.replace(marker, \"\")
-            result = json.loads(raw.strip())'''
+old = '''@app.get("/agent/reports")
+def get_agent_reports():
+    return {"reports": _agent_reports[:50], "count": len(_agent_reports), "timestamp": datetime.now().isoformat()}'''
+
+new = '''@app.get("/agent/reports")
+def get_agent_reports():
+    if not RAILWAY_DB_URL:
+        try:
+            conn = get_railway_db(); cur = conn.cursor()
+            cur.execute("SELECT agent_id, symbol, action, confidence, reasoning, timestamp FROM agent_decisions ORDER BY timestamp DESC LIMIT 100")
+            rows = cur.fetchall()
+            cur.close(); conn.close()
+            reports = [{'agent_id': r[0], 'symbol': r[1], 'action': r[2], 'confidence': float(r[3]) if r[3] else 0.5, 'reasoning': r[4], 'timestamp': r[5].isoformat(), 'agent_type': 'SPECIALIST'} for r in rows]
+            return {"reports": reports, "count": len(reports), "timestamp": datetime.now().isoformat()}
+        except Exception as e:
+            return {"reports": [], "count": 0, "error": str(e), "timestamp": datetime.now().isoformat()}
+    return {"reports": _agent_reports[:50], "count": len(_agent_reports), "timestamp": datetime.now().isoformat()}'''
 
 content = content.replace(old, new)
-with open('scoring/claude_scorer.py', 'w') as f:
+with open('/root/main.py', 'w') as f:
     f.write(content)
-print('fixed')
-"
-python3 main.py score
-cd /root/JobPilot
-python3 main.py dashboard
-cd /root/JobPilot
-nano /root/JobPilot/.env
-python3 -c "
-lines = []
-lines.append('import requests\n')
-lines.append('import os\n')
-lines.append('from dotenv import load_dotenv\n')
-lines.append('\n')
-lines.append('load_dotenv()\n')
-lines.append('\n')
-lines.append('BOT_TOKEN = os.getenv(\"TELEGRAM_BOT_TOKEN\", \"\")\n')
-lines.append('CHAT_ID = os.getenv(\"TELEGRAM_CHAT_ID\", \"\")\n')
-lines.append('\n')
-lines.append('def send_message(text):\n')
-lines.append('    if not BOT_TOKEN or not CHAT_ID:\n')
-lines.append('        print(\"[TELEGRAM] No credentials found\")\n')
-lines.append('        return False\n')
-lines.append('    url = f\"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage\"\n')
-lines.append('    payload = {\"chat_id\": CHAT_ID, \"text\": text, \"parse_mode\": \"HTML\"}\n')
-lines.append('    try:\n')
-lines.append('        resp = requests.post(url, json=payload, timeout=10)\n')
-lines.append('        return resp.status_code == 200\n')
-lines.append('    except Exception as e:\n')
-lines.append('        print(\"[TELEGRAM] Error: \" + str(e))\n')
-lines.append('        return False\n')
-lines.append('\n')
-lines.append('def send_job_alert(title, company, score, url, summary):\n')
-lines.append('    text = (\n')
-lines.append('        f\"🎯 <b>HIGH MATCH JOB FOUND</b>\\n\\n\"\n')
-lines.append('        f\"<b>{title}</b>\\n\"\n')
-lines.append('        f\"🏢 {company}\\n\"\n')
-lines.append('        f\"⭐ Score: {score}/100\\n\\n\"\n')
-lines.append('        f\"📝 {summary}\\n\\n\"\n')
-lines.append('        f\"🔗 {url}\"\n')
-lines.append('    )\n')
-lines.append('    return send_message(text)\n')
-lines.append('\n')
-lines.append('def send_daily_summary(jobs_found, jobs_scored, top_matches):\n')
-lines.append('    matches_text = \"\"\n')
-lines.append('    for i, (title, company, score) in enumerate(top_matches[:5], 1):\n')
-lines.append('        matches_text += f\"  {i}. [{score}/100] {title} @ {company}\\n\"\n')
-lines.append('    text = (\n')
-lines.append('        f\"📊 <b>JOBPILOT DAILY REPORT</b>\\n\\n\"\n')
-lines.append('        f\"Jobs found: {jobs_found}\\n\"\n')
-lines.append('        f\"Jobs scored: {jobs_scored}\\n\\n\"\n')
-lines.append('        f\"<b>TOP MATCHES:</b>\\n{matches_text}\"\n')
-lines.append('    )\n')
-lines.append('    return send_message(text)\n')
-lines.append('\n')
-lines.append('if __name__ == \"__main__\":\n')
-lines.append('    result = send_message(\"✅ JobPilot Telegram notifications are working!\")\n')
-lines.append('    print(\"Sent!\" if result else \"Failed - check your token and chat ID\")\n')
-open('telegram_notifier.py', 'w').writelines(lines)
-print('done')
-"
-python3 telegram_notifier.py
-python3 -c "
-lines = []
-lines.append('import requests\n')
-lines.append('import os\n')
-lines.append('from dotenv import load_dotenv\n')
-lines.append('\n')
-lines.append('load_dotenv()\n')
-lines.append('\n')
-lines.append('BOT_TOKEN = os.getenv(\"TELEGRAM_BOT_TOKEN\", \"\")\n')
-lines.append('CHAT_ID = os.getenv(\"TELEGRAM_CHAT_ID\", \"\")\n')
-lines.append('\n')
-lines.append('def send_message(text):\n')
-lines.append('    if not BOT_TOKEN or not CHAT_ID:\n')
-lines.append('        print(\"[TELEGRAM] No credentials found\")\n')
-lines.append('        return False\n')
-lines.append('    url = \"https://api.telegram.org/bot\" + BOT_TOKEN + \"/sendMessage\"\n')
-lines.append('    payload = {\"chat_id\": CHAT_ID, \"text\": text, \"parse_mode\": \"HTML\"}\n')
-lines.append('    try:\n')
-lines.append('        resp = requests.post(url, json=payload, timeout=10)\n')
-lines.append('        return resp.status_code == 200\n')
-lines.append('    except Exception as e:\n')
-lines.append('        print(\"[TELEGRAM] Error: \" + str(e))\n')
-lines.append('        return False\n')
-lines.append('\n')
-lines.append('def send_job_alert(title, company, score, url, summary):\n')
-lines.append('    text = \"HIGH MATCH JOB FOUND\\n\\n\"\n')
-lines.append('    text += \"<b>\" + title + \"</b>\\n\"\n')
-lines.append('    text += \"Company: \" + company + \"\\n\"\n')
-lines.append('    text += \"Score: \" + str(score) + \"/100\\n\\n\"\n')
-lines.append('    text += summary + \"\\n\\n\"\n')
-lines.append('    text += url\n')
-lines.append('    return send_message(text)\n')
-lines.append('\n')
-lines.append('def send_daily_summary(jobs_found, jobs_scored, top_matches):\n')
-lines.append('    text = \"<b>JOBPILOT DAILY REPORT</b>\\n\\n\"\n')
-lines.append('    text += \"Jobs found: \" + str(jobs_found) + \"\\n\"\n')
-lines.append('    text += \"Jobs scored: \" + str(jobs_scored) + \"\\n\\n\"\n')
-lines.append('    text += \"<b>TOP MATCHES:</b>\\n\"\n')
-lines.append('    for i, (title, company, score) in enumerate(top_matches[:5], 1):\n')
-lines.append('        text += str(i) + \". [\" + str(score) + \"/100] \" + title + \" @ \" + company + \"\\n\"\n')
-lines.append('    return send_message(text)\n')
-lines.append('\n')
-lines.append('if __name__ == \"__main__\":\n')
-lines.append('    result = send_message(\"JobPilot Telegram notifications are working!\")\n')
-lines.append('    print(\"Sent!\" if result else \"Failed - check your token and chat ID\")\n')
-open('telegram_notifier.py', 'w').writelines(lines)
-print('done')
-"
-python3 telegram_notifier.py
-python3 << 'PYEOF'
-content = """import requests
-import os
-from dotenv import load_dotenv
+print("Done!")
+EOF
 
-load_dotenv()
-
-BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
-CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "")
-
-def send_message(text):
-    if not BOT_TOKEN or not CHAT_ID:
-        print("[TELEGRAM] No credentials found")
-        return False
-    url = "https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage"
-    payload = {"chat_id": CHAT_ID, "text": text, "parse_mode": "HTML"}
-    try:
-        resp = requests.post(url, json=payload, timeout=10)
-        return resp.status_code == 200
-    except Exception as e:
-        print("[TELEGRAM] Error: " + str(e))
-        return False
-
-def send_job_alert(title, company, score, url, summary):
-    lines = ["HIGH MATCH JOB FOUND", "", title, "Company: " + company, "Score: " + str(score) + "/100", "", summary, "", url]
-    return send_message("\\n".join(lines))
-
-def send_daily_summary(jobs_found, jobs_scored, top_matches):
-    lines = ["JOBPILOT DAILY REPORT", "", "Jobs found: " + str(jobs_found), "Jobs scored: " + str(jobs_scored), "", "TOP MATCHES:"]
-    for i, (title, company, score) in enumerate(top_matches[:5], 1):
-        lines.append(str(i) + ". [" + str(score) + "/100] " + title + " @ " + company)
-    return send_message("\\n".join(lines))
-
-if __name__ == "__main__":
-    result = send_message("JobPilot is connected!")
-    print("Sent!" if result else "Failed")
+python3 -c "import ast; ast.parse(open('/root/main.py').read()); print('Syntax OK')"
+systemctl restart aria_frontend.service
+sleep 5
+curl -s http://localhost:8000/agent/reports | python3 -m json.tool | head -30
+git add main.py && git commit -m "fix: agent reports read from local DB on Hetzner"
+git push origin master && git push v1 master
+pip install python-binance --break-system-packages
+python3 -c "from binance.client import Client; print('Binance OK')"
+cat /root/aria_market_updater.py
+pip install websocket-client --break-system-packages
+python3 -c "import websocket; print('WebSocket OK')"
+systemctl restart aria_market.service
+sleep 5
+journalctl -u aria_market.service -n 20 --no-pager
+cat > /root/aria_market_updater.py << 'ENDOFFILE'
+#!/usr/bin/env python3
 """
-with open("telegram_notifier.py", "w") as f:
-    f.write(content)
-print("done")
-PYEOF
-
-python3 telegram_notifier.py
-grep "TELEGRAM" /root/JobPilot/.env
-nano /root/JobPilot/.env
-python3 telegram_notifier.py
-python3 -c "
-import requests
-import os
-from dotenv import load_dotenv
-load_dotenv()
-token = os.getenv('TELEGRAM_BOT_TOKEN', '')
-chat_id = os.getenv('TELEGRAM_CHAT_ID', '')
-print('Token length:', len(token))
-print('Chat ID:', chat_id)
-url = 'https://api.telegram.org/bot' + token + '/sendMessage'
-resp = requests.post(url, json={'chat_id': chat_id, 'text': 'test'})
-print('Status:', resp.status_code)
-print('Response:', resp.text)
-"
-nano /root/JobPilot/.env
-python3 telegram_notifier.py
-python3 -c "
-import requests
-import os
-from dotenv import load_dotenv
-load_dotenv()
-token = os.getenv('TELEGRAM_BOT_TOKEN', '')
-chat_id = os.getenv('TELEGRAM_CHAT_ID', '')
-print('Token:', repr(token))
-print('Chat ID:', repr(chat_id))
-url = 'https://api.telegram.org/bot' + token + '/sendMessage'
-resp = requests.post(url, json={'chat_id': chat_id, 'text': 'test'})
-print('Status:', resp.status_code)
-print('Response:', resp.text)
-"
-python3 -c "
-import requests
-import os
-from dotenv import load_dotenv
-load_dotenv()
-token = os.getenv('TELEGRAM_BOT_TOKEN', '')
-url = 'https://api.telegram.org/bot' + token + '/getUpdates'
-resp = requests.get(url)
-print(resp.text)
-"
-cd /root/JobPilot
-python3 -c "
-import requests
-import os
-from dotenv import load_dotenv
-load_dotenv()
-token = os.getenv('TELEGRAM_BOT_TOKEN', '')
-url = 'https://api.telegram.org/bot' + token + '/getUpdates'
-resp = requests.get(url)
-print(resp.text)
-"
-nano /root/JobPilot/.env
-python3 -c "
-import requests
-import os
-from dotenv import load_dotenv
-load_dotenv()
-token = os.getenv('TELEGRAM_BOT_TOKEN', '')
-chat_id = os.getenv('TELEGRAM_CHAT_ID', '')
-print('Token:', repr(token))
-url = 'https://api.telegram.org/bot' + token + '/getUpdates'
-resp = requests.get(url)
-print(resp.text)
-"
-python3 -c "
-import requests, os
-from dotenv import load_dotenv
-load_dotenv()
-token = os.getenv('TELEGRAM_BOT_TOKEN', '')
-resp = requests.get('https://api.telegram.org/bot' + token + '/getUpdates')
-print(resp.text)
-"
-python3 telegram_notifier.py
-python3 -c "
-with open('scoring/claude_scorer.py', 'r') as f:
-    content = f.read()
-
-old = 'import anthropic'
-new = 'import anthropic\nimport sys\nsys.path.insert(0, \"/root/JobPilot\")\nfrom telegram_notifier import send_job_alert'
-
-content = content.replace(old, new)
-
-old2 = 'if score >= MIN_SCORE_TO_APPLY:'
-new2 = '''if score >= 80:
-                try:
-                    send_job_alert(title, company, score, url, result.get(\"one_line_summary\", \"\"))
-                except:
-                    pass
-            if score >= MIN_SCORE_TO_APPLY:'''
-
-content = content.replace(old2, new2)
-
-with open('scoring/claude_scorer.py', 'w') as f:
-    f.write(content)
-print('done')
-"
-python3 << 'PYEOF'
-content = """import sqlite3
-import os
+ARIA Market Data Updater v2
+- Binance MAINNET WebSocket real-time crypto
+- Yahoo Finance for stocks
+- Funding rates for BTC/ETH
+- Crypto updates real-time, stocks every 60s
+"""
+import time, psycopg2, logging, requests, threading, json
 from datetime import datetime
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [MARKET] %(message)s')
+log = logging.getLogger()
+DB = {'host':'localhost','port':5432,'dbname':'aria_db','user':'postgres','password':'aria_secure_2026'}
+BINANCE_API = "https://api.binance.com/api"
+BINANCE_FAPI = "https://fapi.binance.com/fapi"
+CRYPTO = ['BTC', 'ETH']
+STOCKS = ['AAPL', 'NVDA', 'TSLA', 'GLD']
+_ws_prices = {}
 
-def cleanup_database(db_path="jobpilot.db"):
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
+def get_funding_rate(symbol):
+    try:
+        r = requests.get(f"{BINANCE_FAPI}/v1/premiumIndex", params={'symbol': f'{symbol}USDT'}, timeout=5)
+        d = r.json()
+        return float(d.get('lastFundingRate', 0)) * 100
+    except:
+        return 0.0
 
-    # Delete low score jobs older than 7 days
-    cursor.execute(\"\"\"
-        DELETE FROM jobs_raw WHERE id IN (
-            SELECT r.id FROM jobs_raw r
-            JOIN jobs_scored s ON r.id = s.job_id
-            WHERE s.score < 60
-            AND date(r.scraped_at) <= date('now', '-7 days')
-        )
-    \"\"\")
-    low_score_deleted = cursor.rowcount
+def get_stock_price(symbol):
+    try:
+        import yfinance as yf
+        t = yf.Ticker(symbol)
+        fi = t.fast_info
+        price = float(fi.get('last_price') or fi.get('previousClose') or 0)
+        prev = float(fi.get('previous_close') or fi.get('regularMarketPreviousClose') or 0)
+        if price > 0 and prev > 0:
+            return price, round(((price - prev) / prev) * 100, 4)
+    except:
+        pass
+    try:
+        import yfinance as yf
+        hist = yf.Ticker(symbol).history(period='2d')
+        if len(hist) >= 2:
+            price = float(hist['Close'].iloc[-1])
+            prev = float(hist['Close'].iloc[-2])
+            return price, round(((price - prev) / prev * 100) if prev > 0 else 0.0, 4)
+        elif len(hist) == 1:
+            return float(hist['Close'].iloc[-1]), 0.0
+    except:
+        pass
+    return 0.0, 0.0
 
-    # Archive rejected/offered applications - keep only title and company
-    cursor.execute(\"\"\"
-        INSERT OR IGNORE INTO job_archive (title, company, status, date_archived)
-        SELECT r.title, r.company, a.status, date('now')
-        FROM applications a
-        JOIN jobs_scored s ON a.job_id = s.id
-        JOIN jobs_raw r ON s.job_id = r.id
-        WHERE a.status IN ('REJECTED', 'OFFER', 'WITHDRAWN')
-    \"\"\")
+def get_dxy():
+    try:
+        import yfinance as yf
+        hist = yf.Ticker('DX-Y.NYB').history(period='2d')
+        if len(hist) >= 2:
+            price = float(hist['Close'].iloc[-1])
+            prev = float(hist['Close'].iloc[-2])
+            return price, round(((price - prev) / prev * 100) if prev > 0 else 0.0, 4)
+        elif len(hist) == 1:
+            return float(hist['Close'].iloc[-1]), 0.0
+    except Exception as e:
+        log.warning(f"DXY fetch failed: {e}")
+    return 0.0, 0.0
 
-    # Delete full data for archived jobs
-    cursor.execute(\"\"\"
-        DELETE FROM jobs_raw WHERE id IN (
-            SELECT r.id FROM jobs_raw r
-            JOIN jobs_scored s ON r.id = s.job_id
-            JOIN applications a ON s.id = a.job_id
-            WHERE a.status IN ('REJECTED', 'OFFER', 'WITHDRAWN')
-        )
-    \"\"\")
-    archived = cursor.rowcount
+def write_market_state(symbol, price, change, signal):
+    try:
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("DELETE FROM market_state_latest WHERE symbol=%s", [symbol])
+        cur.execute("INSERT INTO market_state_latest (symbol, price, change_24h, signal, updated_at) VALUES (%s,%s,%s,%s,NOW())", [symbol, price, change, signal])
+        conn.commit(); cur.close(); conn.close()
+    except Exception as e:
+        log.error(f"DB write failed {symbol}: {e}")
 
-    # Delete unscored jobs older than 3 days
-    cursor.execute(\"\"\"
-        DELETE FROM jobs_raw WHERE id NOT IN (
-            SELECT job_id FROM jobs_scored
-        )
-        AND date(scraped_at) <= date('now', '-3 days')
-    \"\"\")
-    old_deleted = cursor.rowcount
+def write_price_data(symbol, price, change):
+    try:
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("INSERT INTO price_data (symbol, price, volume, source) VALUES (%s,%s,%s,%s)", [symbol, price, 0, 'binance_mainnet'])
+        conn.commit(); cur.close(); conn.close()
+    except Exception as e:
+        log.warning(f"write_price_data failed {symbol}: {e}")
 
-    conn.commit()
-    conn.close()
+def binance_websocket_thread():
+    import websocket
+    ws_url = "wss://stream.binance.com:9443/ws/btcusdt@ticker/ethusdt@ticker"
+    def on_message(ws, message):
+        try:
+            d = json.loads(message)
+            symbol = d.get('s', '').replace('USDT', '')
+            if symbol in CRYPTO:
+                price = float(d.get('c', 0))
+                change = float(d.get('P', 0))
+                _ws_prices[symbol] = {'price': price, 'change': change, 'ts': time.time()}
+                write_market_state(symbol, price, change, 'HOLD')
+                write_price_data(symbol, price, change)
+                log.info(f"WS {symbol}: ${price:.2f} ({change:+.2f}%)")
+        except Exception as e:
+            log.warning(f"WS message error: {e}")
+    def on_error(ws, error):
+        log.error(f"WebSocket error: {error}")
+    def on_close(ws, close_status_code, close_msg):
+        log.warning("WebSocket closed — reconnecting in 5s")
+        time.sleep(5)
+    def on_open(ws):
+        log.info("Binance WebSocket connected — real-time BTC/ETH active")
+    while True:
+        try:
+            ws = websocket.WebSocketApp(ws_url, on_message=on_message, on_error=on_error, on_close=on_close, on_open=on_open)
+            ws.run_forever()
+        except Exception as e:
+            log.error(f"WebSocket thread error: {e}")
+        time.sleep(10)
 
-    print(f"[CLEANUP] Low score deleted: {low_score_deleted}")
-    print(f"[CLEANUP] Archived: {archived}")
-    print(f"[CLEANUP] Old unscored deleted: {old_deleted}")
+def main():
+    log.info("ARIA Market Updater v2 — Binance mainnet WebSocket + Yahoo Finance")
+    ws_thread = threading.Thread(target=binance_websocket_thread, daemon=True)
+    ws_thread.start()
+    log.info("Binance WebSocket thread started")
+    stock_timer = 0
+    while True:
+        if stock_timer <= 0:
+            for symbol in STOCKS:
+                try:
+                    price, change = get_stock_price(symbol)
+                    if price > 0:
+                        write_market_state(symbol, price, change, 'HOLD')
+                        log.info(f"{symbol}: ${price:.2f} ({change:+.2f}%)")
+                except Exception as e:
+                    log.error(f"{symbol}: {e}")
+            try:
+                dxy_price, dxy_change = get_dxy()
+                if dxy_price > 0:
+                    write_market_state('DXY', dxy_price, dxy_change, 'HOLD')
+                    write_price_data('DXY', dxy_price, dxy_change)
+                    log.info(f"DXY: {dxy_price:.2f} ({dxy_change:+.2f}%)")
+            except Exception as e:
+                log.error(f"DXY: {e}")
+            for symbol in CRYPTO:
+                try:
+                    fr = get_funding_rate(symbol)
+                    if fr != 0:
+                        log.info(f"{symbol} funding rate: {fr:.4f}%")
+                except Exception as e:
+                    log.warning(f"Funding rate {symbol}: {e}")
+            stock_timer = 60
+        stock_timer -= 5
+        time.sleep(5)
 
-def create_archive_table(db_path="jobpilot.db"):
-    conn = sqlite3.connect(db_path)
-    cursor = conn.cursor()
-    cursor.execute(\"\"\"
-        CREATE TABLE IF NOT EXISTS job_archive (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT,
-            company TEXT,
-            status TEXT,
-            date_archived TEXT DEFAULT CURRENT_DATE
-        )
-    \"\"\")
-    conn.commit()
-    conn.close()
-    print("[CLEANUP] Archive table ready")
+if __name__ == '__main__':
+    main()
+ENDOFFILE
 
-if __name__ == "__main__":
-    create_archive_table()
-    cleanup_database()
-"""
-with open("cleanup.py", "w") as f:
+python3 -c "import ast; ast.parse(open('/root/aria_market_updater.py').read()); print('Syntax OK')"
+systemctl restart aria_market.service
+sleep 5
+journalctl -u aria_market.service -n 20 --no-pager
+git add aria_market_updater.py && git commit -m "feat: Binance mainnet WebSocket real-time BTC/ETH + funding rates"
+git push origin master && git push v1 master
+cat > /root/README.md << 'EOF'
+# ARIA — Autonomous Reasoning & Intelligence Architecture
+
+> A live, self-improving multi-asset trading system built on ensemble ML, autonomous agent swarms, and institutional-grade risk management.
+
+## 🔴 Live Performance (Updated: April 20, 2026)
+
+| Metric | Value |
+|--------|-------|
+| Portfolio Value | $14,577 |
+| Total Return | +45.76% |
+| Win Rate | 95.0% |
+| Closed Trades | 933 |
+| Open Positions | 4 |
+| Agent Cycles | 1,852+ |
+| Pattern Library | 76,141 patterns |
+
+## 🖥️ Live Terminals
+- **Product:** http://65.108.217.183/terminal
+- **Dissertation:** https://web-production-548c0.up.railway.app/terminal
+
+## 🏗️ Architecture
+## 🧠 13-Capability Intelligence Blueprint
+
+| Cap | Name | Status |
+|-----|------|--------|
+| 1 | NLP / FinBERT / FOMC / Reddit | ✅ Live |
+| 2 | Causal Graph | ✅ Live |
+| 3 | Episodic Memory | ✅ Live |
+| 4 | Uncertainty / OOD Detection | ✅ Live |
+| 5 | Cross-Asset Signal Chains | ✅ Live |
+| 6 | Multi-Agent Debate | ✅ Live |
+| 7 | Adversarial Self-Test | ✅ Live |
+| 8 | Hypothesis Engine | ✅ Live |
+| 9 | Self-Improvement Loop | ✅ Live |
+| 10 | Order Book Microstructure (VPIN) | ✅ Live |
+| 11 | Narrative Engine | ✅ Live |
+| 12 | Regime Memory | ✅ Live |
+| 13 | DRL VWAP Execution Agent | 🔄 Building |
+
+## 📊 Technical Stack
+
+- **ML:** XGBoost + Random Forest + Neural Network ensemble (27 features)
+- **Risk:** EVT/GPD, Kupiec+Christoffersen backtests, Student-t Monte Carlo
+- **Data:** Binance WebSocket (real-time), Yahoo Finance, FRED macro, Reddit NLP
+- **Execution:** Kelly Criterion regime-adjusted position sizing
+- **Backend:** FastAPI + PostgreSQL + WebSocket
+- **Infrastructure:** Hetzner CPX32 + Railway + GitHub Actions
+
+## 🎯 Core Finding
+
+Multi-asset ensemble training achieves **78.3% accuracy** vs **41.8% single-asset baseline** — a 36.5 percentage point improvement validated across 6 asset classes using 2 years of historical data and walk-forward methodology.
+
+## 📁 Repository Structure
+## 🚀 Roadmap (45-Day Plan)
+
+- [x] Multi-asset ensemble (78.3% accuracy)
+- [x] Binance WebSocket real-time data
+- [x] WebSocket live terminal broadcasts
+- [x] 933 closed trades, 95% win rate
+- [ ] Alpaca real-time stock data
+- [ ] SEC EDGAR earnings signals
+- [ ] Options flow signals
+- [ ] Real broker connection
+- [ ] 1000+ signal pipeline
+
+## 📚 Academic Context
+
+MSc Data Analytics — De Montfort University 2026
+Supervisor: Dr. Usama Mannai | Module: CSIP5501_2025_631
+
+---
+*"No one made more money in trading than Jim Simons. He proved that data, math, and disciplined models can outperform even the best human intuition."*
+
+*ARIA is built on the same principle.*
+EOF
+
+echo "Done!"
+git add README.md && git commit -m "docs: professional README with live performance metrics and architecture"
+git push origin master && git push v1 master
+pip install alpaca-trade-api --break-system-packages
+python3 -c "import alpaca_trade_api; print('Alpaca OK')"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "\d market_state_latest"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "ALTER TABLE market_state_latest ADD COLUMN IF NOT EXISTS funding_rate FLOAT DEFAULT 0.0;"
+python3 << 'EOF'
+with open('/root/aria_market_updater.py', 'r') as f:
+    content = f.read()
+
+# Update write_market_state to include funding_rate
+old = '''def write_market_state(symbol, price, change, signal):
+    try:
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("DELETE FROM market_state_latest WHERE symbol=%s", [symbol])
+        cur.execute("INSERT INTO market_state_latest (symbol, price, change_24h, signal, updated_at) VALUES (%s,%s,%s,%s,NOW())", [symbol, price, change, signal])
+        conn.commit(); cur.close(); conn.close()
+    except Exception as e:
+        log.error(f"DB write failed {symbol}: {e}")'''
+
+new = '''def write_market_state(symbol, price, change, signal, funding_rate=0.0):
+    try:
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("DELETE FROM market_state_latest WHERE symbol=%s", [symbol])
+        cur.execute("INSERT INTO market_state_latest (symbol, price, change_24h, signal, funding_rate, updated_at) VALUES (%s,%s,%s,%s,%s,NOW())", [symbol, price, change, signal, funding_rate])
+        conn.commit(); cur.close(); conn.close()
+    except Exception as e:
+        log.error(f"DB write failed {symbol}: {e}")'''
+
+content = content.replace(old, new)
+
+# Update funding rate collection to store in DB
+old = '''            for symbol in CRYPTO:
+                try:
+                    fr = get_funding_rate(symbol)
+                    if fr != 0:
+                        log.info(f"{symbol} funding rate: {fr:.4f}%")
+                except Exception as e:
+                    log.warning(f"Funding rate {symbol}: {e}")'''
+
+new = '''            for symbol in CRYPTO:
+                try:
+                    fr = get_funding_rate(symbol)
+                    if fr != 0:
+                        # Update funding rate in DB
+                        conn = psycopg2.connect(**DB); cur = conn.cursor()
+                        cur.execute("UPDATE market_state_latest SET funding_rate=%s WHERE symbol=%s", [fr, symbol])
+                        conn.commit(); cur.close(); conn.close()
+                        log.info(f"{symbol} funding rate: {fr:.4f}%")
+                except Exception as e:
+                    log.warning(f"Funding rate {symbol}: {e}")'''
+
+content = content.replace(old, new)
+
+with open('/root/aria_market_updater.py', 'w') as f:
     f.write(content)
-print("done")
-PYEOF
+print("Done!")
+EOF
 
-python3 cleanup.py
-python3 << 'PYEOF'
-content = """[Unit]
-Description=JobPilot Autonomous Job Hunter
+python3 -c "import ast; ast.parse(open('/root/aria_market_updater.py').read()); print('Syntax OK')"
+grep -n "funding\|market_state_latest\|change_24h" /root/agent_loop_v5.py | head -20
+python3 << 'EOF'
+with open('/root/agent_loop_v5.py', 'r') as f:
+    content = f.read()
+
+# Update market read to include funding_rate
+old = '''        cur.execute("SELECT symbol,price,change_24h,updated_at FROM market_state_latest")'''
+new = '''        cur.execute("SELECT symbol,price,change_24h,updated_at,funding_rate FROM market_state_latest")'''
+content = content.replace(old, new)
+
+# Update market dict to include funding_rate
+old = '''            market[row[0]]={'price':float(row[1]),'change_24h':float(row[2]),'age_seconds':age,'stale':age>STALE_MARKET}'''
+new = '''            market[row[0]]={'price':float(row[1]),'change_24h':float(row[2]),'age_seconds':age,'stale':age>STALE_MARKET,'funding_rate':float(row[4]) if row[4] else 0.0}'''
+content = content.replace(old, new)
+
+with open('/root/agent_loop_v5.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/agent_loop_v5.py').read()); print('Syntax OK')"
+grep -n "confidence\|conf\|Kelly\|signal_strength" /root/agent_loop_v5.py | grep -i "def\|=.*conf\|conf.*=" | head -20
+sed -n '285,340p' /root/agent_loop_v5.py
+sed -n '340,420p' /root/agent_loop_v5.py
+python3 << 'EOF'
+with open('/root/agent_loop_v5.py', 'r') as f:
+    content = f.read()
+
+funding_signal = '''
+    # ── Step 5: Funding Rate Signal (Crypto only) ────────
+    if symbol in ['BTC', 'ETH']:
+        try:
+            funding_rate = market_data.get(symbol, {}).get('funding_rate', 0.0)
+            if funding_rate < -0.01:
+                # Very negative funding = shorts overleveraged = squeeze likely = boost LONG
+                if final_dir == 'LONG':
+                    final_conf = min(0.92, final_conf + 0.04)
+                    log.info(f"  {symbol} FUNDING BOOST: rate:{funding_rate:.4f}% (short squeeze likely) → conf:{final_conf:.3f}")
+                elif final_dir == 'SHORT':
+                    final_conf = max(0.45, final_conf - 0.04)
+                    log.info(f"  {symbol} FUNDING DRAG: rate:{funding_rate:.4f}% (short squeeze risk) → conf:{final_conf:.3f}")
+            elif funding_rate > 0.01:
+                # Very positive funding = longs overleveraged = dump likely = boost SHORT
+                if final_dir == 'SHORT':
+                    final_conf = min(0.92, final_conf + 0.04)
+                    log.info(f"  {symbol} FUNDING BOOST: rate:{funding_rate:.4f}% (long squeeze likely) → conf:{final_conf:.3f}")
+                elif final_dir == 'LONG':
+                    final_conf = max(0.45, final_conf - 0.04)
+                    log.info(f"  {symbol} FUNDING DRAG: rate:{funding_rate:.4f}% (long squeeze risk) → conf:{final_conf:.3f}")
+        except Exception as e:
+            log.warning(f"Funding rate signal failed {symbol}: {e}")
+
+'''
+
+# Insert after NLP modifier block
+old = '    # ── Step 12: Regime memory modifier ────────────────────'
+new = funding_signal + '    # ── Step 12: Regime memory modifier ────────────────────'
+content = content.replace(old, new)
+
+with open('/root/agent_loop_v5.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/agent_loop_v5.py').read()); print('Syntax OK')"
+systemctl restart aria_market.service aria_loop_v5.service
+sleep 20
+journalctl -u aria_loop_v5.service -n 20 --no-pager | grep -i "funding\|BTC\|ETH"
+sleep 60 && journalctl -u aria_loop_v5.service -n 30 --no-pager | grep -i "funding\|BTC\|ETH"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, price, change_24h, funding_rate, updated_at FROM market_state_latest WHERE symbol IN ('BTC','ETH');"
+python3 << 'EOF'
+with open('/root/aria_market_updater.py', 'r') as f:
+    content = f.read()
+
+# Store funding rates in memory and include in WebSocket write
+old = '''_ws_prices = {}
+
+def get_funding_rate(symbol):'''
+new = '''_ws_prices = {}
+_funding_rates = {}
+
+def get_funding_rate(symbol):'''
+content = content.replace(old, new)
+
+# Update funding rate collection to store in memory first
+old = '''            for symbol in CRYPTO:
+                try:
+                    fr = get_funding_rate(symbol)
+                    if fr != 0:
+                        # Update funding rate in DB
+                        conn = psycopg2.connect(**DB); cur = conn.cursor()
+                        cur.execute("UPDATE market_state_latest SET funding_rate=%s WHERE symbol=%s", [fr, symbol])
+                        conn.commit(); cur.close(); conn.close()
+                        log.info(f"{symbol} funding rate: {fr:.4f}%")
+                except Exception as e:
+                    log.warning(f"Funding rate {symbol}: {e}")'''
+new = '''            for symbol in CRYPTO:
+                try:
+                    fr = get_funding_rate(symbol)
+                    if fr != 0:
+                        _funding_rates[symbol] = fr
+                        conn = psycopg2.connect(**DB); cur = conn.cursor()
+                        cur.execute("UPDATE market_state_latest SET funding_rate=%s WHERE symbol=%s", [fr, symbol])
+                        conn.commit(); cur.close(); conn.close()
+                        log.info(f"{symbol} funding rate: {fr:.4f}%")
+                except Exception as e:
+                    log.warning(f"Funding rate {symbol}: {e}")'''
+content = content.replace(old, new)
+
+# Include funding rate in WebSocket write
+old = '''                _ws_prices[symbol] = {'price': price, 'change': change, 'ts': time.time()}
+                write_market_state(symbol, price, change, 'HOLD')'''
+new = '''                _ws_prices[symbol] = {'price': price, 'change': change, 'ts': time.time()}
+                fr = _funding_rates.get(symbol, 0.0)
+                write_market_state(symbol, price, change, 'HOLD', fr)'''
+content = content.replace(old, new)
+
+with open('/root/aria_market_updater.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/aria_market_updater.py').read()); print('Syntax OK')"
+grep -n "_funding_rates" /root/aria_market_updater.py
+systemctl restart aria_market.service
+sleep 70
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, price, funding_rate, updated_at FROM market_state_latest WHERE symbol IN ('BTC','ETH');"
+git push origin master && git push v1 master
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT COUNT(*) FROM pattern_library;"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT COUNT(*) FROM closed_trades;"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT outcome, COUNT(*), ROUND(AVG(pnl_pct)::numeric, 2) as avg_pnl FROM closed_trades GROUP BY outcome;"
+
+tail -5 /var/log/aria_db_sync.log
+journalctl -u aria_loop_v5.service -n 5 --no-pager
+curl -s http://localhost:8000/live/portfolio | python3 -m json.tool
+curl -s "https://fapi.binance.com/fapi/v1/openInterest?symbol=BTCUSDT" | python3 -m json.tool
+curl -s "https://fapi.binance.com/futures/data/openInterestHist?symbol=BTCUSDT&period=5m&limit=5" | python3 -m json.tool
+curl -s "https://fapi.binance.com/futures/data/openInterestHist?symbol=ETHUSD T&period=5m&limit=5" | python3 -m json.tool
+curl -s "https://fapi.binance.com/futures/data/openInterestHist?symbol=ETHUSDT&period=5m&limit=5" | python3 -m json.tool
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "
+CREATE TABLE IF NOT EXISTS crypto_signals (
+    id SERIAL PRIMARY KEY,
+    symbol VARCHAR(10),
+    open_interest FLOAT,
+    oi_change_pct FLOAT,
+    funding_rate FLOAT,
+    long_short_ratio FLOAT,
+    signal VARCHAR(20),
+    created_at TIMESTAMP DEFAULT NOW()
+);"
+python3 << 'EOF'
+with open('/root/aria_market_updater.py', 'r') as f:
+    content = f.read()
+
+oi_code = '''
+def get_open_interest_signal(symbol):
+    """
+    Returns OI signal: BULLISH, BEARISH, SQUEEZE, or NEUTRAL
+    Rising OI + Rising Price = BULLISH
+    Rising OI + Falling Price = BEARISH  
+    Falling OI + Rising Price = SQUEEZE (short squeeze)
+    Falling OI + Falling Price = WEAK
+    """
+    try:
+        r = requests.get(f"{BINANCE_FAPI}/futures/data/openInterestHist",
+                        params={'symbol': f'{symbol}USDT', 'period': '5m', 'limit': 3}, timeout=5)
+        data = r.json()
+        if len(data) < 2:
+            return 'NEUTRAL', 0.0
+        oi_latest = float(data[-1]['sumOpenInterest'])
+        oi_prev = float(data[-2]['sumOpenInterest'])
+        oi_change_pct = ((oi_latest - oi_prev) / oi_prev) * 100
+        # Store in DB
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("INSERT INTO crypto_signals (symbol, open_interest, oi_change_pct, funding_rate) VALUES (%s,%s,%s,%s)",
+                   [symbol, oi_latest, oi_change_pct, _funding_rates.get(symbol, 0.0)])
+        conn.commit(); cur.close(); conn.close()
+        return oi_change_pct
+    except Exception as e:
+        log.warning(f"OI signal failed {symbol}: {e}")
+        return 0.0
+
+'''
+
+old = 'def get_funding_rate(symbol):'
+new = oi_code + 'def get_funding_rate(symbol):'
+content = content.replace(old, new)
+
+# Add OI collection in the stock timer loop
+old = '''            for symbol in CRYPTO:
+                try:
+                    fr = get_funding_rate(symbol)'''
+new = '''            for symbol in CRYPTO:
+                try:
+                    oi_change = get_open_interest_signal(symbol)
+                    log.info(f"{symbol} OI change: {oi_change:.4f}%")
+                except Exception as e:
+                    log.warning(f"OI {symbol}: {e}")
+            for symbol in CRYPTO:
+                try:
+                    fr = get_funding_rate(symbol)'''
+content = content.replace(old, new)
+
+with open('/root/aria_market_updater.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/aria_market_updater.py').read()); print('Syntax OK')"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "ALTER TABLE market_state_latest ADD COLUMN IF NOT EXISTS oi_change_pct FLOAT DEFAULT 0.0;"
+python3 << 'EOF'
+with open('/root/aria_market_updater.py', 'r') as f:
+    content = f.read()
+
+# Update write_market_state to include oi_change_pct
+old = '''def write_market_state(symbol, price, change, signal, funding_rate=0.0):
+    try:
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("DELETE FROM market_state_latest WHERE symbol=%s", [symbol])
+        cur.execute("INSERT INTO market_state_latest (symbol, price, change_24h, signal, funding_rate, updated_at) VALUES (%s,%s,%s,%s,%s,NOW())", [symbol, price, change, signal, funding_rate])
+        conn.commit(); cur.close(); conn.close()
+    except Exception as e:
+        log.error(f"DB write failed {symbol}: {e}")'''
+
+new = '''def write_market_state(symbol, price, change, signal, funding_rate=0.0, oi_change_pct=0.0):
+    try:
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("DELETE FROM market_state_latest WHERE symbol=%s", [symbol])
+        cur.execute("INSERT INTO market_state_latest (symbol, price, change_24h, signal, funding_rate, oi_change_pct, updated_at) VALUES (%s,%s,%s,%s,%s,%s,NOW())", [symbol, price, change, signal, funding_rate, oi_change_pct])
+        conn.commit(); cur.close(); conn.close()
+    except Exception as e:
+        log.error(f"DB write failed {symbol}: {e}")'''
+
+content = content.replace(old, new)
+
+# Store OI in memory and pass to write
+old = '''_ws_prices = {}
+_funding_rates = {}'''
+new = '''_ws_prices = {}
+_funding_rates = {}
+_oi_changes = {}'''
+content = content.replace(old, new)
+
+# Store OI change in memory
+old = '''                try:
+                    oi_change = get_open_interest_signal(symbol)
+                    log.info(f"{symbol} OI change: {oi_change:.4f}%")
+                except Exception as e:
+                    log.warning(f"OI {symbol}: {e}")'''
+new = '''                try:
+                    oi_change = get_open_interest_signal(symbol)
+                    _oi_changes[symbol] = oi_change
+                    log.info(f"{symbol} OI change: {oi_change:.4f}%")
+                except Exception as e:
+                    log.warning(f"OI {symbol}: {e}")'''
+content = content.replace(old, new)
+
+# Include OI in WebSocket write
+old = '''                fr = _funding_rates.get(symbol, 0.0)
+                write_market_state(symbol, price, change, 'HOLD', fr)'''
+new = '''                fr = _funding_rates.get(symbol, 0.0)
+                oi = _oi_changes.get(symbol, 0.0)
+                write_market_state(symbol, price, change, 'HOLD', fr, oi)'''
+content = content.replace(old, new)
+
+with open('/root/aria_market_updater.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/aria_market_updater.py').read()); print('Syntax OK')"
+python3 << 'EOF'
+with open('/root/agent_loop_v5.py', 'r') as f:
+    content = f.read()
+
+# Read OI from market state
+old = "            market[row[0]]={'price':float(row[1]),'change_24h':float(row[2]),'age_seconds':age,'stale':age>STALE_MARKET,'funding_rate':float(row[4]) if row[4] else 0.0}"
+new = "            market[row[0]]={'price':float(row[1]),'change_24h':float(row[2]),'age_seconds':age,'stale':age>STALE_MARKET,'funding_rate':float(row[4]) if row[4] else 0.0,'oi_change_pct':float(row[5]) if len(row)>5 and row[5] else 0.0}"
+content = content.replace(old, new)
+
+# Update SELECT to include oi_change_pct
+old = '        cur.execute("SELECT symbol,price,change_24h,updated_at,funding_rate FROM market_state_latest")'
+new = '        cur.execute("SELECT symbol,price,change_24h,updated_at,funding_rate,oi_change_pct FROM market_state_latest")'
+content = content.replace(old, new)
+
+# Add OI signal after funding rate signal
+old = '    # ── Step 12: Regime memory modifier ────────────────────'
+new = '''    # ── Step 6: Open Interest Signal (Crypto only) ──────────
+    if symbol in ['BTC', 'ETH']:
+        try:
+            oi_change = market_data.get(symbol, {}).get('oi_change_pct', 0.0)
+            price_change = market_data.get(symbol, {}).get('change_24h', 0.0)
+            if oi_change > 0.05 and price_change > 0:
+                # Rising OI + Rising Price = BULLISH
+                if final_dir == 'LONG':
+                    final_conf = min(0.92, final_conf + 0.05)
+                    log.info(f"  {symbol} OI BULLISH: oi:{oi_change:.3f}% price:{price_change:.2f}% → conf:{final_conf:.3f}")
+                elif final_dir == 'SHORT':
+                    final_conf = max(0.45, final_conf - 0.05)
+                    log.info(f"  {symbol} OI BEARISH for SHORT: oi:{oi_change:.3f}% → conf:{final_conf:.3f}")
+            elif oi_change < -0.05 and price_change > 0:
+                # Falling OI + Rising Price = SHORT SQUEEZE — avoid shorting
+                if final_dir == 'SHORT':
+                    final_conf = max(0.45, final_conf - 0.08)
+                    log.info(f"  {symbol} OI SQUEEZE WARNING: oi:{oi_change:.3f}% price up → conf:{final_conf:.3f}")
+            elif oi_change > 0.05 and price_change < 0:
+                # Rising OI + Falling Price = BEARISH
+                if final_dir == 'SHORT':
+                    final_conf = min(0.92, final_conf + 0.05)
+                    log.info(f"  {symbol} OI BEARISH CONFIRMED: oi:{oi_change:.3f}% price down → conf:{final_conf:.3f}")
+        except Exception as e:
+            log.warning(f"OI signal failed {symbol}: {e}")
+
+    # ── Step 12: Regime memory modifier ────────────────────'''
+content = content.replace(old, new)
+
+with open('/root/agent_loop_v5.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/agent_loop_v5.py').read()); print('Syntax OK')"
+# Check aria_market_updater.py
+echo "=== MARKET UPDATER CHECKS ==="
+grep -n "_oi_changes" /root/aria_market_updater.py
+grep -n "oi_change_pct" /root/aria_market_updater.py
+grep -n "get_open_interest_signal" /root/aria_market_updater.py
+echo "=== AGENT LOOP CHECKS ==="
+grep -n "oi_change_pct" /root/agent_loop_v5.py
+grep -n "OI BULLISH\|OI BEARISH\|OI SQUEEZE" /root/agent_loop_v5.py
+grep -n "Step 6" /root/agent_loop_v5.py
+grep -n "── Step" /root/agent_loop_v5.py
+systemctl restart aria_market.service aria_loop_v5.service
+sleep 10
+journalctl -u aria_market.service -n 15 --no-pager | grep -i "OI\|funding\|BTC\|ETH"
+sleep 60 && journalctl -u aria_market.service -n 10 --no-pager | grep -i "OI\|funding"
+journalctl -u aria_market.service -n 30 --no-pager | tail -20
+# Test the correct URL
+curl -s "https://fapi.binance.com/futures/data/openInterestHist?symbol=BTCUSDT&period=5m&limit=3" | python3 -m json.tool | head -10
+python3 << 'EOF'
+with open('/root/aria_market_updater.py', 'r') as f:
+    content = f.read()
+
+old = '''        r = requests.get(f"{BINANCE_FAPI}/futures/data/openInterestHist",
+                        params={'symbol': f'{symbol}USDT', 'period': '5m', 'limit': 3}, timeout=5)'''
+new = '''        r = requests.get("https://fapi.binance.com/futures/data/openInterestHist",
+                        params={'symbol': f'{symbol}USDT', 'period': '5m', 'limit': 3}, timeout=5)'''
+
+content = content.replace(old, new)
+with open('/root/aria_market_updater.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/aria_market_updater.py').read()); print('Syntax OK')"
+grep -n "openInterestHist\|BINANCE_FAPI" /root/aria_market_updater.py
+systemctl restart aria_market.service
+sleep 65
+journalctl -u aria_market.service -n 10 --no-pager | grep -i "OI\|funding"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, price, funding_rate, oi_change_pct, updated_at FROM market_state_latest WHERE symbol IN ('BTC','ETH');"
+systemctl list-units | grep aria | grep -v "dead\|failed"
+git add agent_loop_v5.py aria_market_updater.py && git commit -m "feat: OI signal + funding rate wired into agent loop - BTC/ETH intelligence upgrade"
+git push origin master && git push v1 master
+# Check all original core files exist
+ls -la /root/aria_model_inference.py        /root/aria_regime_memory.py        /root/aria_episodic_memory.py        /root/aria_hypothesis.py        /root/aria_causal_graph.py        /root/aria_adversarial.py        /root/aria_cross_asset.py        /root/aria_debate.py        /root/aria_microstructure.py        /root/aria_narrative.py        /root/aria_ood_detector.py        /root/aria_self_improvement.py        /root/retrain_models.py 2>/dev/null
+ls -la /root/temp_aria/*.pkl 2>/dev/null | head -20
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT COUNT(*) FROM market_data_raw;"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT tablename FROM pg_tables WHERE schemaname='public' ORDER BY tablename;"
+# Check data collection services
+journalctl -u aria_sentiment.service -n 5 --no-pager
+journalctl -u aria_nlp.service -n 5 --no-pager
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT COUNT(*) FROM price_data;"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT COUNT(*) FROM nlp_sentiment;"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT COUNT(*) FROM sentiment_latest;"
+grep -n "newsapi\|NewsAPI\|news_api" /root/aria_nlp_service.py | head -10
+journalctl -u aria_loop_v5.service -n 30 --no-pager | grep -i "OI\|funding\|BTC\|ETH" | head -20
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT mode, score, updated_at FROM system_health ORDER BY id DESC LIMIT 5;"
+grep -n "DEGRADED\|score\|system_health" /root/aria_anomaly_detector.py | head -20
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT details FROM system_health ORDER BY id DESC LIMIT 1;" | python3 -m json.tool 2>/dev/null || psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT details FROM system_health ORDER BY id DESC LIMIT 1;"
+grep -n "threshold\|stale\|STALE\|market_stale" /root/aria_anomaly_detector.py | head -20
+grep -n "market_state.*300\|market_state.*threshold" /root/aria_anomaly_detector.py | head -10
+sed -n '108,120p' /root/aria_anomaly_detector.py
+sed -n '25,35p' /root/aria_anomaly_detector.py
+python3 << 'EOF'
+with open('/root/aria_anomaly_detector.py', 'r') as f:
+    content = f.read()
+
+old = """    'market_state': {
+        'BTC':  120,   # 2 mins — crypto updates every 60s
+        'ETH':  120,
+        'AAPL': 300,   # 5 mins — stocks
+        'NVDA': 300,
+        'TSLA': 300,
+        'GLD':  300,"""
+
+new = """    'market_state': {
+        'BTC':  120,   # 2 mins — crypto updates every 60s
+        'ETH':  120,
+        'AAPL': 28800,  # 8 hours — stocks only update during market hours
+        'NVDA': 28800,
+        'TSLA': 28800,
+        'GLD':  28800,"""
+
+content = content.replace(old, new)
+with open('/root/aria_anomaly_detector.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/aria_anomaly_detector.py').read()); print('Syntax OK')"
+systemctl restart aria_anomaly.service
+sleep 15
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT mode, score, updated_at FROM system_health ORDER BY id DESC LIMIT 3;"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT details FROM system_health ORDER BY id DESC LIMIT 1;" | head -5
+sed -n '35,45p' /root/aria_anomaly_detector.py
+sed -i "s/'DXY':  600,   # 10 mins — macro/'DXY':  28800, # 8 hours — macro index/" /root/aria_anomaly_detector.py
+grep -n "DXY" /root/aria_anomaly_detector.py
+sed -i "47s/'DXY':  600,/'DXY':  28800,/" /root/aria_anomaly_detector.py
+grep -n "DXY" /root/aria_anomaly_detector.py
+systemctl restart aria_anomaly.service
+sleep 15
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT mode, score, updated_at FROM system_health ORDER BY id DESC LIMIT 3;"
+git add aria_anomaly_detector.py aria_market_updater.py agent_loop_v5.py && git commit -m "fix: health thresholds for market hours, OI signal live, funding rates in DB"
+git push origin master && git push v1 master
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, direction, entry_price, size_usd FROM positions_live WHERE status='OPEN';"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, price, change_24h, funding_rate, oi_change_pct FROM market_state_latest WHERE symbol IN ('BTC','ETH');"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" << 'EOF'
+BEGIN;
+
+-- Close BTC SHORT (losing trade)
+INSERT INTO closed_trades (symbol, direction, entry_price, exit_price, pnl_usd, pnl_pct, size_usd, outcome, hold_cycles, signal_id)
+SELECT 'BTC', 'SHORT', 74760.44, 75860.42, 
+       ((74760.44 - 75860.42) / 74760.44) * 50,
+       ((74760.44 - 75860.42) / 74760.44) * 100,
+       50, 'LOSS', 10, 'manual_close_signal_upgrade';
+
+-- Close ETH SHORT (losing trade)
+INSERT INTO closed_trades (symbol, direction, entry_price, exit_price, pnl_usd, pnl_pct, size_usd, outcome, hold_cycles, signal_id)
+SELECT 'ETH', 'SHORT', 2261.16, 2300.18,
+       ((2261.16 - 2300.18) / 2261.16) * 247.25,
+       ((2261.16 - 2300.18) / 2261.16) * 100,
+       247.25, 'LOSS', 10, 'manual_close_signal_upgrade';
+
+-- Remove from positions
+EOF
+
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, direction FROM positions_live WHERE status='OPEN';"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "DELETE FROM positions_live WHERE symbol IN ('BTC', 'ETH');"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, direction FROM positions_live WHERE status='OPEN';"
+sleep 60 && journalctl -u aria_loop_v5.service -n 20 --no-pager | grep -i "BTC\|ETH\|LONG\|SHORT\|open\|decision"
+:
+systemctl restart aria_loop_v5.service
+sleep 15
+journalctl -u aria_loop_v5.service -n 10 --no-pager | grep -i "restored\|open\|portfolio"
+journalctl -u aria_loop_v5.service -n 20 --no-pager | grep -i "restored\|positions\|startup"
+journalctl -u aria_loop_v5.service -n 30 --no-pager | head -20
+grep -n "open_positions\|restore\|load.*position\|positions_live" /root/agent_loop_v5.py | head -20
+sed -n '598,632p' /root/agent_loop_v5.py
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, side, direction, status FROM orders_outbox WHERE status='EXECUTED' ORDER BY created_at DESC LIMIT 10;"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "UPDATE orders_outbox SET status='CLOSED' WHERE symbol IN ('BTC','ETH') AND status='EXECUTED';"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, direction, status FROM orders_outbox WHERE symbol IN ('BTC','ETH');"
+systemctl restart aria_loop_v5.service
+sleep 15
+journalctl -u aria_loop_v5.service -n 10 --no-pager | grep -i "restored\|open\|cycle 1"
+sed -n '601,615p' /root/agent_loop_v5.py
+python3 << 'EOF'
+with open('/root/agent_loop_v5.py', 'r') as f:
+    content = f.read()
+
+old = '''    open_positions={}
+    try:
+        conn=get_db(); cur=conn.cursor()
+        cur.execute("""SELECT symbol, side, direction, size_usd, confidence, entry_price, created_at
+            FROM orders_outbox WHERE status='EXECUTED' ORDER BY created_at DESC""")
+        rows=cur.fetchall(); cur.close(); conn.close()
+        for row in rows:
+            if row[0] not in open_positions:
+                open_positions[row[0]]={
+                    'side': row[1], 'direction': row[2],
+                    'size_usd': float(row[3]), 'confidence': float(row[4]),
+                    'entry_price': float(row[5]) if row[5] else 0.0,
+                    'entry_time': row[6], 'hold_cycles': 0
+                }
+        log.info(f"Restored {len(open_positions)} open positions: {list(open_positions.keys())}")'''
+
+new = '''    open_positions={}
+    try:
+        conn=get_db(); cur=conn.cursor()
+        # Single source of truth — always restore from positions_live
+        cur.execute("""SELECT symbol, direction, size_usd, entry_price, entry_time
+            FROM positions_live WHERE status='OPEN' ORDER BY entry_time DESC""")
+        rows=cur.fetchall(); cur.close(); conn.close()
+        for row in rows:
+            if row[0] not in open_positions:
+                open_positions[row[0]]={
+                    'side': 'BUY' if row[1]=='LONG' else 'SELL',
+                    'direction': row[1],
+                    'size_usd': float(row[2]),
+                    'confidence': 0.6,
+                    'entry_price': float(row[3]) if row[3] else 0.0,
+                    'entry_time': row[4], 'hold_cycles': 0
+                }
+        log.info(f"Restored {len(open_positions)} open positions: {list(open_positions.keys())}")'''
+
+content = content.replace(old, new)
+with open('/root/agent_loop_v5.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/agent_loop_v5.py').read()); print('Syntax OK')"
+sed -n '616,632p' /root/agent_loop_v5.py
+python3 << 'EOF'
+with open('/root/agent_loop_v5.py', 'r') as f:
+    content = f.read()
+
+old = '''        log.info(f"Restored {len(open_positions)} open positions: {list(open_positions.keys())}")
+        # Sync restored positions to positions_live
+        if open_positions:
+            conn2 = get_db(); cur2 = conn2.cursor()
+            for sym, pos in open_positions.items():
+                cur2.execute("""
+                    INSERT INTO positions_live (symbol, direction, entry_price, size_usd, status, updated_at)
+                    VALUES (%s, %s, %s, %s, 'OPEN', NOW())
+                    ON CONFLICT (symbol) DO UPDATE SET
+                    direction=EXCLUDED.direction, entry_price=EXCLUDED.entry_price,
+                    size_usd=EXCLUDED.size_usd, status='OPEN', updated_at=NOW()
+                """, (sym, pos['direction'], pos['entry_price'], pos['size_usd']))
+            conn2.commit(); cur2.close(); conn2.close()
+            log.info(f"Synced {len(open_positions)} positions to positions_live")'''
+
+new = '''        log.info(f"Restored {len(open_positions)} open positions from positions_live: {list(open_positions.keys())}")'''
+
+content = content.replace(old, new)
+with open('/root/agent_loop_v5.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/agent_loop_v5.py').read()); print('Syntax OK')"
+systemctl restart aria_loop_v5.service
+sleep 15
+journalctl -u aria_loop_v5.service -n 10 --no-pager | grep -i "restored\|open positions\|cycle 1"
+journalctl -u aria_loop_v5.service -n 15 --no-pager
+journalctl -u aria_loop_v5.service --since "13:33:00" --until "13:33:40" --no-pager
+journalctl -u aria_loop_v5.service --no-pager | grep "Started\|Restored\|ARIAv5.*Cycle 1" | tail -5
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, direction, entry_price, size_usd, entry_time FROM positions_live WHERE status='OPEN';"
+journalctl -u aria_loop_v5.service -n 50 --no-pager | grep -i "BTC\|ETH" | head -20
+grep -n "MIN_CONFIDENCE\|min_conf\|CONFIDENCE" /root/agent_loop_v5.py | head -10
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "SELECT symbol, COUNT(*) FROM closed_trades GROUP BY symbol ORDER BY count DESC;"
+python3 << 'EOF'
+with open('/root/agent_loop_v5.py', 'r') as f:
+    content = f.read()
+
+old = '''    # ── Step 1: Get model signal ──────────────────────────
+    try:
+        from aria_model_inference import get_model_signal
+        model_dir, model_conf, model_reason = get_model_signal(symbol)
+    except Exception as e:
+        log.warning(f"Model inference import failed: {e}")
+        model_dir, model_conf, model_reason = None, 0.52, "import_error"'''
+
+new = '''    # ── Step 1: Get model signal ──────────────────────────
+    # Crypto uses rules only until 500+ trades accumulated
+    if symbol in ['BTC', 'ETH']:
+        model_dir, model_conf, model_reason = None, 0.52, "crypto_rules_only"
+        log.info(f"  {symbol} CRYPTO MODE: rules-only (insufficient trade history)")
+    else:
+        try:
+            from aria_model_inference import get_model_signal
+            model_dir, model_conf, model_reason = get_model_signal(symbol)
+        except Exception as e:
+            log.warning(f"Model inference import failed: {e}")
+            model_dir, model_conf, model_reason = None, 0.52, "import_error"'''
+
+content = content.replace(old, new)
+with open('/root/agent_loop_v5.py', 'w') as f:
+    f.write(content)
+print("Done!")
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/agent_loop_v5.py').read()); print('Syntax OK')"
+systemctl restart aria_loop_v5.service
+sleep 65
+journalctl -u aria_loop_v5.service -n 30 --no-pager | grep -i "BTC\|ETH\|crypto\|rules"
+psql "postgresql://postgres:aria_secure_2026@localhost:5432/aria_db" -c "
+DELETE FROM positions_live WHERE symbol IN ('BTC','ETH');
+UPDATE orders_outbox SET status='CLOSED' WHERE symbol IN ('BTC','ETH') AND status='EXECUTED';
+SELECT symbol, direction FROM positions_live WHERE status='OPEN';"
+grep -n "BTC\|ETH" /root/agent_loop_v5.py | grep -i "LONG\|SHORT\|rules" | head -20
+cat > /root/aria_crypto_engine.py << 'EOF'
+"""
+ARIA Crypto Signal Engine
+Dedicated signal generator for BTC/ETH
+Uses: Funding Rate + Open Interest + Price Momentum
+No XGBoost — rules-based until 500+ trade history accumulated
+"""
+import psycopg2, logging
+log = logging.getLogger()
+DB = {'host':'localhost','port':5432,'dbname':'aria_db','user':'postgres','password':'aria_secure_2026'}
+
+def get_crypto_signal(symbol):
+    """
+    Returns (direction, confidence, reason)
+    direction: 'LONG', 'SHORT', or 'HOLD'
+    """
+    try:
+        conn = psycopg2.connect(**DB); cur = conn.cursor()
+        cur.execute("SELECT price, change_24h, funding_rate, oi_change_pct FROM market_state_latest WHERE symbol=%s", [symbol])
+        row = cur.fetchone(); cur.close(); conn.close()
+        if not row:
+            return 'HOLD', 0.5, 'no_data'
+        price, change_24h, funding_rate, oi_change = row
+        funding_rate = float(funding_rate or 0)
+        oi_change = float(oi_change or 0)
+        change_24h = float(change_24h or 0)
+
+        reasons = []
+        long_score = 0
+        short_score = 0
+
+        # Funding rate signal
+        if funding_rate < -0.01:
+            long_score += 2
+            reasons.append(f"funding:{funding_rate:.4f}%(squeeze_risk)")
+        elif funding_rate > 0.02:
+            short_score += 2
+            reasons.append(f"funding:{funding_rate:.4f}%(overleveraged_longs)")
+
+        # OI + Price momentum signal
+        if oi_change > 0.05 and change_24h > 0:
+            long_score += 2
+            reasons.append(f"OI_rising+price_up")
+        elif oi_change > 0.05 and change_24h < 0:
+            short_score += 2
+            reasons.append(f"OI_rising+price_down")
+        elif oi_change < -0.05 and change_24h > 0:
+            long_score += 1
+            reasons.append(f"short_squeeze")
+        elif oi_change < -0.05 and change_24h < 0:
+            short_score += 1
+            reasons.append(f"longs_exiting")
+
+        # Price momentum
+        if change_24h > 2:
+            long_score += 1
+            reasons.append(f"momentum:+{change_24h:.1f}%")
+        elif change_24h < -2:
+            short_score += 1
+            reasons.append(f"momentum:{change_24h:.1f}%")
+
+        # Decision
+        if long_score >= 3 and long_score > short_score:
+            conf = min(0.80, 0.55 + long_score * 0.05)
+            return 'LONG', conf, ' | '.join(reasons)
+        elif short_score >= 3 and short_score > long_score:
+            conf = min(0.80, 0.55 + short_score * 0.05)
+            return 'SHORT', conf, ' | '.join(reasons)
+        else:
+            return 'HOLD', 0.5, f"no_conviction(long:{long_score} short:{short_score})"
+
+    except Exception as e:
+        log.warning(f"Crypto engine failed {symbol}: {e}")
+        return 'HOLD', 0.5, 'error'
+EOF
+
+python3 -c "import ast; ast.parse(open('/root/aria_crypto_engine.py').read()); print('Syntax OK')"
+git add agent_loop_v5.py aria_crypto_engine.py aria_market_updater.py aria_anomaly_detector.py && git commit -m "feat: crypto engine rules-only, OI signals, single source of truth positions_live, health thresholds fixed"
+git push origin master && git push v1 master
+UNT(*) FROM jobs_raw; SELECT COUNT(*) FROM jobs_scored; SELECT COUNT(*) FROM star_stories; SELECT COUNT(*) FROM cv_versions;"
+cd /root/JobPilot
+systemctl status jobpilot.service
+sqlite3 jobpilot.db "SELECT COUNT(*) FROM jobs_raw; SELECT COUNT(*) FROM jobs_scored; SELECT COUNT(*) FROM star_stories; SELECT COUNT(*) FROM cv_versions;"
+cd /root/JobPilot && sqlite3 jobpilot.db "SELECT date, tokens_used, estimated_cost FROM api_usage ORDER BY date DESC LIMIT 5;"
+cd /root/JobPilot && python3 -c "
+import os
+from dotenv import load_dotenv
+load_dotenv()
+print('GEMINI:', 'SET' if os.getenv('GEMINI_API_KEY') else 'MISSING')
+print('GROQ:', 'SET' if os.getenv('GROQ_API_KEY') else 'MISSING')
+print('ANTHROPIC:', 'SET' if os.getenv('ANTHROPIC_API_KEY') else 'MISSING')
+"
+cd /root/JobPilot
+systemctl status jobpilot.service
+cd /root/JobPilot && systemctl status jobpilot.service
+ss -tlnp | grep -E '8080|8081|5000|3000'
+pip install fastapi uvicorn jinja2 --break-system-packages
+mkdir -p /root/JobPilot/dashboard/templates
+mkdir -p /root/JobPilot/dashboard/static
+ls -la /root/JobPilot/dashboard/
+# 1. Copy backend
+nano /root/JobPilot/dashboard/app.py
+# paste dashboard_app.py contents
+# 2. Copy template
+nano /root/JobPilot/dashboard/templates/index.html
+cd /root/JobPilot
+systemctl status jobpilot.service
+cd /root/JobPilot && python3 -c "
+import sqlite3
+conn = sqlite3.connect('jobpilot.db')
+c = conn.cursor()
+c.execute('CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT, updated_at TEXT DEFAULT CURRENT_TIMESTAMP)')
+c.execute(\"INSERT OR IGNORE INTO settings (key,value) VALUES ('notifications_enabled','1')\")
+c.execute(\"INSERT OR IGNORE INTO settings (key,value) VALUES ('notifications_mode','auto')\")
+conn.commit()
+print('Done')
+"
+nano /root/JobPilot/dashboard/app.py
+cd /root/JobPilot && python3 -c "import dashboard.app; print('Import OK')"
+nano /root/JobPilot/dashboard/templates/index.html
+ls -la /root/JobPilot/dashboard/templates/
+cat > /etc/systemd/system/jobpilot-dashboard.service << 'EOF'
+[Unit]
+Description=JobPilot Dashboard
 After=network.target
 
 [Service]
 Type=simple
 User=root
 WorkingDirectory=/root/JobPilot
-ExecStart=/usr/bin/python3 /root/JobPilot/main.py schedule
+ExecStart=/usr/bin/python3 /root/JobPilot/dashboard/app.py
 Restart=always
-RestartSec=60
-StandardOutput=append:/var/log/jobpilot.log
-StandardError=append:/var/log/jobpilot.log
-
-[Install]
-WantedBy=multi-user.target
-"""
-with open("/etc/systemd/system/jobpilot.service", "w") as f:
-    f.write(content)
-print("done")
-PYEOF
-
-systemctl daemon-reload
-systemctl enable jobpilot
-systemctl start jobpilot
-systemctl status jobpilot
-Created symlink /etc/systemd/system/multi-user.target.wants/jobpilot.service → /etc/systemd/system/jobpilot.service.
-● jobpilot.service - JobPilot Autonomous Job Hunter
-Apr 14 19:34:36 aria-trainer systemd[1]: Started jobpilot.service - JobPilot Autonomous Job Hunter.
-root@aria-trainer:~/JobPilot#cd /root/JobPilot
-git add .
-git commit -m "Initial release - JobPilot Autonomous Career Intelligence System"
-git push origin main
-echo "jobpilot.db" >> .gitignore
-echo "cv_engine/master_cv.docx" >> .gitignore
-echo ".active_profile" >> .gitignore
-echo "test.py" >> .gitignore
-echo "reports/archive/" >> .gitignore
-git rm --cached jobpilot.db cv_engine/master_cv.docx .active_profile test.py 2>/dev/null
-git add .gitignore
-git commit -m "Remove personal files from tracking"
-git push origin main
-cd /root/JobPilot
-cat > architecture.svg << 'SVGEOF'
-<svg width="100%" viewBox="0 0 680 620" xmlns="http://www.w3.org/2000/svg">
-<defs><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
-<rect x="40" y="40" width="130" height="44" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
-<text font-family="Arial" font-size="13" font-weight="500" x="105" y="67" text-anchor="middle">Reed API</text>
-<rect x="190" y="40" width="130" height="44" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
-<text font-family="Arial" font-size="13" font-weight="500" x="255" y="67" text-anchor="middle">Adzuna API</text>
-<rect x="340" y="40" width="130" height="44" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
-<text font-family="Arial" font-size="13" font-weight="500" x="405" y="67" text-anchor="middle">LinkedIn RSS</text>
-<line x1="105" y1="84" x2="245" y2="148" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<line x1="255" y1="84" x2="255" y2="148" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<line x1="405" y1="84" x2="265" y2="148" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<rect x="140" y="148" width="230" height="56" rx="8" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
-<text font-family="Arial" font-size="13" font-weight="500" x="255" y="176" text-anchor="middle">Job scraper</text>
-<text font-family="Arial" font-size="11" x="255" y="194" text-anchor="middle" fill="#0f6e56">Runs at 8am + 6pm daily</text>
-<line x1="255" y1="204" x2="255" y2="244" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<rect x="140" y="244" width="230" height="44" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
-<text font-family="Arial" font-size="13" font-weight="500" x="255" y="271" text-anchor="middle">Deduplicate + normalize</text>
-<line x1="255" y1="288" x2="255" y2="328" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<rect x="120" y="328" width="270" height="56" rx="8" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
-<text font-family="Arial" font-size="13" font-weight="500" x="255" y="356" text-anchor="middle">Claude AI scorer</text>
-<text font-family="Arial" font-size="11" x="255" y="374" text-anchor="middle" fill="#534ab7">Scores each job 0-100 vs your CV</text>
-<line x1="190" y1="384" x2="100" y2="424" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<rect x="40" y="424" width="120" height="44" rx="8" fill="#f1efe8" stroke="#888780" stroke-width="0.5"/>
-<text font-family="Arial" font-size="12" font-weight="500" x="100" y="451" text-anchor="middle">Score below 60</text>
-<line x1="320" y1="384" x2="410" y2="424" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<rect x="350" y="424" width="120" height="44" rx="8" fill="#faeeda" stroke="#ba7517" stroke-width="0.5"/>
-<text font-family="Arial" font-size="12" font-weight="500" x="410" y="451" text-anchor="middle">Score 80+</text>
-<line x1="470" y1="446" x2="530" y2="446" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<rect x="530" y="424" width="120" height="44" rx="8" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
-<text font-family="Arial" font-size="12" font-weight="500" x="590" y="451" text-anchor="middle">Telegram alert</text>
-<line x1="410" y1="468" x2="410" y2="508" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<rect x="310" y="508" width="200" height="44" rx="8" fill="#eeedfe" stroke="#534ab7" stroke-width="0.5"/>
-<text font-family="Arial" font-size="13" font-weight="500" x="410" y="535" text-anchor="middle">CV tailor</text>
-<line x1="255" y1="384" x2="190" y2="508" stroke="#888780" stroke-width="1" marker-end="url(#arrow)"/>
-<rect x="130" y="508" width="120" height="44" rx="8" fill="#e1f5ee" stroke="#0f6e56" stroke-width="0.5"/>
-<text font-family="Arial" font-size="12" font-weight="500" x="190" y="535" text-anchor="middle">Daily report</text>
-</svg>
-SVGEOF
-
-echo "Done"
-git add README.md architecture.svg
-git commit -m "Add README and architecture diagram"
-git push origin main
-cd /root/JobPilot
-sed -i 's/## How It Works/## Architecture\n\n![JobPilot Architecture](architecture.svg)\n\n## How It Works/' README.md
-git add README.md
-git commit -m "Add architecture diagram to README"
-git push origin main
-grep -n "open_positions\[d\['symbol'\]\] = d" /root/agent_loop_v5.py
-sed -n '455,475p' /root/agent_loop_v5.py
-cp /root/agent_loop_v5.py /root/agent_loop_v5.py.bak
-python3 -c "
-with open('/root/agent_loop_v5.py', 'r') as f:
-    content = f.read()
-
-old = '''                    open_positions[d['symbol']] = d
-                    log.info(f\"  ORDER: {d['action']} {d['symbol']} \${d['size_usd']:.0f}\")'''
-
-new = '''                    open_positions[d['symbol']] = d
-                    try:
-                        conn2 = get_db()
-                        cur2 = conn2.cursor()
-                        cur2.execute(\"\"\"
-                            INSERT INTO positions_live (symbol, direction, entry_price, size_usd, regime_at_entry, sentiment_at_entry, fear_greed_at_entry, status)
-                            VALUES (%s, %s, %s, %s, %s, %s, %s, 'OPEN')
-                            ON CONFLICT (symbol) DO UPDATE SET
-                            direction=EXCLUDED.direction, entry_price=EXCLUDED.entry_price,
-                            size_usd=EXCLUDED.size_usd, status='OPEN', updated_at=NOW()
-                        \"\"\", (d['symbol'], d['direction'], d.get('entry_price', 0),
-                               d['size_usd'], d.get('regime','NORMAL'),
-                               d.get('sentiment_score', 0), d.get('fear_greed', 21)))
-                        conn2.commit()
-                        conn2.close()
-                    except Exception as pe:
-                        log.error(f\"positions_live write failed: {pe}\")
-                    log.info(f\"  ORDER: {d['action']} {d['symbol']} \${d['size_usd']:.0f}\")'''
-
-content = content.replace(old, new)
-with open('/root/agent_loop_v5.py', 'w') as f:
-    f.write(content)
-print('done')
-"
-sed -n '460,485p' /root/agent_loop_v5.py
-sed -n '134,185p' /root/agent_loop_v5.py
-python3 -c "
-with open('/root/agent_loop_v5.py', 'r') as f:
-    content = f.read()
-
-old = \"        conn.commit(); cur.close(); conn.close()\"
-
-new = \"\"\"        cur.execute(\\\"UPDATE positions_live SET status='CLOSED', updated_at=NOW() WHERE symbol=%s\\\", [symbol])
-        conn.commit(); cur.close(); conn.close()\"\"\"
-
-content = content.replace(old, new, 1)
-with open('/root/agent_loop_v5.py', 'w') as f:
-    f.write(content)
-print('done')
-"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "
-INSERT INTO positions_live (symbol, direction, entry_price, size_usd, regime_at_entry, sentiment_at_entry, fear_greed_at_entry, status)
-VALUES 
-('GLD', 'LONG', 0, 100, 'NORMAL', -12.0, 21, 'OPEN'),
-('ETH', 'LONG', 0, 100, 'NORMAL', -12.0, 21, 'OPEN'),
-('BTC', 'LONG', 0, 100, 'NORMAL', -12.0, 21, 'OPEN')
-ON CONFLICT (symbol) DO NOTHING;
-"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "SELECT symbol, direction, status FROM positions_live;"
-systemctl restart aria_loop_v5
-sleep 5
-systemctl status aria_loop_v5 --no-pager | grep Active
-python3 -c "
-with open('/root/aria_db_sync.py', 'r') as f:
-    content = f.read()
-content = content.replace(
-    'SELECT sys_mode, regime, sentiment_score, fear_greed, narrative, liquidity_state, w_mult, portfolio_value, cycle FROM system_health ORDER BY id DESC LIMIT 1',
-    'SELECT mode, score FROM system_health ORDER BY id DESC LIMIT 1'
-)
-content = content.replace(
-    'rcur.execute(\"INSERT INTO system_state_sync (id, sys_mode, regime, sentiment, fear_greed, narrative, liquidity, wmult, portfolio_value, cycle, updated_at) VALUES (1,%s,%s,%s,%s,%s,%s,%s,%s,%s,NOW()) ON CONFLICT (id) DO UPDATE SET sys_mode=EXCLUDED.sys_mode, regime=EXCLUDED.regime, sentiment=EXCLUDED.sentiment, fear_greed=EXCLUDED.fear_greed, narrative=EXCLUDED.narrative, liquidity=EXCLUDED.liquidity, wmult=EXCLUDED.wmult, portfolio_value=EXCLUDED.portfolio_value, cycle=EXCLUDED.cycle, updated_at=NOW()\", row)',
-    'rcur.execute(\"INSERT INTO system_state_sync (id, sys_mode, regime, updated_at) VALUES (1,%s,%s,NOW()) ON CONFLICT (id) DO UPDATE SET sys_mode=EXCLUDED.sys_mode, regime=EXCLUDED.regime, updated_at=NOW()\", (row[0], row[0]))'
-)
-with open('/root/aria_db_sync.py', 'w') as f:
-    f.write(content)
-print('fixed')
-"
-python3 /root/aria_db_sync.py
-grep -r "positions\|LIVE\|open_pos" /root/main.py | grep -i "select\|fetch\|query" | head -20
-grep -n "positions\|live_pos\|open_pos" /root/main.py | head -30
-sed -n '1201,1270p' /root/main.py
-python3 -c "
-with open('/root/aria_db_sync.py', 'r') as f:
-    content = f.read()
-
-old = 'if __name__ == \"__main__\":\n    run()'
-
-new = '''import requests
-
-RAILWAY_APP_URL = 'https://web-production-548c0.up.railway.app'
-
-def post_positions_to_frontend(positions):
-    try:
-        payload = {'positions': [{'symbol': p[0], 'direction': p[1], 'entry_price': p[2], 'size': p[3], 'exchange': 'ARIA Paper'} for p in positions]}
-        resp = requests.post(RAILWAY_APP_URL + '/positions/update', json=payload, timeout=10)
-        log.info('Posted ' + str(len(positions)) + ' positions to frontend: ' + str(resp.status_code))
-    except Exception as e:
-        log.error('Frontend POST failed: ' + str(e))
-
-if __name__ == \"__main__\":
-    run()'''
-
-content = content.replace(old, new)
-with open('/root/aria_db_sync.py', 'w') as f:
-    f.write(content)
-print('done')
-"
-python3 -c "
-with open('/root/aria_db_sync.py', 'r') as f:
-    content = f.read()
-
-old = '            sync_system_state(hcur, rcur)\n            rconn.commit()'
-
-new = '''            sync_system_state(hcur, rcur)
-            rconn.commit()
-            hcur.execute(\"SELECT symbol, direction, entry_price, size_usd, status FROM positions_live WHERE status='OPEN'\")
-            positions = hcur.fetchall()
-            post_positions_to_frontend(positions)'''
-
-content = content.replace(old, new)
-with open('/root/aria_db_sync.py', 'w') as f:
-    f.write(content)
-print('done')
-"
-systemctl restart aria_db_sync
-sleep 5
-journalctl -u aria_db_sync -n 20 --no-pager
-tail -20 /var/log/aria_db_sync.log
-systemctl status aria_loop_v5 aria_market aria_sentiment aria_anomaly aria_world_model aria_positions jobpilot --no-pager | grep -E "Active|●"
-journalctl -u aria_loop_v5 -n 30 --no-pager
-ps aux | grep python3 | grep -v grep | wc -l
-ps aux | grep -E "aria|agent|loop|sentiment|market|world|anomaly|position|watchdog|jobpilot" | grep -v grep
-grep -i "database\|postgres\|DB_URL" /root/main.py | head -10
-sudo -u postgres psql -d aria_db -h localhost -c "SELECT symbol, side, entry_price, quantity, pnl FROM positions LIMIT 10;" 2>/dev/null || python3 -c "
-import psycopg2, os
-conn = psycopg2.connect(os.environ.get('DATABASE_URL', ''))
-cur = conn.cursor()
-cur.execute('SELECT symbol, side, entry_price, quantity FROM positions LIMIT 10')
-print(cur.fetchall())
-conn.close()
-"
-python3 -c "
-import os, sys
-sys.path.insert(0, '/root')
-from main import get_db
-conn = get_db()
-cur = conn.cursor()
-cur.execute('SELECT symbol, side, entry_price, quantity FROM positions LIMIT 10')
-print(cur.fetchall())
-conn.close()
-"
-python3 -c "
-import psycopg2
-import subprocess
-result = subprocess.run(['grep', 'DATABASE_URL', '/etc/environment', '/root/.env', '/root/.bashrc'], capture_output=True, text=True)
-print(result.stdout)
-"
-grep -r "DATABASE_URL\|postgres" /root/.env /root/aria-env/bin/activate 2>/dev/null | head -5
-grep -r "DATABASE_URL\|RAILWAY\|postgres" /root/agent_loop_v5.py | head -10
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "SELECT symbol, side, entry_price, quantity FROM positions LIMIT 10;"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "\dt"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "SELECT symbol, side, entry_price, quantity FROM positions_live LIMIT 10;"
-grep -r "DATABASE_URL" /root/main.py | head -3
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "\d positions_live"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "SELECT symbol, direction, entry_price, size_usd, status FROM positions_live;"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "SELECT * FROM positions_live;"
-grep -n "positions_live" /root/agent_loop_v5.py | head -20
-grep -n "position\|INSERT\|UPDATE" /root/agent_loop_v5.py | head -30
-nano /root/.env
-python3 -c "
-lines = []
-lines.append('import psycopg2\n')
-lines.append('import os\n')
-lines.append('import time\n')
-lines.append('import logging\n')
-lines.append('from dotenv import load_dotenv\n')
-lines.append('\n')
-lines.append('load_dotenv(\"/root/.env\")\n')
-lines.append('\n')
-lines.append('logging.basicConfig(level=logging.INFO, format=\"%(asctime)s [SYNC] %(message)s\")\n')
-lines.append('log = logging.getLogger()\n')
-lines.append('\n')
-lines.append('HETZNER_DB = {\"host\":\"localhost\",\"port\":5432,\"dbname\":\"aria_db\",\"user\":\"postgres\",\"password\":\"aria_secure_2026\"}\n')
-lines.append('RAILWAY_URL = os.getenv(\"RAILWAY_DATABASE_URL\", \"\")\n')
-lines.append('SYNC_INTERVAL = 60\n')
-lines.append('\n')
-lines.append('def get_hetzner():\n')
-lines.append('    return psycopg2.connect(**HETZNER_DB)\n')
-lines.append('\n')
-lines.append('def get_railway():\n')
-lines.append('    return psycopg2.connect(RAILWAY_URL)\n')
-open('/root/aria_db_sync.py', 'w').writelines(lines)
-print('chunk 1 done')
-"
-python3 -c "
-lines = []
-lines.append('\n')
-lines.append('def ensure_railway_tables(rcur):\n')
-lines.append('    rcur.execute(\"\"\"\n')
-lines.append('        CREATE TABLE IF NOT EXISTS positions_live (\n')
-lines.append('            id SERIAL PRIMARY KEY,\n')
-lines.append('            symbol VARCHAR(10) UNIQUE,\n')
-lines.append('            direction VARCHAR(10),\n')
-lines.append('            entry_price FLOAT,\n')
-lines.append('            size_usd FLOAT,\n')
-lines.append('            status VARCHAR(20) DEFAULT \'OPEN\',\n')
-lines.append('            updated_at TIMESTAMP DEFAULT NOW()\n')
-lines.append('        )\n')
-lines.append('    \"\"\")\n')
-lines.append('    rcur.execute(\"\"\"\n')
-lines.append('        CREATE TABLE IF NOT EXISTS system_state_sync (\n')
-lines.append('            id INTEGER PRIMARY KEY DEFAULT 1,\n')
-lines.append('            sys_mode VARCHAR(20),\n')
-lines.append('            regime VARCHAR(20),\n')
-lines.append('            sentiment FLOAT,\n')
-lines.append('            fear_greed INTEGER,\n')
-lines.append('            narrative VARCHAR(50),\n')
-lines.append('            liquidity VARCHAR(20),\n')
-lines.append('            wmult FLOAT,\n')
-lines.append('            portfolio_value FLOAT,\n')
-lines.append('            cycle INTEGER,\n')
-lines.append('            updated_at TIMESTAMP DEFAULT NOW()\n')
-lines.append('        )\n')
-lines.append('    \"\"\")\n')
-open('/root/aria_db_sync.py', 'a').writelines(lines)
-print('chunk 2 done')
-"python3 -c "
-lines = []
-lines.append('\n')
-lines.append('def ensure_railway_tables(rcur):\n')
-lines.append('    rcur.execute(\"\"\"\n')
-lines.append('        CREATE TABLE IF NOT EXISTS positions_live (\n')
-lines.append('            id SERIAL PRIMARY KEY,\n')
-lines.append('            symbol VARCHAR(10) UNIQUE,\n')
-lines.append('            direction VARCHAR(10),\n')
-lines.append('            entry_price FLOAT,\n')
-lines.append('            size_usd FLOAT,\n')
-lines.append('            status VARCHAR(20) DEFAULT \'OPEN\',\n')
-lines.append('            updated_at TIMESTAMP DEFAULT NOW()\n')
-lines.append('        )\n')
-lines.append('    \"\"\")\n')
-lines.append('    rcur.execute(\"\"\"\n')
-lines.append('        CREATE TABLE IF NOT EXISTS system_state_sync (\n')
-lines.append('            id INTEGER PRIMARY KEY DEFAULT 1,\n')
-lines.append('            sys_mode VARCHAR(20),\n')
-lines.append('            regime VARCHAR(20),\n')
-lines.append('            sentiment FLOAT,\n')
-lines.append('            fear_greed INTEGER,\n')
-lines.append('            narrative VARCHAR(50),\n')
-lines.append('            liquidity VARCHAR(20),\n')
-lines.append('            wmult FLOAT,\n')
-lines.append('            portfolio_value FLOAT,\n')
-lines.append('            cycle INTEGER,\n')
-lines.append('            updated_at TIMESTAMP DEFAULT NOW()\n')
-lines.append('        )\n')
-lines.append('    \"\"\")\n')
-open('/root/aria_db_sync.py', 'a').writelines(lines)
-print('chunk 2 done')
-"
-tail -20 /root/aria_db_sync.py
-python3 -c "
-lines = []
-lines.append('\n')
-lines.append('def sync_positions(hcur, rcur):\n')
-lines.append('    hcur.execute(\"SELECT symbol, direction, entry_price, size_usd, status FROM positions_live\")\n')
-lines.append('    positions = hcur.fetchall()\n')
-lines.append('    for p in positions:\n')
-lines.append('        rcur.execute(\"INSERT INTO positions_live (symbol, direction, entry_price, size_usd, status, updated_at) VALUES (%s, %s, %s, %s, %s, NOW()) ON CONFLICT (symbol) DO UPDATE SET direction=EXCLUDED.direction, entry_price=EXCLUDED.entry_price, size_usd=EXCLUDED.size_usd, status=EXCLUDED.status, updated_at=NOW()\", p)\n')
-lines.append('    log.info(\"Synced \" + str(len(positions)) + \" positions to Railway\")\n')
-lines.append('\n')
-lines.append('def sync_system_state(hcur, rcur):\n')
-lines.append('    try:\n')
-lines.append('        hcur.execute(\"SELECT sys_mode, regime, sentiment_score, fear_greed, narrative, liquidity_state, w_mult, portfolio_value, cycle FROM system_health ORDER BY id DESC LIMIT 1\")\n')
-lines.append('        row = hcur.fetchone()\n')
-lines.append('        if row:\n')
-lines.append('            rcur.execute(\"INSERT INTO system_state_sync (id, sys_mode, regime, sentiment, fear_greed, narrative, liquidity, wmult, portfolio_value, cycle, updated_at) VALUES (1,%s,%s,%s,%s,%s,%s,%s,%s,%s,NOW()) ON CONFLICT (id) DO UPDATE SET sys_mode=EXCLUDED.sys_mode, regime=EXCLUDED.regime, sentiment=EXCLUDED.sentiment, fear_greed=EXCLUDED.fear_greed, narrative=EXCLUDED.narrative, liquidity=EXCLUDED.liquidity, wmult=EXCLUDED.wmult, portfolio_value=EXCLUDED.portfolio_value, cycle=EXCLUDED.cycle, updated_at=NOW()\", row)\n')
-lines.append('            log.info(\"Synced system state\")\n')
-lines.append('    except Exception as e:\n')
-lines.append('        log.warning(\"system state sync skipped: \" + str(e))\n')
-open('/root/aria_db_sync.py', 'a').writelines(lines)
-print('chunk 3 done')
-"
-python3 -c "
-lines = []
-lines.append('\n')
-lines.append('def run():\n')
-lines.append('    log.info(\"DB Sync Bridge starting...\")\n')
-lines.append('    if not RAILWAY_URL:\n')
-lines.append('        log.error(\"RAILWAY_DATABASE_URL not set\")\n')
-lines.append('        return\n')
-lines.append('    while True:\n')
-lines.append('        try:\n')
-lines.append('            hconn = get_hetzner()\n')
-lines.append('            rconn = get_railway()\n')
-lines.append('            hcur = hconn.cursor()\n')
-lines.append('            rcur = rconn.cursor()\n')
-lines.append('            ensure_railway_tables(rcur)\n')
-lines.append('            sync_positions(hcur, rcur)\n')
-lines.append('            sync_system_state(hcur, rcur)\n')
-lines.append('            rconn.commit()\n')
-lines.append('            hcur.close(); hconn.close()\n')
-lines.append('            rcur.close(); rconn.close()\n')
-lines.append('            log.info(\"Sync complete. Next in \" + str(SYNC_INTERVAL) + \"s\")\n')
-lines.append('        except Exception as e:\n')
-lines.append('            log.error(\"Sync error: \" + str(e))\n')
-lines.append('        time.sleep(SYNC_INTERVAL)\n')
-lines.append('\n')
-lines.append('if __name__ == \"__main__\":\n')
-lines.append('    run()\n')
-open('/root/aria_db_sync.py', 'a').writelines(lines)
-print('chunk 4 done')
-"
-cd /root && python3 aria_db_sync.py
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h localhost -c "\d system_health"
-cat > /etc/systemd/system/aria_db_sync.service << 'EOF'
-[Unit]
-Description=ARIA DB Sync Bridge - Hetzner to Railway
-After=network.target postgresql.service
-
-[Service]
-Type=simple
-User=root
-WorkingDirectory=/root
-ExecStart=/usr/bin/python3 /root/aria_db_sync.py
-Restart=always
-RestartSec=30
-StandardOutput=append:/var/log/aria_db_sync.log
-StandardError=append:/var/log/aria_db_sync.log
+RestartSec=5
+EnvironmentFile=/root/JobPilot/.env
 
 [Install]
 WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
-systemctl enable aria_db_sync
-systemctl start aria_db_sync
-systemctl status aria_db_sync --no-pager | grep Active
-systemctl status aria_loop_v5 aria_market aria_sentiment aria_anomaly aria_world_model aria_positions jobpilot aria_db_sync --no-pager | grep -E "Active|●"
-grep -n "system_prompt\|system_message\|SYSTEM\|context" /root/main.py | head -30
-sed -n '839,865p' /root/main.py
-python3 -c "
-with open('/root/main.py', 'r') as f:
-    content = f.read()
-content = content.replace('for sym in symbols_to_analyse[:2]:', 'for sym in symbols_to_analyse[:6]:')
-with open('/root/main.py', 'w') as f:
-    f.write(content)
-print('fixed')
-"
-cd /root
-git add main.py
-git commit -m "Fix chat context to include all 6 assets"
-git push origin master
-grep "symbols_to_analyse\[:6\]" /root/main.py
-curl -s https://web-production-548c0.up.railway.app/health | head -20
-grep -n "CRITICAL\|risk_score\|Advanced Retail\|swarm_balance\|portfolio_value\|open_positions\|of 5 max\|of 20 total" /root/main.py | head -30
-grep -n "swarm_balance\|of 5 max\|of 20 total\|SWARM ACTIVE\|Storm Protocol\|20 AGENTS" /root/main.py | head -20
-find /root -name "*.html" | head -5
-grep -l "SWARM ACTIVE\|of 5 max\|Storm Protocol" /root/frontend.html /root/aria_terminal.html 2>/dev/null
-grep -n "SWARM ACTIVE\|of 5 max\|of 20 total\|Storm Protocol\|20 AGENTS\|Advanced Retail\|Autonomous Reasoning" /root/aria_terminal.html | head -20
-python3 -c "
-with open('/root/aria_terminal.html', 'r') as f:
-    content = f.read()
-
-# Fix name
-content = content.replace('Advanced Retail Intelligence & Analytics', 'Autonomous Reasoning & Intelligence Architecture')
-content = content.replace('Advanced Retail Intelligence and Analytics', 'Autonomous Reasoning & Intelligence Architecture')
-
-# Fix agent count to match reality
-content = content.replace('20 AGENTS RUNNING', '12 AGENTS RUNNING')
-content = content.replace('of 20 total', 'of 12 total')
-content = content.replace('V4 — 20 AGENTS', 'V5 — 12 AGENTS')
-
-# Fix max positions to match reality
-content = content.replace('of 5 max', 'of 6 max')
-
-with open('/root/aria_terminal.html', 'w') as f:
-    f.write(content)
-print('done')
-"
-grep -n "swarm_balance\|portfolio\|8,77\|9,98" /root/main.py | head -20
-cd /root
-git add aria_terminal.html main.py
-git commit -m "Fix ARIA name, agent count, position max, chat context"
-git push origin master
-curl -s https://web-production-548c0.up.railway.app/health
-grep -n "production_models" /root/main.py | head -10
-grep -n "SYMBOLS\|symbols\s*=\|model_files\|pickle.load" /root/main.py | head -15
-sed -n '120,142p' /root/main.py
-cd /root
-echo "# force redeploy $(date)" >> main.py
-git add main.py aria_terminal.html
-git commit -m "Force redeploy - fix chat context and frontend name"
-git push origin master
-ps aux | grep python3 | grep -v grep | awk '{print $11, $12}'
-curl -s https://web-production-548c0.up.railway.app/terminal 2>&1 | head -50
-curl -s https://web-production-548c0.up.railway.app/api/chat/history 2>&1
-grep -n "chat\|messages\|context\|history" /root/main.py | head -40
-sed -n '906,960p' /root/main.py
-grep -n "messages\|chat\|fetch.*chat\|user_id" /root/main.py | grep -i "frontend\|html\|js\|fetch" | head -20
-grep -n "fetch\|messages\|chat\|user_id" /root/main.py | tail -60
-grep -n "user_id\|fetch.*chat\|/chat\|messages" /root/main.py | grep -v "def \|cur\.\|portfolio\|paper\|history\|save_\|get_\|check_\|track" | head -30grep -n "user_id\|fetch.*chat\|/chat\|messages" /root/main.py | grep -v "def \|cur\.\|portfolio\|paper\|history\|save_\|get_\|check_\|track" | head -3
-grep -n "user_id\|fetch.*chat\|/chat\|messages" /root/main.py | grep -v "def \|cur\.\|portfolio\|paper\|history\|save_\|get_\|check_\|track" | head -30
-grep -n "HTMLResponse\|html_content\|return HTML\|index.html\|sendMessage\|chatInput\|userId" /root/main.py | head -20
-grep -n "sendMessage\|userId\|user_id\|fetch.*chat\|/chat" /root/aria_terminal.html | head -30
-grep -n "currentUserId\|userId\|generateId\|localStorage" /root/aria_terminal.html | head -30
-curl -s -X POST https://web-production-548c0.up.railway.app/chat   -H "Content-Type: application/json"   -d '{"message":"what did I just say to you?","user_id":"aria-agent-system","symbol":"BTC","user_level":"intermediate"}' | python3 -m json.tool
-curl -s -X POST https://web-production-548c0.up.railway.app/chat   -H "Content-Type: application/json"   -d '{"message":"hello ARIA, my name is Alee","user_id":"aria-agent-system","symbol":"BTC","user_level":"intermediate"}' | python3 -m json.tool
-curl -s -X POST https://web-production-548c0.up.railway.app/chat   -H "Content-Type: application/json"   -d '{"message":"what is my name?","user_id":"aria-agent-system","symbol":"BTC","user_level":"intermediate"}' | python3 -m json.tool
-grep -n "ARIA\|logo\|title\|Autonomous\|Financial Intelligence\|header" /root/aria_terminal.html | head -20
-sed -n '269,278p' /root/aria_terminal.html
-sed -i 's/ADVANCED RETAIL INTELLIGENCE \& ANALYTICS/AUTONOMOUS REASONING \& INTELLIGENCE ARCHITECTURE/' /root/aria_terminal.html
-sed -n '269,271p' /root/aria_terminal.html
-sed -i 's/ARIA Terminal - Financial Intelligence/ARIA - Autonomous Reasoning \& Intelligence Architecture/' /root/aria_terminal.html
-cd /root && git add aria_terminal.html && git commit -m "fix: ARIA full name corrected in header and title" && git push origin master
-grep -n "agent\|swarm\|20\|12\|count" /root/aria_terminal.html | grep -i "count\|total\|length\|agent" | head -20
-grep -n "agent_name\|agentName\|agents\[]\|agent_list\|renderAgent\|AGENTS\|agents =" /root/aria_terminal.html | head -20
-curl -s https://web-production-548c0.up.railway.app/api/agents 2>&1
-psql -U postgres -d aria_db -c "SELECT COUNT(DISTINCT agent_id) FROM agent_decisions WHERE created_at > NOW() - INTERVAL '1 hour';"
-psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT COUNT(DISTINCT agent_id) FROM agent_decisions WHERE created_at > NOW() - INTERVAL '1 hour';"
-psql -U postgres -d aria_db -h 127.0.0.1 -W -c "SELECT COUNT(DISTINCT agent_id) FROM agent_decisions WHERE created_at > NOW() - INTERVAL '1 hour';"
-grep -r "postgresql\|postgres.*password\|DB_PASS\|db_pass" /root/.env /root/agent_loop_v5.py 2>/dev/null | head -10
-curl -s -X POST https://web-production-548c0.up.railway.app/chat   -H "Content-Type: application/json"   -d '{"message":"hello ARIA, my name is Alee","user_id":"aria-agent-system","symbol":"BTC","user_level":"intermediate"}' | python3 -m json.tool
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT COUNT(DISTINCT agent_id) FROM agent_decisions WHERE created_at > NOW() - INTERVAL '1 hour';"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "\d agent_decisions"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT COUNT(DISTINCT agent_id) FROM agent_decisions WHERE timestamp > NOW() - INTERVAL '1 hour';"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT agent_id, action, timestamp FROM agent_decisions ORDER BY timestamp DESC LIMIT 10;"
-journalctl -u agent_loop -n 50 --no-pager
-grep -n "Approved\|approve\|threshold\|confidence.*0\.\|min_conf\|HOLD" /root/agent_loop_v5.py | head -20
-grep -n "MIN_CONFIDENCE\|min_confidence\|0\.6\|0\.7\|0\.8" /root/agent_loop_v5.py | head -20
-grep -n "agent_tech\|agent_gold\|agent_aapl\|agent_tsla\|def run_agent\|def agent_" /root/agent_loop_v5.py | head -20
-grep -n "agent_btc\|agent_eth\|AGENTS\|agent_list\|for.*agent\|agents\[" /root/agent_loop_v5.py | head -30
-sed -n '400,500p' /root/agent_loop_v5.py
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, direction, entry_price, size_usd, status FROM positions_live;"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, direction, entry_price, size_usd, updated_at FROM positions_live ORDER BY updated_at;"
-grep -n "MAX_OPEN_TRADES\|MAX_POSITIONS\|open_positions" /root/agent_loop_v5.py | head -10
-journalctl -u agent_loop -n 200 --no-pager | grep -i "positions_live\|write failed\|ERROR\|error\|GLD\|ETH\|BTC" | head -30
-journalctl -u agent_loop --no-pager | grep -i "ORDER.*GLD\|ORDER.*ETH\|ORDER.*BTC\|entry.*GLD\|entry.*ETH\|entry.*BTC" | head -20
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "
-INSERT INTO positions_live (symbol, direction, entry_price, size_usd, regime_at_entry, sentiment_at_entry, fear_greed_at_entry, status)
-VALUES 
-  ('GLD',  'LONG', (SELECT price FROM market_data WHERE symbol='GLD'  ORDER BY updated_at DESC LIMIT 1), 100, 'SIDEWAYS', 0, 23, 'OPEN'),
-  ('ETH',  'LONG', (SELECT price FROM market_data WHERE symbol='ETH'  ORDER BY updated_at DESC LIMIT 1), 100, 'SIDEWAYS', 0, 23, 'OPEN'),
-  ('BTC',  'LONG', (SELECT price FROM market_data WHERE symbol='BTC'  ORDER BY updated_at DESC LIMIT 1), 100, 'SIDEWAYS', 0, 23, 'OPEN')
-ON CONFLICT (symbol) DO NOTHING;
-"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "\dt"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, close, updated_at FROM price_data WHERE symbol IN ('GLD','ETH','BTC') ORDER BY updated_at DESC LIMIT 6;"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "\d price_data"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "
-INSERT INTO positions_live (symbol, direction, entry_price, size_usd, regime_at_entry, sentiment_at_entry, fear_greed_at_entry, status)
-VALUES 
-  ('GLD', 'LONG', (SELECT price FROM price_data WHERE symbol='GLD' ORDER BY timestamp DESC LIMIT 1), 100, 'SIDEWAYS', 0, 23, 'OPEN'),
-  ('ETH', 'LONG', (SELECT price FROM price_data WHERE symbol='ETH' ORDER BY timestamp DESC LIMIT 1), 100, 'SIDEWAYS', 0, 23, 'OPEN'),
-  ('BTC', 'LONG', (SELECT price FROM price_data WHERE symbol='BTC' ORDER BY timestamp DESC LIMIT 1), 100, 'SIDEWAYS', 0, 23, 'OPEN')
-ON CONFLICT (symbol) DO NOTHING;
-"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, direction, entry_price, size_usd, status FROM positions_live;"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT COUNT(*) FROM positions_live;"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, price FROM price_data WHERE symbol IN ('GLD','ETH','BTC') ORDER BY timestamp DESC LIMIT 3;"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "
-INSERT INTO positions_live (symbol, direction, entry_price, size_usd, regime_at_entry, sentiment_at_entry, fear_greed_at_entry, status)
-VALUES 
-  ('GLD', 'LONG', 3230.00, 100, 'SIDEWAYS', 0, 23, 'OPEN'),
-  ('ETH', 'LONG', 2185.16, 100, 'SIDEWAYS', 0, 23, 'OPEN'),
-  ('BTC', 'LONG', 84500.00, 100, 'SIDEWAYS', 0, 23, 'OPEN')
-ON CONFLICT (symbol) DO NOTHING;
-"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, direction, entry_price, status FROM positions_live ORDER BY symbol;"
-systemctl restart agent_loop && sleep 5 && journalctl -u agent_loop -n 20 --no-pager
-systemctl restart agent_loop_v5 2>/dev/null || systemctl list-units | grep agent
-cat /etc/systemd/system/agent_loop.service
-sed -i 's|ExecStart=/root/aria-env/bin/python -u /root/agent_loop.py|ExecStart=/root/aria-env/bin/python -u /root/agent_loop_v5.py|' /etc/systemd/system/agent_loop.service
-systemctl daemon-reload
-systemctl restart agent_loop
-sleep 5
-journalctl -u agent_loop -n 20 --no-pager
-grep -n "12 AGENTS\|of 12 total\|12 total\|AGENTS RUNNING" /root/aria_terminal.html
-sed -i 's/SWARM ACTIVE — 12 AGENTS RUNNING/SWARM ACTIVE — 6 AGENTS RUNNING/' /root/aria_terminal.html
-sed -i 's/of 12 total/of 6 total/' /root/aria_terminal.html
-sed -i 's/V5 — 12 AGENTS/V5 — 6 AGENTS/' /root/aria_terminal.html
-grep -n "12 AGENTS\|of 12 total\|AGENTS RUNNING" /root/aria_terminal.html
-grep -n "CRITICAL RISK\|riskBadge\|risk-critical\|risk_badge" /root/aria_terminal.html | head -10
-curl -s https://web-production-548c0.up.railway.app/riskscore/BTC 2>&1 | python3 -m json.tool | head -20
-psql -U postgres -d aria_db -h 127.0.0.1 -p 5432 -c "SELECT COUNT(DISTINCT agent_id) FROM agent_decisions WHERE created_at > NOW() - INTERVAL '1 hour';" -W
-curl -s https://web-production-548c0.up.railway.app/riskscore/BTC | python3 -m json.tool | grep -i "risk\|level\|score\|overall"
-grep -n "loadRisk\|riskBadge\|risk_score\|updateRisk\|fetchRisk" /root/aria_terminal.html | head -15
-sed -n '468,530p' /root/aria_terminal.html
-grep -n "var score\|scoreColor\|riskBadge" /root/aria_terminal.html
-sed -i 's/var scoreColor = score>70?"var(--accent-red)":score>40?"var(--accent-gold)":"var(--accent-green)";/var scoreColor = score>70?"var(--accent-red)":score>40?"var(--accent-gold)":"var(--accent-green)";\n    var badge = document.getElementById("riskBadge");\n    if(badge){ badge.textContent = score>70?"HIGH RISK":score>40?"MODERATE":("LOW RISK"); badge.className = "risk-badge " + (score>70?"risk-critical":score>40?"risk-warning":"risk-safe"); }/' /root/aria_terminal.html
-sed -n '490,496p' /root/aria_terminal.html
-sed -i 's/.risk-critical { background:rgba(239,68,68,0.12); color:var(--accent-red); border:1px solid rgba(239,68,68,0.4); }/.risk-critical { background:rgba(239,68,68,0.12); color:var(--accent-red); border:1px solid rgba(239,68,68,0.4); }\n.risk-warning { background:rgba(245,158,11,0.12); color:var(--accent-gold); border:1px solid rgba(245,158,11,0.4); }\n.risk-safe { background:rgba(34,197,94,0.12); color:var(--accent-green); border:1px solid rgba(34,197,94,0.4); }/' /root/aria_terminal.html
-cd /root && git add aria_terminal.html && git commit -m "fix: dynamic risk badge, agent count 6, ARIA full name" && git push origin master
-grep -n "window.onload\|DOMContentLoaded\|loadPortfolio\|init\(\|onload" /root/aria_terminal.html | head -15
-grep -n "window.onload\|DOMContentLoaded\|loadPortfolio\|onload" /root/aria_terminal.html | head -15
-sed -n '378,392p' /root/aria_terminal.html
-sed -n '355,380p' /root/aria_terminal.html
-grep -n "loadMarket\|loadSwarm\|loadNews\|setTimeout\|setInterval\|startUp\|start()" /root/aria_terminal.html | head -20
-sed -n '1050,1075p' /root/aria_terminal.html
-sed -i 's/async function init() {/async function init() {\n  await loadRiskPanel();/' /root/aria_terminal.html
-sed -n '1053,1062p' /root/aria_terminal.html
-cd /root && git add aria_terminal.html && git commit -m "fix: risk badge updates on page load" && git push origin master
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "\dt" | wc -l
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, COUNT(*) as records, MAX(timestamp) as latest FROM price_data GROUP BY symbol ORDER BY latest DESC;"
-grep -n "price_data\|INSERT.*price" /root/aria_market_updater.py | head -10
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, price, updated_at FROM market_state_latest ORDER BY updated_at DESC LIMIT 10;"
-sed -i 's|async function init() {|async function updateRiskBadge() {\n  try {\n    var r = await fetch(API + "/riskscore/BTC?direction=LONG\&amount_usd=100\&user_id=aria-agent-system");\n    var d = await r.json();\n    var score = d.risk_metrics.risk_score;\n    var badge = document.getElementById("riskBadge");\n    if (!badge) return;\n    if (score > 70) { badge.textContent = "CRITICAL RISK"; badge.className = "risk-badge risk-critical"; }\n    else if (score > 40) { badge.textContent = "MODERATE RISK"; badge.className = "risk-badge risk-warning"; }\n    else { badge.textContent = "LOW RISK"; badge.className = "risk-badge risk-safe"; }\n  } catch(e) {}\n}\nasync function init() {|' /root/aria_terminal.html
-sed -i 's|await Promise.all(\[loadAssets(), loadIntelligence(), loadRightPanel()\]);|updateRiskBadge();\n  setInterval(updateRiskBadge, 300000);\n  await Promise.all([loadAssets(), loadIntelligence(), loadRightPanel()]);|' /root/aria_terminal.html
-sed -n '1053,1068p' /root/aria_terminal.html
-sed -i 's|  await loadRiskPanel();\n  updateRiskBadge();|  updateRiskBadge();|' /root/aria_terminal.html
-sed -n '1065,1075p' /root/aria_terminal.html
-sed -i '/await loadRiskPanel();/d' /root/aria_terminal.html
-sed -n '1065,1075p' /root/aria_terminal.html
-cd /root && git add aria_terminal.html && git commit -m "fix: independent risk badge updater on page load" && git push origin master
-python3 aria_nlp_service.py 2>&1 | tail -5
-pip install praw requests feedparser --break-system-packages 2>&1 | tail -3
-python3 -c "from transformers import pipeline; print('pipeline ready')"
-cat > /root/aria_nlp_service.py << 'EOF'
-import time
-import logging
-import psycopg2
-import feedparser
-import requests
-from transformers import pipeline
-from datetime import datetime
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [NLP] %(message)s")
-log = logging.getLogger()
-
-DB = {"host":"localhost","port":5432,"dbname":"aria_db","user":"postgres","password":"aria_secure_2026"}
-
-NEWS_FEEDS = [
-    "https://feeds.feedburner.com/CoinTelegraph",
-    "https://feeds.finance.yahoo.com/rss/2.0/headline?s=BTC-USD,ETH-USD,AAPL,NVDA,TSLA&region=US&lang=en-US",
-    "https://www.investing.com/rss/news.rss",
-]
-
-FOMC_HAWKISH = ["rate hike","tighten","inflation","restrictive","hawkish","reduce balance sheet","quantitative tightening"]
-FOMC_DOVISH  = ["rate cut","pause","pivot","dovish","accommodative","easing","quantitative easing","support growth"]
-
-SYMBOL_KEYWORDS = {
-    "BTC":  ["bitcoin","btc","crypto","coinbase"],
-    "ETH":  ["ethereum","eth","defi","smart contract"],
-    "AAPL": ["apple","iphone","tim cook","aapl"],
-    "NVDA": ["nvidia","nvda","gpu","jensen huang","chips"],
-    "TSLA": ["tesla","tsla","elon","ev","electric vehicle"],
-    "GLD":  ["gold","gld","safe haven","precious metal"],
+systemctl enable jobpilot-dashboard
+systemctl start jobpilot-dashboard
+systemctl status jobpilot-dashboard
+journalctl -u jobpilot-dashboard.service -n 30 --no-pager
+nano /root/JobPilot/dashboard/app.py
+systemctl restart jobpilot-dashboard && systemctl status jobpilot-dashboard
+pip install python-multipart --break-system-packages
+nano /root/JobPilot/dashboard/app.py
+systemctl restart jobpilot-dashboard && systemctl status jobpilot-dashboard
+apt install nginx -y
+openssl req -x509 -nodes -days 365 -newkey rsa:2048   -keyout /etc/ssl/private/jobpilot.key   -out /etc/ssl/certs/jobpilot.crt   -subj "/C=GB/ST=Leeds/L=Leeds/O=JobPilot/CN=65.108.217.183"
+cat > /etc/nginx/sites-available/jobpilot << 'EOF'
+server {
+    listen 80;
+    server_name 65.108.217.183;
+    return 301 https://$host$request_uri;
 }
 
-def get_db():
-    return psycopg2.connect(**DB)
+server {
+    listen 443 ssl;
+    server_name 65.108.217.183;
 
-def ensure_table():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS nlp_sentiment (
-            id SERIAL PRIMARY KEY,
-            symbol VARCHAR(10),
-            score FLOAT,
-            label VARCHAR(20),
-            fomc_signal VARCHAR(20),
-            headline_count INTEGER,
-            timestamp TIMESTAMP DEFAULT NOW()
-        )
-    """)
-    conn.commit()
-    cur.close()
-    conn.close()
-    log.info("NLP table ready")
+    ssl_certificate     /etc/ssl/certs/jobpilot.crt;
+    ssl_certificate_key /etc/ssl/private/jobpilot.key;
 
-def fetch_headlines():
-    headlines = []
-    for feed_url in NEWS_FEEDS:
-        try:
-            feed = feedparser.parse(feed_url)
-            for entry in feed.entries[:20]:
-                headlines.append(entry.title)
-        except Exception as e:
-            log.warning(f"Feed error {feed_url}: {e}")
-    log.info(f"Fetched {len(headlines)} headlines")
-    return headlines
-
-def score_fomc(headlines):
-    text = " ".join(headlines).lower()
-    hawkish = sum(1 for w in FOMC_HAWKISH if w in text)
-    dovish  = sum(1 for w in FOMC_DOVISH  if w in text)
-    if hawkish > dovish:   return "HAWKISH"
-    elif dovish > hawkish: return "DOVISH"
-    else:                  return "NEUTRAL"
-
-def score_symbol(symbol, headlines, finbert):
-    keywords = SYMBOL_KEYWORDS.get(symbol, [])
-    relevant = [h for h in headlines if any(k in h.lower() for k in keywords)]
-    if not relevant:
-        return 0.0, "NEUTRAL", 0
-    scores = []
-    for h in relevant[:10]:
-        try:
-            result = finbert(h[:512])[0]
-            label = result['label'].upper()
-            score = result['score']
-            if label == "POSITIVE":   scores.append(score)
-            elif label == "NEGATIVE": scores.append(-score)
-            else:                     scores.append(0.0)
-        except Exception as e:
-            log.warning(f"FinBERT error: {e}")
-    if not scores:
-        return 0.0, "NEUTRAL", 0
-    avg = sum(scores) / len(scores)
-    label = "POSITIVE" if avg > 0.1 else "NEGATIVE" if avg < -0.1 else "NEUTRAL"
-    return round(avg, 4), label, len(relevant)
-
-def run():
-    ensure_table()
-    log.info("Loading FinBERT model...")
-    finbert = pipeline("text-classification", model="ProsusAI/finbert", device=-1)
-    log.info("FinBERT loaded. Starting NLP loop...")
-    while True:
-        try:
-            headlines = fetch_headlines()
-            fomc     = score_fomc(headlines)
-            conn     = get_db()
-            cur      = conn.cursor()
-            for symbol in ["BTC","ETH","AAPL","NVDA","TSLA","GLD"]:
-                score, label, count = score_symbol(symbol, headlines, finbert)
-                cur.execute("""
-                    INSERT INTO nlp_sentiment (symbol, score, label, fomc_signal, headline_count)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, (symbol, score, label, fomc, count))
-                log.info(f"  {symbol}: {label} ({score:+.3f}) | {count} headlines | FOMC:{fomc}")
-            conn.commit()
-            cur.close()
-            conn.close()
-            log.info("NLP cycle complete. Sleeping 5 minutes.")
-        except Exception as e:
-            log.error(f"NLP cycle error: {e}")
-        time.sleep(300)
-
-if __name__ == "__main__":
-    run()
+    location / {
+        proxy_pass http://127.0.0.1:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
 EOF
 
-wc -l /root/aria_nlp_service.py && tail -5 /root/aria_nlp_service.py
-cd /root && python3 aria_nlp_service.py 2>&1 | head -20
-grep -n "loadAgents\|api/agents\|agent_decisions\|/agents" /root/aria_terminal.html | head -15
-sed -n '710,775p' /root/aria_terminal.html
-curl -s https://web-production-548c0.up.railway.app/agent/reports | python3 -m json.tool | head -20
-grep -n "agent/reports\|agent_reports\|agent_decisions" /root/main.py | head -20
-grep -n "POST\|requests\|agent\|decisions\|reports" /root/aria_db_sync.py | head -20
-sed -n '1,110p' /root/aria_db_sync.py
-cat >> /root/aria_db_sync.py << 'EOF'
+ln -s /etc/nginx/sites-available/jobpilot /etc/nginx/sites-enabled/
+nginx -t
+systemctl restart nginx
+systemctl status nginx
+cd /root/JobPilot && python3 -c "
+from scrapers.portal_scanner import COMPANIES
+print(f'Total companies configured: {len(COMPANIES)}')
+for name, portal, pid in COMPANIES:
+    print(f'  {name} → {portal}/{pid}')
+"
+cd /root/JobPilot && python3 -c "
+import requests
 
-def post_agent_reports(reports):
+# Test each broken company with correct format
+tests = [
+    ('Revolut',      'https://api.lever.co/v0/postings/revolut?mode=json'),
+    ('Wise',         'https://boards-api.greenhouse.io/v1/boards/wise/jobs'),
+    ('Starling',     'https://boards-api.greenhouse.io/v1/boards/starlingbank/jobs'),
+    ('Quantexa',     'https://boards-api.greenhouse.io/v1/boards/quantexa/jobs'),
+    ('Palantir',     'https://boards-api.greenhouse.io/v1/boards/palantir/jobs'),
+    ('Synthesia',    'https://boards-api.greenhouse.io/v1/boards/synthesia/jobs'),
+    ('Darktrace',    'https://boards-api.greenhouse.io/v1/boards/darktrace/jobs'),
+    ('Onfido',       'https://boards-api.greenhouse.io/v1/boards/onfido/jobs'),
+    ('Tide',         'https://api.lever.co/v0/postings/tide?mode=json'),
+    ('Tractable',    'https://api.lever.co/v0/postings/tractable?mode=json'),
+]
+
+for name, url in tests:
     try:
-        payload = {'reports': reports}
-        resp = requests.post(RAILWAY_APP_URL + '/agent/reports/sync', json=payload, timeout=10)
-        log.info('Posted ' + str(len(reports)) + ' agent reports to frontend: ' + str(resp.status_code))
+        r = requests.get(url, timeout=10, headers={'User-Agent':'Mozilla/5.0'})
+        print(f'{name}: {r.status_code}')
     except Exception as e:
-        log.error('Agent reports POST failed: ' + str(e))
+        print(f'{name}: ERROR {e}')
+"
+cd /root/JobPilot && python3 -c "
+import requests
+h = {'User-Agent':'Mozilla/5.0'}
 
-def sync_agent_decisions(hcur):
+tests = [
+    ('Revolut-ashby',    'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'revolut'),
+    ('Wise-ashby',       'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'wise'),
+    ('Starling-ashby',   'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'starlingbank'),
+    ('Quantexa-ashby',   'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'quantexa'),
+    ('Palantir-ashby',   'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'palantir'),
+    ('Synthesia-ashby',  'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'synthesia'),
+    ('Darktrace-ashby',  'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'darktrace'),
+    ('Onfido-ashby',     'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'onfido'),
+    ('Tide-ashby',       'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'tide'),
+    ('Tractable-ashby',  'https://jobs.ashbyhq.com/api/non-user-graphql', 'ashby', 'tractable'),
+]
+
+payload_template = {
+    'operationName': 'ApiJobBoardWithTeams',
+    'variables': {'organizationHostedJobsPageName': ''},
+    'query': 'query ApiJobBoardWithTeams(\$organizationHostedJobsPageName: String!) { jobBoard: jobBoardWithTeams(organizationHostedJobsPageName: \$organizationHostedJobsPageName) { jobPostings { id title } } }'
+}
+
+for name, url, portal, pid in tests:
     try:
-        hcur.execute("""
-            SELECT agent_id, symbol, action, confidence, reasoning, timestamp 
-            FROM agent_decisions 
-            ORDER BY timestamp DESC LIMIT 100
-        """)
-        rows = hcur.fetchall()
-        reports = [{'agent_id': r[0], 'symbol': r[1], 'action': r[2], 
-                    'confidence': float(r[3]) if r[3] else 0.5, 
-                    'reasoning': r[4], 'timestamp': r[5].isoformat(),
-                    'agent_type': 'SPECIALIST'} for r in rows]
-        post_agent_reports(reports)
-        log.info('Synced ' + str(len(reports)) + ' agent decisions')
+        import json
+        p = dict(payload_template)
+        p['variables'] = {'organizationHostedJobsPageName': pid}
+        r = requests.post(url, json=p, headers={**h, 'Content-Type':'application/json'}, timeout=10)
+        data = r.json()
+        jobs = data.get('data',{}).get('jobBoard',{}).get('jobPostings',[]) or []
+        print(f'{name}: {len(jobs)} jobs')
     except Exception as e:
-        log.warning('Agent decisions sync skipped: ' + str(e))
-EOF
+        print(f'{name}: ERROR {e}')
+"
+cd /root/JobPilot && python3 -c "
+import requests, json
+h = {'User-Agent':'Mozilla/5.0', 'Content-Type':'application/json'}
+url = 'https://jobs.ashbyhq.com/api/non-user-graphql'
+q = 'query ApiJobBoardWithTeams(\$organizationHostedJobsPageName: String!) { jobBoard: jobBoardWithTeams(organizationHostedJobsPageName: \$organizationHostedJobsPageName) { jobPostings { id title } } }'
 
-grep -n "sync_system_state\|sync_positions" /root/aria_db_sync.py
-sed -i 's/            sync_system_state(hcur, rcur)/            sync_system_state(hcur, rcur)\n            sync_agent_decisions(hcur)/' /root/aria_db_sync.py
-sed -n '78,84p' /root/aria_db_sync.py
-grep -n "def get_agent_reports\|agent/reports" /root/main.py
-sed -n '1196,1202p' /root/main.py
-sed -i 's|@app.get("/agent/reports")\ndef get_agent_reports():\n    return {"reports": _agent_reports\[:50\], "count": len(_agent_reports), "timestamp": datetime.now().isoformat()}|@app.get("/agent/reports")\ndef get_agent_reports():\n    return {"reports": _agent_reports[:50], "count": len(_agent_reports), "timestamp": datetime.now().isoformat()}\n\n@app.post("/agent/reports/sync")\ndef sync_agent_reports(data: dict):\n    global _agent_reports\n    reports = data.get("reports", [])\n    _agent_reports = reports\n    save_agent_reports(_agent_reports)\n    return {"success": True, "count": len(_agent_reports)}|' /root/main.py
-grep -n "agent/reports/sync\|sync_agent_reports" /root/main.py
-python3 << 'EOF'
-with open('/root/main.py', 'r') as f:
-    content = f.read()
+# Try alternative IDs
+tests = [
+    ('Revolut',     ['revolut','Revolut']),
+    ('Wise',        ['wise','transferwise','wiseapp']),
+    ('Starling',    ['starling','starlingbank','starling-bank']),
+    ('Palantir',    ['palantir','palantir-technologies']),
+    ('Darktrace',   ['darktrace','Darktrace']),
+    ('Onfido',      ['onfido','Onfido']),
+    ('Tide',        ['tide','tideplatform']),
+]
 
-new_endpoint = '''
-@app.post("/agent/reports/sync")
-def sync_agent_reports(data: dict):
-    global _agent_reports
-    reports = data.get("reports", [])
-    _agent_reports = reports
-    save_agent_reports(_agent_reports)
-    return {"success": True, "count": len(_agent_reports)}
-'''
+for name, ids in tests:
+    for pid in ids:
+        try:
+            p = {'operationName':'ApiJobBoardWithTeams','variables':{'organizationHostedJobsPageName':pid},'query':q}
+            r = requests.post(url, json=p, headers=h, timeout=8)
+            data = r.json()
+            jobs = (data.get('data') or {}).get('jobBoard') or {}
+            postings = jobs.get('jobPostings') or []
+            if postings:
+                print(f'{name} [{pid}]: {len(postings)} jobs FOUND')
+                break
+        except:
+            pass
+    else:
+        print(f'{name}: not on Ashby — trying Greenhouse/Lever...')
+"
+cd /root/JobPilot && python3 -c "
+import requests
+h = {'User-Agent':'Mozilla/5.0'}
 
-content = content.replace(
-    '@app.get("/agent/reports")',
-    new_endpoint + '@app.get("/agent/reports")'
+# Test Lever with correct URL format
+tests = [
+    ('Revolut-lever',  'https://api.lever.co/v0/postings/revolut'),
+    ('Wise-lever',     'https://api.lever.co/v0/postings/wise'),
+    ('Tide-lever',     'https://api.lever.co/v0/postings/tide'),
+    ('Starling-lever', 'https://api.lever.co/v0/postings/starling'),
+    ('Palantir-lever', 'https://api.lever.co/v0/postings/palantir'),
+    ('Darktrace-lever','https://api.lever.co/v0/postings/darktrace'),
+    ('Onfido-lever',   'https://api.lever.co/v0/postings/onfido'),
+    ('Wise-gh',        'https://boards-api.greenhouse.io/v1/boards/transferwise/jobs'),
+    ('Starling-gh',    'https://boards-api.greenhouse.io/v1/boards/starling/jobs'),
+    ('Palantir-gh',    'https://boards-api.greenhouse.io/v1/boards/palantirtechnologies/jobs'),
+]
+
+for name, url in tests:
+    try:
+        r = requests.get(url, headers=h, timeout=10)
+        print(f'{name}: {r.status_code}')
+    except Exception as e:
+        print(f'{name}: ERROR')
+"
+cd /root/JobPilot && python3 -c "
+import requests
+h = {'User-Agent':'Mozilla/5.0'}
+
+tests = [
+    ('Wise-gh2',        'https://boards-api.greenhouse.io/v1/boards/wiseapp/jobs'),
+    ('Starling-gh2',    'https://boards-api.greenhouse.io/v1/boards/starlingbankcareers/jobs'),
+    ('Revolut-gh',      'https://boards-api.greenhouse.io/v1/boards/revolut/jobs'),
+    ('Darktrace-gh',    'https://boards-api.greenhouse.io/v1/boards/darktracecareers/jobs'),
+    ('Onfido-gh2',      'https://boards-api.greenhouse.io/v1/boards/onfidocareers/jobs'),
+    ('Tide-gh',         'https://boards-api.greenhouse.io/v1/boards/tide/jobs'),
+    ('Checkout-gh2',    'https://boards-api.greenhouse.io/v1/boards/checkoutcom/jobs'),
+    ('Palantir-lever2', 'https://api.lever.co/v0/postings/palantir-technologies'),
+    ('Monzo-gh2',       'https://boards-api.greenhouse.io/v1/boards/monzo/jobs'),
+    ('Improbable-gh2',  'https://boards-api.greenhouse.io/v1/boards/improbable/jobs'),
+]
+
+for name, url in tests:
+    try:
+        r = requests.get(url, headers=h, timeout=10)
+        if r.status_code == 200:
+            import json
+            data = r.json()
+            if 'jobs' in data:
+                count = len(data['jobs'])
+            else:
+                count = len(data) if isinstance(data, list) else '?'
+            print(f'{name}: 200 OK — {count} jobs')
+        else:
+            print(f'{name}: {r.status_code}')
+    except Exception as e:
+        print(f'{name}: ERROR')
+"
+cp /root/JobPilot/scrapers/portal_scanner.py /root/JobPilot/scrapers/portal_scanner_backup.py
+nano /root/JobPilot/scrapers/portal_scanner.py
+cd /root/JobPilot && python3 scrapers/portal_scanner.py
+nano /root/JobPilot/scrapers/portal_scanner.py
+systemctl restart jobpilot.service
+systemctl status jobpilot.service
+cd /root/JobPilot && python3 -c "
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# Test Gemini rate limit handling
+from google import genai
+client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
+try:
+    r = client.models.generate_content(model='gemini-2.0-flash-lite', contents='Say OK')
+    print('Gemini: OK -', r.text.strip())
+except Exception as e:
+    print('Gemini error:', type(e).__name__, str(e)[:100])
+
+# Test Groq
+from groq import Groq
+client2 = Groq(api_key=os.getenv('GROQ_API_KEY'))
+try:
+    r2 = client2.chat.completions.create(
+        model='llama-3.3-70b-versatile',
+        messages=[{'role':'user','content':'Say OK'}],
+        max_tokens=10
+    )
+    print('Groq: OK -', r2.choices[0].message.content.strip())
+except Exception as e:
+    print('Groq error:', type(e).__name__, str(e)[:100])
+"
+nano /root/JobPilot/scoring/claude_scorer.py
+cd /root/JobPilot && python3 -c "
+from scoring.claude_scorer import ClaudeScorer
+scorer = ClaudeScorer()
+result = scorer.score_job(
+    job_id=7777,
+    title='Data Engineer',
+    company='Palantir',
+    location='London, UK',
+    description='Data Engineer building large scale data pipelines. Python, Spark, SQL required.'
 )
+print('Provider:', result.get('provider'))
+print('Grade:', result.get('grade'))
+print('Score:', result.get('weighted_score'))
+"
+nano /root/JobPilot/scoring/claude_scorer.py
+cat -n /root/JobPilot/scoring/claude_scorer.py | head -50
+grep -n "def call_llm\|def call_gemini\|def call_groq\|def run" /root/JobPilot/scoring/claude_scorer.py
+sed -n '134,220p' /root/JobPilot/scoring/claude_scorer.py
+sed -n '330,380p' /root/JobPilot/scoring/claude_scorer.py
+cat > /tmp/run_method.py << 'EOF'
+   def run(self):
+        """Score all unscored jobs."""
+        jobs = self._get_unscored_jobs()
+        print(f"[SCORER] {len(jobs)} unscored jobs found.")
 
-with open('/root/main.py', 'w') as f:
-    f.write(content)
+        MAX_PER_RUN = 50
+        if len(jobs) > MAX_PER_RUN:
+            print(f"[SCORER] Limiting to {MAX_PER_RUN} jobs this run to protect rate limits.")
+            jobs = jobs[:MAX_PER_RUN]
 
-print("Done")
+        apply_list = []
+
+        for job in jobs:
+            job_id, title, company, location, description, url = job
+            print(f"[SCORER] Scoring: {title} @ {company}...")
+
+            result = self.score_job(job_id, title, company, location, description)
+
+            grade    = result.get("grade", "F")
+            ws       = result.get("weighted_score", 0)
+            priority = result.get("priority", "low")
+            summary  = result.get("one_line_summary", "")
+            provider = result.get("provider", "unknown")
+
+            bar = "█" * int(ws // 10) + "░" * (10 - int(ws // 10))
+            print(f"         [{provider}] Grade: {grade} | Score: {int(ws)}/100 [{bar}] | {priority.upper()}")
+            print(f"         {summary}")
+
+            if grade in ("A", "B"):
+                self._send_telegram_alert(title, company, grade, ws, url, summary, result, provider)
+
+            if result.get("apply"):
+                apply_list.append({
+                    "title":    title,
+                    "company":  company,
+                    "grade":    grade,
+                    "score":    int(ws),
+                    "priority": priority,
+                    "url":      url,
+                    "provider": provider,
+                })
+
+        apply_list.sort(key=lambda x: x["score"], reverse=True)
+
+        print(f"\n[SCORER] Done. {len(jobs)} jobs scored.")
+        print(f"[SCORER] {len(apply_list)} jobs recommended.")
+
+        if apply_list:
+            print("\n── TOP MATCHES ──────────────────────────────────────────")
+            for i, job in enumerate(apply_list[:10], 1):
+                print(f"{i:2}. [Grade {job['grade']} | {job['score']:3}/100] [{job['provider']}] {job['title']} @ {job['company']}")
+                print(f"     {job['url']}")
+
+        return apply_list
 EOF
 
-grep -n "agent/reports/sync\|sync_agent_reports" /root/main.py
-cd /root && git add main.py aria_db_sync.py && git commit -m "fix: agent decisions sync Hetzner->Railway via /agent/reports/sync" && git push origin master && systemctl restart aria_db_sync
-journalctl -u aria_db_sync -n 20 --no-pager
-sleep 60 && journalctl -u aria_db_sync -n 30 --no-pager
-journalctl -u aria_db_sync -n 50 --no-pager | grep -i "error\|failed\|exception\|traceback"
-systemctl status aria_db_sync
-cd /root && python3 aria_db_sync.py 2>&1 | head -30
-python3 << 'EOF'
-with open('/root/aria_db_sync.py', 'r') as f:
-    content = f.read()
+cat > /root/JobPilot/scoring/claude_scorer.py << 'SCORER_EOF'
+"""
+JobPilot Scoring Engine — Multi-Provider
+=========================================
+Primary:  Groq Llama 3.3 70B (free, fast, reliable)
+Fallback: Google Gemini 1.5 Flash (free, good quality)
+Last:     Anthropic Claude (paid, only if both fail)
 
-# Extract the two new functions we appended
-new_funcs = """
-def post_agent_reports(reports):
-    try:
-        payload = {'reports': reports}
-        resp = requests.post(RAILWAY_APP_URL + '/agent/reports/sync', json=payload, timeout=10)
-        log.info('Posted ' + str(len(reports)) + ' agent reports to frontend: ' + str(resp.status_code))
-    except Exception as e:
-        log.error('Agent reports POST failed: ' + str(e))
-
-def sync_agent_decisions(hcur):
-    try:
-        hcur.execute(\"\"\"
-            SELECT agent_id, symbol, action, confidence, reasoning, timestamp 
-            FROM agent_decisions 
-            ORDER BY timestamp DESC LIMIT 100
-        \"\"\")
-        rows = hcur.fetchall()
-        reports = [{'agent_id': r[0], 'symbol': r[1], 'action': r[2], 
-                    'confidence': float(r[3]) if r[3] else 0.5, 
-                    'reasoning': r[4], 'timestamp': r[5].isoformat(),
-                    'agent_type': 'SPECIALIST'} for r in rows]
-        post_agent_reports(reports)
-        log.info('Synced ' + str(len(reports)) + ' agent decisions')
-    except Exception as e:
-        log.warning('Agent decisions sync skipped: ' + str(e))
+A-F grading across 10 weighted dimensions.
+6-block evaluation output per job.
+Telegram alert on A/B grade jobs.
 """
 
-# Remove appended functions from end
-content = content.replace(new_funcs, '')
+import sqlite3
+import json
+import os
+import sys
+import time
+sys.path.insert(0, "/root/JobPilot")
+from datetime import datetime
+from config import (
+    ANTHROPIC_API_KEY,
+    ANTHROPIC_MODEL,
+    MIN_SCORE_TO_APPLY,
+    DAILY_TOKEN_LIMIT,
+)
 
-# Insert before def run()
-content = content.replace('def run():', new_funcs + '\ndef run():')
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GROQ_API_KEY   = os.getenv("GROQ_API_KEY", "")
 
-with open('/root/aria_db_sync.py', 'w') as f:
-    f.write(content)
+CV_SUMMARY = """
+Name: Usama Fateh Ali
+Current: MSc Data Analytics, De Montfort University (graduating Sep 2026)
+Previous: BEng Electrical Engineering, UMT Lahore (2024)
 
-print("Done")
-EOF
+Key Projects:
+- ARIA: 7-layer autonomous multi-agent trading system. Live in production.
+  XGBoost+RF ensemble 78.3% multi-asset accuracy. 9 systemd services,
+  FastAPI, PostgreSQL, Hetzner CPX32, Railway, Claude API.
+- Quantum Adversarial Market Detection: IBM Torino 133-qubit hardware.
+- CoBots (BEng Thesis): 6-DOF robotic arm, ESP32, OpenCV, Tesseract OCR.
+- JobPilot: Autonomous AI job search agent, 24/7 systemd, multi-provider LLM.
 
-python3 aria_db_sync.py 2>&1 | head -20
-systemctl restart aria_db_sync
-ls /root/aria_nlp* 2>/dev/null || echo "No NLP files yet"
-df -h / && free -h && python3 -c "import transformers; print('transformers ready')" 2>/dev/null || echo "transformers not installed"
-pip install transformers torch --break-system-packages 2>&1 | tail -5
-ls -lh ~/.cache/huggingface/hub/
-nohup python3 /root/aria_nlp_service.py > /root/nlp_service.log 2>&1 &
-echo "PID: $!"
-sleep 30 && tail -20 /root/nlp_service.log
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, score, label, fomc_signal, timestamp FROM nlp_sentiment ORDER BY timestamp DESC LIMIT 10;"
-python3 << 'EOF'
-with open('/root/aria_nlp_service.py', 'r') as f:
-    content = f.read()
+Skills: Python, FastAPI, PostgreSQL, XGBoost, PyTorch, systemd, Docker,
+        multi-agent systems, safety architecture, anomaly detection
 
-old_feeds = '''NEWS_FEEDS = [
-    "https://feeds.feedburner.com/CoinTelegraph",
-    "https://feeds.finance.yahoo.com/rss/2.0/headline?s=BTC-USD,ETH-USD,AAPL,NVDA,TSLA&region=US&lang=en-US",
-    "https://www.investing.com/rss/news.rss",
-]'''
+Target roles: AI Engineer, ML Engineer, Data Engineer, Agent Engineer,
+              Autonomous Systems, Fintech Data (Revolut, Quantexa etc.)
+Salary: £45,000+ | Location: Manchester UK | Visa: Requires UK sponsorship
+"""
 
-new_feeds = '''NEWS_FEEDS = [
-    "https://feeds.feedburner.com/CoinTelegraph",
-    "https://cointelegraph.com/rss",
-    "https://decrypt.co/feed",
-    "https://feeds.finance.yahoo.com/rss/2.0/headline?s=BTC-USD,ETH-USD,AAPL,NVDA,TSLA,GLD&region=US&lang=en-US",
-    "https://feeds.finance.yahoo.com/rss/2.0/headline?s=GC%3DF&region=US&lang=en-US",
-    "https://www.coindesk.com/arc/outboundfeeds/rss/",
-    "https://cryptonews.com/news/feed/",
-]'''
+DIMENSIONS = [
+    ("dim_title_match",        "Role Title Match",       0.15),
+    ("dim_skills_match",       "Technical Skills Match", 0.20),
+    ("dim_experience_level",   "Experience Level Fit",   0.15),
+    ("dim_location_remote",    "Location / Remote",      0.10),
+    ("dim_salary_range",       "Salary Range",           0.10),
+    ("dim_company_stage",      "Company Stage / Type",   0.10),
+    ("dim_growth_potential",   "Growth Potential",       0.05),
+    ("dim_visa_sponsorship",   "Visa Sponsorship",       0.10),
+    ("dim_industry_relevance", "Industry Relevance",     0.05),
+    ("dim_keyword_overlap",    "CV Keyword Overlap",     0.00),
+]
 
-content = content.replace(old_feeds, new_feeds)
+PROMPT_TEMPLATE = """You are a senior career advisor evaluating job fit for a candidate.
+Score this job across 10 dimensions (each 0-100) and write 6 evaluation blocks.
+Be honest and strict.
 
-with open('/root/aria_nlp_service.py', 'w') as f:
-    f.write(content)
+CANDIDATE PROFILE:
+{cv}
 
-print("Done")
-EOF
+JOB LISTING:
+Title: {title}
+Company: {company}
+Location: {location}
+Description: {description}
 
-pkill -f aria_nlp_service && sleep 2 && nohup python3 /root/aria_nlp_service.py > /root/nlp_service.log 2>&1 & && sleep 60 && tail -10 /root/nlp_service.log
-pkill -f aria_nlp_service
-sleep 2
-nohup python3 /root/aria_nlp_service.py > /root/nlp_service.log 2>&1 &
-sleep 60 && tail -10 /root/nlp_service.log
-cat > /etc/systemd/system/aria_nlp.service << 'EOF'
-[Unit]
-Description=ARIA NLP Sentiment Service
-After=network.target
+Respond in valid JSON only. No preamble. No markdown.
 
-[Service]
-Type=simple
-User=root
-WorkingDirectory=/root
-ExecStart=/usr/bin/python3 /root/aria_nlp_service.py
-Restart=always
-RestartSec=30
-StandardOutput=journal
-StandardError=journal
+{{
+    "dim_title_match": <0-100>,
+    "dim_skills_match": <0-100>,
+    "dim_experience_level": <0-100>,
+    "dim_location_remote": <0-100, 100 if remote or Manchester/London>,
+    "dim_salary_range": <0-100, 100 if above £45k, 50 if unknown, 0 if below>,
+    "dim_company_stage": <0-100, fintech/AI/autonomous preferred>,
+    "dim_growth_potential": <0-100>,
+    "dim_visa_sponsorship": <0-100, 100 if sponsors, 50 if unknown, 0 if no>,
+    "dim_industry_relevance": <0-100>,
+    "dim_keyword_overlap": <0-100>,
+    "match_reasons": ["reason1", "reason2", "reason3"],
+    "gaps": ["gap1", "gap2"],
+    "apply": <true or false>,
+    "priority": "<high or medium or low>",
+    "one_line_summary": "<one sentence why this is or isn't a strong match>",
+    "block_role_summary": "<2-3 sentences: what this role is>",
+    "block_cv_match": "<2-3 sentences: specific CV projects that match>",
+    "block_level_strategy": "<1-2 sentences: positioning strategy>",
+    "block_comp_research": "<1-2 sentences: estimated salary range>",
+    "block_personalisation": "<2-3 sentences: cover letter talking points>",
+    "block_interview_prep": "<2-3 sentences: likely interview topics>"
+}}"""
 
-[Install]
-WantedBy=multi-user.target
-EOF
+def weighted_score_to_grade(ws: float) -> str:
+    if ws >= 85: return "A"
+    if ws >= 70: return "B"
+    if ws >= 55: return "C"
+    if ws >= 40: return "D"
+    if ws >= 25: return "E"
+    return "F"
 
-systemctl daemon-reload
-systemctl enable aria_nlp
-systemctl start aria_nlp
-systemctl status aria_nlp --no-pager
-grep -n "def generate_signal" /root/agent_loop_v5.py
-sed -n '206,330p' /root/agent_loop_v5.py
-python3 << 'EOF'
-with open('/root/agent_loop_v5.py', 'r') as f:
-    content = f.read()
+def parse_json(raw: str) -> dict:
+    for marker in ["```json", "```"]:
+        raw = raw.replace(marker, "")
+    return json.loads(raw.strip())
 
-nlp_function = '''
-def get_nlp_sentiment(symbol):
-    """Read latest NLP sentiment score from DB for this symbol."""
-    try:
-        conn = get_db()
-        cur = conn.cursor()
-        cur.execute("""
-            SELECT score, label, fomc_signal 
-            FROM nlp_sentiment 
-            WHERE symbol=%s 
-            ORDER BY timestamp DESC LIMIT 1
-        """, (symbol,))
-        row = cur.fetchone()
-        cur.close(); conn.close()
-        if row:
-            return {'score': float(row[0]), 'label': row[1], 'fomc': row[2]}
-    except Exception as e:
-        pass
-    return {'score': 0.0, 'label': 'NEUTRAL', 'fomc': 'NEUTRAL'}
+def call_gemini(prompt: str) -> dict:
+    from google import genai
+    client = genai.Client(api_key=GEMINI_API_KEY)
+    response = client.models.generate_content(
+        model="gemini-1.5-flash",
+        contents=prompt,
+    )
+    return parse_json(response.text)
 
-'''
+def call_groq(prompt: str) -> dict:
+    from groq import Groq
+    client = Groq(api_key=GROQ_API_KEY)
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=[{"role": "user", "content": prompt}],
+        max_tokens=1200,
+        temperature=0.1,
+    )
+    return parse_json(response.choices[0].message.content)
 
-content = content.replace('def generate_signal(', nlp_function + 'def generate_signal(')
+def call_claude(prompt: str) -> dict:
+    import anthropic
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    message = client.messages.create(
+        model=ANTHROPIC_MODEL,
+        max_tokens=1200,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return parse_json(message.content[0].text)
 
-with open('/root/agent_loop_v5.py', 'w') as f:
-    f.write(content)
+def call_llm(prompt: str) -> tuple[dict, str]:
+    """Try Groq → Gemini → Claude with smart backoff."""
 
-print("Done")
-EOF
+    if GROQ_API_KEY:
+        for attempt in range(3):
+            try:
+                result = call_groq(prompt)
+                return result, "groq"
+            except Exception as e:
+                err = str(e).lower()
+                if "429" in err or "rate" in err:
+                    wait = 2 ** attempt
+                    print(f"[SCORER] Groq rate limit, waiting {wait}s...")
+                    time.sleep(wait)
+                else:
+                    print(f"[SCORER] Groq failed: {e}")
+                    break
 
-grep -n "def get_nlp_sentiment\|def generate_signal" /root/agent_loop_v5.py
-python3 << 'EOF'
-with open('/root/agent_loop_v5.py', 'r') as f:
-    content = f.read()
+    if GEMINI_API_KEY:
+        for attempt in range(2):
+            try:
+                result = call_gemini(prompt)
+                return result, "gemini"
+            except Exception as e:
+                err = str(e).lower()
+                if "429" in err or "quota" in err:
+                    wait = 5 * (attempt + 1)
+                    print(f"[SCORER] Gemini quota hit, waiting {wait}s...")
+                    time.sleep(wait)
+                else:
+                    print(f"[SCORER] Gemini failed: {e}")
+                    break
 
-old = "    if final_dir is None:\n        return 'HOLD', final_conf, None\n\n    return ('BUY' if final_dir == 'LONG' else 'SELL'), final_conf, final_dir"
+    if ANTHROPIC_API_KEY:
+        try:
+            result = call_claude(prompt)
+            return result, "claude"
+        except Exception as e:
+            print(f"[SCORER] Claude failed: {e}")
 
-new = """    if final_dir is None:
-        return 'HOLD', final_conf, None
+    raise Exception("All providers failed.")
 
-    # ── Step 4: NLP sentiment modifier ───────────────────
-    try:
-        nlp = get_nlp_sentiment(symbol)
-        nlp_score = nlp['score']
-        nlp_label = nlp['label']
-        fomc      = nlp['fomc']
+class ClaudeScorer:
 
-        # NLP agrees with direction → boost confidence
-        if final_dir == 'LONG' and nlp_score > 0.1:
-            final_conf = min(0.92, final_conf + 0.05)
-            log.info(f"  {symbol} NLP BOOST: {nlp_label} ({nlp_score:+.3f}) → conf:{final_conf:.3f}")
-        elif final_dir == 'SHORT' and nlp_score < -0.1:
-            final_conf = min(0.92, final_conf + 0.05)
-            log.info(f"  {symbol} NLP BOOST: {nlp_label} ({nlp_score:+.3f}) → conf:{final_conf:.3f}")
-        # NLP disagrees → reduce confidence
-        elif final_dir == 'LONG' and nlp_score < -0.15:
-            final_conf = max(0.45, final_conf - 0.03)
-            log.info(f"  {symbol} NLP DRAG: {nlp_label} ({nlp_score:+.3f}) → conf:{final_conf:.3f}")
-        elif final_dir == 'SHORT' and nlp_score > 0.15:
-            final_conf = max(0.45, final_conf - 0.03)
-            log.info(f"  {symbol} NLP DRAG: {nlp_label} ({nlp_score:+.3f}) → conf:{final_conf:.3f}")
+    def __init__(self, db_path="/root/JobPilot/jobpilot.db"):
+        self.db_path = db_path
+        self.tokens_used_today = 0
 
-        # FOMC hawkish → risk-off, reduce confidence on risky assets
-        if fomc == 'HAWKISH' and symbol in ['BTC','ETH','NVDA','TSLA']:
-            final_conf = max(0.45, final_conf - 0.05)
-            log.info(f"  {symbol} FOMC HAWKISH penalty → conf:{final_conf:.3f}")
-        elif fomc == 'DOVISH' and symbol == 'GLD':
-            final_conf = max(0.45, final_conf - 0.03)
-            log.info(f"  {symbol} FOMC DOVISH GLD drag → conf:{final_conf:.3f}")
-    except Exception as e:
-        log.warning(f"NLP modifier failed for {symbol}: {e}")
+    def _get_unscored_jobs(self):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT r.id, r.title, r.company, r.location, r.description, r.url
+            FROM jobs_raw r
+            LEFT JOIN jobs_scored s ON r.id = s.job_id
+            WHERE s.id IS NULL
+            ORDER BY r.scraped_at DESC
+        """)
+        jobs = cursor.fetchall()
+        conn.close()
+        return jobs
 
-    return ('BUY' if final_dir == 'LONG' else 'SELL'), final_conf, final_dir"""
+    def _save_score(self, job_id, result, provider):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        ws = 0.0
+        for col, label, weight in DIMENSIONS:
+            ws += result.get(col, 0) * weight
+        grade = weighted_score_to_grade(ws)
+        cursor.execute("""
+            INSERT INTO jobs_scored (
+                job_id, score, grade, weighted_score,
+                dim_title_match, dim_skills_match, dim_experience_level,
+                dim_location_remote, dim_salary_range, dim_company_stage,
+                dim_growth_potential, dim_visa_sponsorship,
+                dim_industry_relevance, dim_keyword_overlap,
+                block_role_summary, block_cv_match, block_level_strategy,
+                block_comp_research, block_personalisation, block_interview_prep,
+                match_reasons, gaps, apply, priority, one_line_summary
+            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        """, (
+            job_id, int(ws), grade, round(ws, 2),
+            result.get("dim_title_match", 0),
+            result.get("dim_skills_match", 0),
+            result.get("dim_experience_level", 0),
+            result.get("dim_location_remote", 0),
+            result.get("dim_salary_range", 0),
+            result.get("dim_company_stage", 0),
+            result.get("dim_growth_potential", 0),
+            result.get("dim_visa_sponsorship", 0),
+            result.get("dim_industry_relevance", 0),
+            result.get("dim_keyword_overlap", 0),
+            result.get("block_role_summary", ""),
+            result.get("block_cv_match", ""),
+            result.get("block_level_strategy", ""),
+            result.get("block_comp_research", ""),
+            result.get("block_personalisation", ""),
+            result.get("block_interview_prep", ""),
+            json.dumps(result.get("match_reasons", [])),
+            json.dumps(result.get("gaps", [])),
+            1 if result.get("apply") else 0,
+            result.get("priority", "low"),
+            result.get("one_line_summary", ""),
+        ))
+        conn.commit()
+        conn.close()
+        return grade, round(ws, 2)
 
-content = content.replace(old, new)
-
-with open('/root/agent_loop_v5.py', 'w') as f:
-    f.write(content)
-
-print("Done")
-EOF
-
-grep -n "NLP BOOST\|NLP DRAG\|FOMC HAWKISH" /root/agent_loop_v5.py
-systemctl restart agent_loop && sleep 10 && journalctl -u agent_loop -n 30 --no-pager | grep -E "NLP|FOMC|conf:|Cycle"
-grep -n "get_nlp_sentiment" /root/agent_loop_v5.py | head -5
-cd /root && git add agent_loop_v5.py aria_nlp_service.py && git commit -m "feat: Cap 1 NLP complete - FinBERT sentiment wired into generate_signal" && git push origin master
-systemctl status jobpilot && journalctl -u jobpilot -n 20 --no-pager
-cat /root/.env
-cat /root/JobPilot/.env 2>/dev/null || cat /root/JobPilot/config.py 2>/dev/null || grep -r "API_KEY\|api_key\|secret\|token" /root/JobPilot/*.py 2>/dev/null | grep -v "^Binary" | head -20
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "\d closed_trades"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT COUNT(*), outcome FROM closed_trades GROUP BY outcome;"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, direction, pnl_pct, regime_at_entry, fear_greed_at_entry, outcome FROM closed_trades ORDER BY id DESC LIMIT 10;"
-cat > /root/aria_episodic_memory.py << 'EOF'
-import psycopg2
-import logging
-
-log = logging.getLogger()
-
-DB = {"host":"localhost","port":5432,"dbname":"aria_db","user":"postgres","password":"aria_secure_2026"}
-
-def get_db():
-    return psycopg2.connect(**DB)
-
-def ensure_table():
-    conn = get_db()
-    cur = conn.cursor()
-    cur.execute("""
-        CREATE TABLE IF NOT EXISTS episodic_memory (
-            id SERIAL PRIMARY KEY,
-            symbol VARCHAR(10),
-            direction VARCHAR(10),
-            regime VARCHAR(20),
-            fear_greed_bucket VARCHAR(10),
-            nlp_label VARCHAR(20),
-            fomc_signal VARCHAR(20),
-            outcome VARCHAR(10),
-            pnl_pct FLOAT,
-            timestamp TIMESTAMP DEFAULT NOW()
-        )
-    """)
-    conn.commit()
-    cur.close()
-    conn.close()
-
-def recall(symbol, direction, regime, fear_greed, nlp_label='NEUTRAL', fomc='NEUTRAL'):
-    """
-    Query similar past episodes and return win rate + avg pnl.
-    Similarity: same symbol + direction + regime + fear_greed bucket
-    """
-    try:
-        fg_bucket = 'EXTREME_FEAR' if fear_greed < 25 else \
-                    'FEAR' if fear_greed < 45 else \
-                    'NEUTRAL' if fear_greed < 55 else \
-                    'GREED' if fear_greed < 75 else 'EXTREME_GREED'
-
-        conn = get_db()
-        cur = conn.cursor()
-
-        # Query similar episodes from closed_trades
-        cur.execute("""
-            SELECT outcome, pnl_pct FROM closed_trades
-            WHERE symbol=%s
-            AND direction=%s
-            AND regime_at_entry=%s
-            AND ABS(fear_greed_at_entry - %s) <= 15
-        """, (symbol, direction, regime, fear_greed))
-
-        rows = cur.fetchall()
-        cur.close()
+    def _track_usage(self, tokens):
+        self.tokens_used_today += tokens
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        today = datetime.now().strftime("%Y-%m-%d")
+        cursor.execute("""
+            INSERT INTO api_usage (date, tokens_used, estimated_cost)
+            VALUES (?, ?, ?)
+            ON CONFLICT(date) DO UPDATE SET
+            tokens_used = tokens_used + ?,
+            estimated_cost = estimated_cost + ?,
+            updated_at = CURRENT_TIMESTAMP
+        """, (today, tokens, tokens * 0.000003, tokens, tokens * 0.000003))
+        conn.commit()
         conn.close()
 
-        if not rows:
-            return {'win_rate': None, 'avg_pnl': None, 'sample_size': 0, 'confidence_modifier': 0.0}
-
-        wins = sum(1 for r in rows if r[0] == 'WIN')
-        win_rate = wins / len(rows)
-        avg_pnl = sum(r[1] for r in rows) / len(rows)
-
-        # Confidence modifier based on historical win rate
-        if win_rate >= 0.70 and len(rows) >= 3:
-            modifier = +0.05
-        elif win_rate >= 0.60 and len(rows) >= 3:
-            modifier = +0.03
-        elif win_rate <= 0.40 and len(rows) >= 3:
-            modifier = -0.05
-        elif win_rate <= 0.30 and len(rows) >= 3:
-            modifier = -0.08
-        else:
-            modifier = 0.0
-
-        return {
-            'win_rate': round(win_rate, 3),
-            'avg_pnl': round(avg_pnl, 4),
-            'sample_size': len(rows),
-            'confidence_modifier': modifier,
-            'fg_bucket': fg_bucket
-        }
-
-    except Exception as e:
-        log.warning(f"Episodic recall failed for {symbol}: {e}")
-        return {'win_rate': None, 'avg_pnl': None, 'sample_size': 0, 'confidence_modifier': 0.0}
-
-if __name__ == "__main__":
-    ensure_table()
-    print("Episodic memory table ready")
-    # Test recall
-    result = recall('NVDA', 'LONG', 'NORMAL', 23)
-    print(f"NVDA LONG NORMAL F&G:23 → {result}")
-EOF
-
-python3 /root/aria_episodic_memory.py
-python3 << 'EOF'
-with open('/root/agent_loop_v5.py', 'r') as f:
-    content = f.read()
-
-# Add import at top of generate_signal area
-old = "def get_nlp_sentiment(symbol):"
-
-new = """def get_episodic_modifier(symbol, direction, regime, fear_greed):
-    \"\"\"Query episodic memory for historical win rate in similar conditions.\"\"\"
-    try:
-        from aria_episodic_memory import recall
-        result = recall(symbol, direction, regime, fear_greed)
-        if result['sample_size'] >= 3:
-            log.info(f"  {symbol} EPISODIC: wr:{result['win_rate']:.0%} n:{result['sample_size']} modifier:{result['confidence_modifier']:+.2f}")
-        return result['confidence_modifier']
-    except Exception as e:
-        log.warning(f"Episodic memory failed: {e}")
-        return 0.0
-
-def get_nlp_sentiment(symbol):"""
-
-content = content.replace(old, new)
-
-with open('/root/agent_loop_v5.py', 'w') as f:
-    f.write(content)
-
-print("Done")
-EOF
-
-python3 << 'EOF'
-with open('/root/agent_loop_v5.py', 'r') as f:
-    content = f.read()
-
-old = "    return ('BUY' if final_dir == 'LONG' else 'SELL'), final_conf, final_dir"
-
-new = """    # ── Step 5: Episodic memory modifier ─────────────────
-    try:
-        ep_modifier = get_episodic_modifier(symbol, final_dir, regime, fg)
-        final_conf = min(0.92, max(0.45, final_conf + ep_modifier))
-    except Exception as e:
-        log.warning(f"Episodic modifier failed: {e}")
-
-    return ('BUY' if final_dir == 'LONG' else 'SELL'), final_conf, final_dir"""
-
-content = content.replace(old, new)
-
-with open('/root/agent_loop_v5.py', 'w') as f:
-    f.write(content)
-
-print("Done")
-EOF
-
-grep -n "EPISODIC\|get_episodic_modifier\|Step 5" /root/agent_loop_v5.py
-systemctl restart agent_loop && sleep 10 && journalctl -u agent_loop -n 20 --no-pager
-python3 << 'EOF'
-import sys
-sys.path.insert(0, '/root')
-
-# Test NLP sentiment is reading correctly
-import psycopg2
-conn = psycopg2.connect(host='localhost', port=5432, dbname='aria_db', user='postgres', password='aria_secure_2026')
-cur = conn.cursor()
-cur.execute("SELECT symbol, score, label, fomc_signal, timestamp FROM nlp_sentiment ORDER BY timestamp DESC LIMIT 6")
-rows = cur.fetchall()
-print("=== Latest NLP Scores ===")
-for r in rows:
-    print(f"{r[0]}: {r[2]} ({r[1]:+.3f}) FOMC:{r[3]} @ {r[4]}")
-cur.close()
-conn.close()
-EOF
-
-python3 << 'EOF'
-from aria_episodic_memory import recall
-
-symbols = ['BTC','ETH','AAPL','NVDA','TSLA','GLD']
-directions = ['LONG','SHORT']
-regimes = ['NORMAL','CRISIS']
-
-print("=== Episodic Memory Recall Test ===")
-for symbol in symbols:
-    for direction in directions:
-        for regime in regimes:
-            result = recall(symbol, direction, regime, 23)
-            if result['sample_size'] > 0:
-                print(f"{symbol} {direction} {regime}: wr:{result['win_rate']:.0%} n:{result['sample_size']} modifier:{result['confidence_modifier']:+.2f} avg_pnl:{result['avg_pnl']:+.3f}")
-EOF
-
-python3 << 'EOF'
-import sys
-sys.path.insert(0, '/root')
-from agent_loop_v5 import get_nlp_sentiment, get_episodic_modifier
-
-print("=== NLP Sentiment Test ===")
-for symbol in ['BTC','ETH','AAPL','NVDA','TSLA','GLD']:
-    nlp = get_nlp_sentiment(symbol)
-    print(f"{symbol}: {nlp['label']} ({nlp['score']:+.3f}) FOMC:{nlp['fomc']}")
-
-print("\n=== Episodic Modifier Test ===")
-for symbol in ['BTC','ETH','AAPL','NVDA','TSLA','GLD']:
-    mod = get_episodic_modifier(symbol, 'LONG', 'NORMAL', 23)
-    print(f"{symbol} LONG NORMAL F&G:23: modifier={mod:+.2f}")
-EOF
-
-cd /root && git add agent_loop_v5.py aria_episodic_memory.py aria_nlp_service.py && git commit -m "feat: Cap 1 NLP + Cap 3 Episodic Memory - tested and integrated" && git push origin master
-grep -n "def get_features\|features\|feature_vector\|build_features" /root/aria_model_inference.py | head -15
-sed -n '133,230p' /root/aria_model_inference.py
-cat > /root/aria_ood_detector.py << 'EOF'
-import numpy as np
-import psycopg2
-import logging
-
-log = logging.getLogger()
-
-DB = {"host":"localhost","port":5432,"dbname":"aria_db","user":"postgres","password":"aria_secure_2026"}
-
-FEATURE_NAMES = [
-    'rsi','macd','macd_hist','volatility','bb_position','ma_distance',
-    'price_change_5','price_change_10','price_change_24',
-    'rsi_momentum','volume_ratio','volume_trend',
-    'rsi_4h','dist_from_high','dist_from_low','range_position',
-    'candle_range','candle_close_pos','upper_wick','lower_wick',
-    'adx_proxy','z_score','momentum_5','momentum_10',
-    'atr_pct','vpin_norm','vpin_signal'
-]
-EOF
-
-wc -l /root/aria_ood_detector.py
-cat >> /root/aria_ood_detector.py << 'EOF'
-
-FEATURE_STATS = {
-    'rsi':            {'mean': 50.0,  'std': 15.0},
-    'macd':           {'mean': 0.0,   'std': 100.0},
-    'macd_hist':      {'mean': 0.0,   'std': 50.0},
-    'volatility':     {'mean': 0.02,  'std': 0.01},
-    'bb_position':    {'mean': 0.5,   'std': 0.25},
-    'ma_distance':    {'mean': 0.0,   'std': 3.0},
-    'price_change_5': {'mean': 0.0,   'std': 2.0},
-    'price_change_10':{'mean': 0.0,   'std': 3.0},
-    'price_change_24':{'mean': 0.0,   'std': 5.0},
-    'rsi_momentum':   {'mean': 0.0,   'std': 5.0},
-    'volume_ratio':   {'mean': 1.0,   'std': 0.5},
-    'volume_trend':   {'mean': 0.0,   'std': 0.3},
-    'rsi_4h':         {'mean': 50.0,  'std': 15.0},
-    'dist_from_high': {'mean': 5.0,   'std': 4.0},
-    'dist_from_low':  {'mean': 5.0,   'std': 4.0},
-    'range_position': {'mean': 0.5,   'std': 0.25},
-    'candle_range':   {'mean': 0.5,   'std': 0.4},
-    'candle_close_pos':{'mean': 0.5,  'std': 0.1},
-    'upper_wick':     {'mean': 0.0,   'std': 0.001},
-    'lower_wick':     {'mean': 0.0,   'std': 0.001},
-    'adx_proxy':      {'mean': 1.0,   'std': 0.8},
-    'z_score':        {'mean': 0.0,   'std': 1.5},
-    'momentum_5':     {'mean': 0.0,   'std': 0.02},
-    'momentum_10':    {'mean': 0.0,   'std': 0.03},
-    'atr_pct':        {'mean': 1.5,   'std': 1.0},
-    'vpin_norm':      {'mean': 0.5,   'std': 0.2},
-    'vpin_signal':    {'mean': 0.0,   'std': 1.0},
-}
-EOF
-
-wc -l /root/aria_ood_detector.py
-cat >> /root/aria_ood_detector.py << 'EOF'
-
-def detect_ood(symbol, features):
-    try:
-        if features is None:
-            return {'ood_score': 0.0, 'is_ood': False, 'size_multiplier': 1.0, 'reason': 'no_features'}
-
-        fvec = features[0]
-        z_scores = []
-
-        for i, fname in enumerate(FEATURE_NAMES):
-            if fname in FEATURE_STATS:
-                mean = FEATURE_STATS[fname]['mean']
-                std  = FEATURE_STATS[fname]['std']
-                if std > 0:
-                    z = abs((fvec[i] - mean) / std)
-                    z_scores.append((fname, z))
-
-        if not z_scores:
-            return {'ood_score': 0.0, 'is_ood': False, 'size_multiplier': 1.0, 'reason': 'no_stats'}
-
-        outliers = [(f, z) for f, z in z_scores if z > 2.0]
-        ood_score = len(outliers) / len(z_scores)
-
-        if ood_score > 0.4:
-            is_ood = True
-            size_multiplier = 0.25
-            reason = f"EXTREME_OOD: {len(outliers)}/{len(z_scores)} features outlying"
-        elif ood_score > 0.25:
-            is_ood = True
-            size_multiplier = 0.50
-            reason = f"MODERATE_OOD: {len(outliers)}/{len(z_scores)} features outlying"
-        elif ood_score > 0.15:
-            is_ood = False
-            size_multiplier = 0.75
-            reason = f"MILD_OOD: {len(outliers)}/{len(z_scores)} features outlying"
-        else:
-            is_ood = False
-            size_multiplier = 1.0
-            reason = "IN_DISTRIBUTION"
-
-        return {
-            'ood_score': round(ood_score, 3),
-            'is_ood': is_ood,
-            'size_multiplier': size_multiplier,
-            'reason': reason,
-            'outlier_features': [f for f, z in outliers[:3]]
-        }
-
-    except Exception as e:
-        log.warning(f"OOD detection failed for {symbol}: {e}")
-        return {'ood_score': 0.0, 'is_ood': False, 'size_multiplier': 1.0, 'reason': 'error'}
-EOF
-
-wc -l /root/aria_ood_detector.py
-cat >> /root/aria_ood_detector.py << 'EOF'
-
-if __name__ == "__main__":
-    import sys
-    sys.path.insert(0, '/root')
-    from aria_model_inference import build_feature_vector
-    print("=== OOD Detection Test ===")
-    for symbol in ['BTC','ETH','AAPL','NVDA','TSLA','GLD']:
-        features = build_feature_vector(symbol)
-        result = detect_ood(symbol, features)
-        print(f"{symbol}: {result['reason']} | size_mult:{result['size_multiplier']} | ood_score:{result['ood_score']}")
-EOF
-
-python3 /root/aria_ood_detector.py
-grep -n "def kelly_size" /root/agent_loop_v5.py
-sed -n '186,206p' /root/agent_loop_v5.py
-python3 << 'EOF'
-with open('/root/agent_loop_v5.py', 'r') as f:
-    content = f.read()
-
-old = "    max_pct={'BTC':0.15,'ETH':0.12,'GLD':0.15,'NVDA':0.10,'AAPL':0.10,'TSLA':0.08}.get(symbol,0.10)"
-
-new = """    # OOD check — reduce size if conditions are unusual
-    ood_mult = 1.0
-    try:
-        from aria_ood_detector import detect_ood
-        from aria_model_inference import build_feature_vector
-        features = build_feature_vector(symbol)
-        ood = detect_ood(symbol, features)
-        ood_mult = ood['size_multiplier']
-        if ood_mult < 1.0:
-            log.info(f"  {symbol} OOD: {ood['reason']} size_mult:{ood_mult}")
-    except Exception as e:
-        pass
-    max_pct={'BTC':0.15,'ETH':0.12,'GLD':0.15,'NVDA':0.10,'AAPL':0.10,'TSLA':0.08}.get(symbol,0.10)"""
-
-content = content.replace(old, new)
-
-old2 = "    adjusted=kelly*regime_mult*fg_mult*vol_mult*vel_mult*world_mult"
-new2 = "    adjusted=kelly*regime_mult*fg_mult*vol_mult*vel_mult*world_mult*ood_mult"
-
-content = content.replace(old2, new2)
-
-with open('/root/agent_loop_v5.py', 'w') as f:
-    f.write(content)
-
-print("Done")
-EOF
-
-grep -n "ood_mult\|OOD" /root/agent_loop_v5.py | head -10
-systemctl restart agent_loop && sleep 10 && journalctl -u agent_loop -n 15 --no-pager
-cd /root && git add agent_loop_v5.py aria_ood_detector.py aria_episodic_memory.py && git commit -m "feat: Cap 4 OOD Detection - position size reduction in unknown regimes" && git push origin master
-systemctl status agent_loop aria_nlp aria_db_sync --no-pager | grep -E "Active|Main PID"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT COUNT(*) FROM episodic_memory;"
-grep -n "def close_position" /root/agent_loop_v5.py
-sed -n '134,175p' /root/agent_loop_v5.py
-sed -n '175,185p' /root/agent_loop_v5.py
-python3 << 'EOF'
-with open('/root/agent_loop_v5.py', 'r') as f:
-    content = f.read()
-
-old = '        cur.execute("UPDATE positions_live SET status=\'CLOSED\', updated_at=NOW() WHERE symbol=%s", [symbol])\n        conn.commit(); cur.close(); conn.close()'
-
-new = '''        cur.execute("UPDATE positions_live SET status='CLOSED', updated_at=NOW() WHERE symbol=%s", [symbol])
-        # Write to episodic memory with full context
+    def score_job(self, job_id, title, company, location, description):
+        prompt = PROMPT_TEMPLATE.format(
+            cv=CV_SUMMARY,
+            title=title,
+            company=company,
+            location=location,
+            description=description[:2500],
+        )
         try:
-            from aria_nlp_service import get_nlp_sentiment
-            nlp = get_nlp_sentiment(symbol) if hasattr(__builtins__, '__import__') else {'label':'NEUTRAL','fomc':'NEUTRAL'}
-        except:
-            nlp = {'label':'NEUTRAL','fomc':'NEUTRAL'}
-        fg_bucket = 'EXTREME_FEAR' if sentiment.get('fear_greed',50)<25 else 'FEAR' if sentiment.get('fear_greed',50)<45 else 'NEUTRAL' if sentiment.get('fear_greed',50)<55 else 'GREED' if sentiment.get('fear_greed',50)<75 else 'EXTREME_GREED'
-        cur.execute("""INSERT INTO episodic_memory (symbol, direction, regime, fear_greed_bucket, nlp_label, fomc_signal, outcome, pnl_pct)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
-            [symbol, direction, regime, fg_bucket, nlp.get('label','NEUTRAL'), nlp.get('fomc','NEUTRAL'), outcome, round(pnl_pct,6)])
-        conn.commit(); cur.close(); conn.close()'''
+            result, provider = call_llm(prompt)
+            grade, ws = self._save_score(job_id, result, provider)
+            result["grade"] = grade
+            result["weighted_score"] = ws
+            result["provider"] = provider
+            return result
+        except Exception as e:
+            print(f"[SCORER] All providers failed for job {job_id}: {e}")
+            return {"grade": "F", "weighted_score": 0, "apply": False, "priority": "low", "provider": "none"}
 
-content = content.replace(old, new)
+    def _send_telegram_alert(self, title, company, grade, ws, url, summary, result, provider):
+        grade_emoji = {"A": "🏆", "B": "⭐", "C": "👍", "D": "👀", "E": "➖", "F": "❌"}.get(grade, "")
+        provider_tag = {"gemini": "🟦 Gemini", "groq": "🟩 Groq", "claude": "🟪 Claude"}.get(provider, provider)
+        lines = [
+            f"{grade_emoji} GRADE {grade} JOB — {int(ws)}/100",
+            f"Scored by {provider_tag}",
+            "",
+            f"📌 {title}",
+            f"🏢 {company}",
+            "",
+            f"💡 {summary}",
+            "",
+            "── CV MATCH ──",
+            result.get("block_cv_match", ""),
+            "",
+            "── INTERVIEW PREP ──",
+            result.get("block_interview_prep", ""),
+            "",
+            f"🔗 {url}",
+        ]
+        try:
+            from telegram_notifier import send_message
+            # Check notification settings
+            import sqlite3 as sq
+            conn = sq.connect(self.db_path)
+            c = conn.cursor()
+            c.execute("SELECT value FROM settings WHERE key='notifications_enabled'")
+            row = c.fetchone()
+            conn.close()
+            if row and row[0] == '0':
+                print(f"[SCORER] Notifications disabled, skipping Telegram")
+                return
+            send_message("\n".join(lines))
+        except Exception as e:
+            print(f"[SCORER] Telegram error: {e}")
 
-with open('/root/agent_loop_v5.py', 'w') as f:
-    f.write(content)
+    def run(self):
+        """Score all unscored jobs — max 50 per run to protect rate limits."""
+        jobs = self._get_unscored_jobs()
+        print(f"[SCORER] {len(jobs)} unscored jobs found.")
 
-print("Done")
+        MAX_PER_RUN = 50
+        if len(jobs) > MAX_PER_RUN:
+            print(f"[SCORER] Limiting to {MAX_PER_RUN} jobs this run.")
+            jobs = jobs[:MAX_PER_RUN]
+
+        apply_list = []
+
+        for job in jobs:
+            job_id, title, company, location, description, url = job
+            print(f"[SCORER] Scoring: {title} @ {company}...")
+
+            result = self.score_job(job_id, title, company, location, description)
+
+            grade    = result.get("grade", "F")
+            ws       = result.get("weighted_score", 0)
+            priority = result.get("priority", "low")
+            summary  = result.get("one_line_summary", "")
+            provider = result.get("provider", "unknown")
+
+            bar = "█" * int(ws // 10) + "░" * (10 - int(ws // 10))
+            print(f"         [{provider}] Grade: {grade} | Score: {int(ws)}/100 [{bar}] | {priority.upper()}")
+            print(f"         {summary}")
+
+            if grade in ("A", "B"):
+                self._send_telegram_alert(title, company, grade, ws, url, summary, result, provider)
+
+            if result.get("apply"):
+                apply_list.append({
+                    "title":    title,
+                    "company":  company,
+                    "grade":    grade,
+                    "score":    int(ws),
+                    "priority": priority,
+                    "url":      url,
+                    "provider": provider,
+                })
+
+        apply_list.sort(key=lambda x: x["score"], reverse=True)
+
+        print(f"\n[SCORER] Done. {len(jobs)} jobs scored.")
+        print(f"[SCORER] {len(apply_list)} jobs recommended.")
+
+        if apply_list:
+            print("\n── TOP MATCHES ──────────────────────────────────────────")
+            for i, job in enumerate(apply_list[:10], 1):
+                print(f"{i:2}. [Grade {job['grade']} | {job['score']:3}/100] [{job['provider']}] {job['title']} @ {job['company']}")
+                print(f"     {job['url']}")
+
+        return apply_list
+
+
+if __name__ == "__main__":
+    scorer = ClaudeScorer()
+    scorer.run()
+SCORER_EOF
+
+cd /root/JobPilot && python3 -c "from scoring.claude_scorer import ClaudeScorer; print('Import OK')"
+cd /root/JobPilot && python3 -c "
+from scoring.claude_scorer import ClaudeScorer
+scorer = ClaudeScorer()
+result = scorer.score_job(
+    job_id=6666,
+    title='Data Scientist',
+    company='Monzo',
+    location='London, UK',
+    description='Data Scientist building ML models for fraud detection and credit risk. Python, SQL, PyTorch required.'
+)
+print('Provider:', result.get('provider'))
+print('Grade:', result.get('grade'))
+print('Score:', result.get('weighted_score'))
+print('Summary:', result.get('one_line_summary'))
+"
+# Fix Gemini model name
+sed -i 's/gemini-1.5-flash/gemini-2.0-flash-lite/g' /root/JobPilot/scoring/claude_scorer.py
+# Verify
+grep "gemini" /root/JobPilot/scoring/claude_scorer.py | grep "model"
+sleep 60 && cd /root/JobPilot && python3 -c "
+from scoring.claude_scorer import ClaudeScorer
+scorer = ClaudeScorer()
+result = scorer.score_job(
+    job_id=6665,
+    title='Data Scientist',
+    company='Monzo',
+    location='London, UK',
+    description='Data Scientist building ML models for fraud detection. Python, SQL, PyTorch required.'
+)
+print('Provider:', result.get('provider'))
+print('Grade:', result.get('grade'))
+print('Score:', result.get('weighted_score'))
+"
+cd /root/JobPilot && python3 -c "
+from groq import Groq
+import os
+from dotenv import load_dotenv
+load_dotenv()
+client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+try:
+    r = client.chat.completions.create(
+        model='llama-3.3-70b-versatile',
+        messages=[{'role':'user','content':'OK'}],
+        max_tokens=5
+    )
+    print('Groq OK')
+except Exception as e:
+    # Check retry-after header
+    print('Error:', str(e)[:200])
+"
+systemctl restart jobpilot.service && systemctl status jobpilot.service
+cd /root/JobPilot && git status
+cd /root/JobPilot
+# Create .gitignore first
+cat > .gitignore << 'EOF'
+.env
+*.db
+*.db-journal
+cv_engine/tailored/
+cv_engine/master_cv.docx
+__pycache__/
+*.pyc
+*.pyo
+*.bak
+*.save
+jobpilot.db
+logs/
+*.log
+dashboard/static/
 EOF
 
-grep -n "episodic_memory\|fg_bucket\|nlp_label" /root/agent_loop_v5.py | head -10
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "
-INSERT INTO episodic_memory (symbol, direction, regime, fear_greed_bucket, nlp_label, fomc_signal, outcome, pnl_pct)
-SELECT 
-    symbol, direction, regime_at_entry,
-    CASE 
-        WHEN fear_greed_at_entry < 25 THEN 'EXTREME_FEAR'
-        WHEN fear_greed_at_entry < 45 THEN 'FEAR'
-        WHEN fear_greed_at_entry < 55 THEN 'NEUTRAL'
-        WHEN fear_greed_at_entry < 75 THEN 'GREED'
-        ELSE 'EXTREME_GREED'
-    END,
-    'NEUTRAL', 'NEUTRAL', outcome, pnl_pct
-FROM closed_trades;
-"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "\d episodic_memory"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "ALTER TABLE episodic_memory ALTER COLUMN fear_greed_bucket TYPE character varying(20);"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "
-INSERT INTO episodic_memory (symbol, direction, regime, fear_greed_bucket, nlp_label, fomc_signal, outcome, pnl_pct)
-SELECT symbol, direction, regime_at_entry,
-    CASE 
-        WHEN fear_greed_at_entry < 25 THEN 'EXTREME_FEAR'
-        WHEN fear_greed_at_entry < 45 THEN 'FEAR'
-        WHEN fear_greed_at_entry < 55 THEN 'NEUTRAL'
-        WHEN fear_greed_at_entry < 75 THEN 'GREED'
-        ELSE 'EXTREME_GREED'
-    END,
-    'NEUTRAL', 'NEUTRAL', outcome, pnl_pct
-FROM closed_trades;
-"
-PGPASSWORD=aria_secure_2026 psql -U postgres -d aria_db -h 127.0.0.1 -c "SELECT symbol, outcome, COUNT(*) FROM episodic_memory GROUP BY symbol, outcome ORDER BY symbol;"
-python3 << 'EOF'
-from aria_episodic_memory import recall
+# Add everything
+git add .
+git commit -m "feat: Phase 1-5 complete
 
-print("=== Episodic Memory Test (populated) ===")
-for symbol in ['BTC','ETH','AAPL','NVDA','TSLA','GLD']:
-    for direction in ['LONG','SHORT']:
-        result = recall(symbol, direction, 'NORMAL', 23)
-        if result['sample_size'] > 0:
-            print(f"{symbol} {direction} NORMAL: wr:{result['win_rate']:.0%} n:{result['sample_size']} modifier:{result['confidence_modifier']:+.2f}")
-EOF
+- A-F scoring across 10 weighted dimensions
+- ATS PDF CV generation per job  
+- Portal scanner (31 companies, Greenhouse/Lever/Ashby)
+- STAR+R interview bank
+- FastAPI dashboard with HTTPS
+- Multi-provider LLM chain (Groq/Gemini/Claude fallback)
+- Rate limit backoff, 50 jobs/run limit
+- Notification settings (on/off/modes)
+- Settings table for user preferences"
+git push origin main
+git remote set-url origin https://Usama1909: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@github.com/Usama1909/JobPilot.git
+git push origin main
+cat > /root/JobPilot/README.md << 'READMEEOF'
+# paste README contents here
+READMEEOF
 
-systemctl restart agent_loop && sleep 5 && journalctl -u agent_loop -n 5 --no-pager
-cd /root && git add agent_loop_v5.py aria_episodic_memory.py && git commit -m "feat: Cap 3 complete - episodic memory writes on trade close, 618 trades backfilled" && git push origin master
-pip install newsapi-python --break-system-packages 2>&1 | tail -3
-echo "NEWSAPI_KEY=79812f8bd44a444ea9d6627d13d69368" >> /root/.env
-grep "NEWSAPI_KEY" /root/.env
-grep -n "NEWS_FEEDS\|SYMBOL_KEYWORDS\|newsapi\|NEWSAPI" /root/aria_nlp_service.py | head -10
+nano /root/JobPilot/README.md
+cd /root/JobPilot
+git add README.md
+git commit -m "docs: add professional README"
+git push origin main
+cd /root/JobPilot && sqlite3 jobpilot.db "
+SELECT COUNT(*) as total_jobs FROM jobs_raw;
+SELECT COUNT(*) as duplicate_urls FROM (
+    SELECT url, COUNT(*) as cnt FROM jobs_raw
+    GROUP BY url HAVING cnt > 1
+);
+SELECT COUNT(DISTINCT url) as unique_jobs FROM jobs_raw;
+"
+cd /root/JobPilot && sqlite3 jobpilot.db "
+SELECT title, company, grade, weighted_score 
+FROM jobs_scored s
+JOIN jobs_raw r ON s.job_id = r.id
+WHERE s.grade IN ('E','F')
+ORDER BY s.scored_at DESC
+LIMIT 20;
+"
+nano /root/JobPilot/scoring/pre_filter.py
+cd /root/JobPilot && python3 scoring/pre_filter.py
+nano /root/JobPilot/scoring/claude_scorer.py
+cd /root/JobPilot && python3 -c "
+from scoring.claude_scorer import ClaudeScorer
+scorer = ClaudeScorer()
+jobs = scorer._get_unscored_jobs()
+from scoring.pre_filter import filter_jobs
+filtered, skipped = filter_jobs(jobs)
+print(f'Total unscored: {len(jobs)}')
+print(f'After filter: {len(filtered)}')
+print(f'Skipped: {skipped}')
+print(f'API calls saved: {skipped}/{len(jobs)} = {int(skipped/max(len(jobs),1)*100)}%')
+"
+python3 -c "
+content = open('/root/JobPilot/scoring/claude_scorer.py').read()
+content = content.expandtabs(4)
+open('/root/JobPilot/scoring/claude_scorer.py', 'w').write(content)
+print('Fixed')
+"
+python3 -c "from scoring.claude_scorer import ClaudeScorer; print('Import OK')"
 python3 << 'EOF'
-with open('/root/aria_nlp_service.py', 'r') as f:
+with open('/root/JobPilot/scoring/claude_scorer.py', 'r') as f:
     content = f.read()
 
-old = "def fetch_headlines():"
+# Find and replace the broken run method
+old = content[content.find('    def run(self):'):]
+# Get everything after the class definition up to end
+new_run = '''    def run(self):
+        """Score all unscored jobs — pre-filter + max 50 per run."""
+        from scoring.pre_filter import filter_jobs
+        jobs = self._get_unscored_jobs()
+        print(f"[SCORER] {len(jobs)} unscored jobs found.")
 
-new = '''def fetch_newsapi_headlines(symbol):
-    """Fetch headlines from NewsAPI for a specific symbol."""
-    try:
-        import os
-        from newsapi import NewsApiClient
-        key = os.getenv('NEWSAPI_KEY', '79812f8bd44a444ea9d6627d13d69368')
-        newsapi = NewsApiClient(api_key=key)
-        query_map = {
-            'BTC': 'bitcoin OR crypto', 'ETH': 'ethereum OR ether',
-            'AAPL': 'Apple stock', 'NVDA': 'Nvidia GPU chips',
-            'TSLA': 'Tesla Elon', 'GLD': 'gold price safe haven'
-        }
-        q = query_map.get(symbol, symbol)
-        articles = newsapi.get_everything(q=q, language='en', sort_by='publishedAt', page_size=10)
-        headlines = [a['title'] for a in articles.get('articles', []) if a.get('title')]
-        log.info(f"NewsAPI: {len(headlines)} headlines for {symbol}")
-        return headlines
-    except Exception as e:
-        log.warning(f"NewsAPI failed for {symbol}: {e}")
-        return []
+        jobs, skipped = filter_jobs(jobs)
+        print(f"[SCORER] Pre-filter: {len(jobs)} relevant | {skipped} skipped")
 
-def fetch_headlines():'''
+        MAX_PER_RUN = 50
+        if len(jobs) > MAX_PER_RUN:
+            print(f"[SCORER] Limiting to {MAX_PER_RUN} jobs this run.")
+            jobs = jobs[:MAX_PER_RUN]
 
-content = content.replace(old, new)
+        apply_list = []
 
-with open('/root/aria_nlp_service.py', 'w') as f:
-    f.write(content)
+        for job in jobs:
+            job_id, title, company, location, description, url = job
+            print(f"[SCORER] Scoring: {title} @ {company}...")
+            result = self.score_job(job_id, title, company, location, description)
+            grade    = result.get("grade", "F")
+            ws       = result.get("weighted_score", 0)
+            priority = result.get("priority", "low")
+            summary  = result.get("one_line_summary", "")
+            provider = result.get("provider", "unknown")
+            bar = "█" * int(ws // 10) + "░" * (10 - int(ws // 10))
+            print(f"         [{provider}] Grade: {grade} | Score: {int(ws)}/100 [{bar}] | {priority.upper()}")
+            print(f"         {summary}")
+            if grade in ("A", "B"):
+                self._send_telegram_alert(title, company, grade, ws, url, summary, result, provider)
+            if result.get("apply"):
+                apply_list.append({
+                    "title":    title,
+                    "company":  company,
+                    "grade":    grade,
+                    "score":    int(ws),
+                    "priority": priority,
+                    "url":      url,
+                    "provider": provider,
+                })
 
-print("Done")
+        apply_list.sort(key=lambda x: x["score"], reverse=True)
+        print(f"\\n[SCORER] Done. {len(jobs)} jobs scored.")
+        print(f"[SCORER] {len(apply_list)} jobs recommended.")
+
+        if apply_list:
+            print("\\n── TOP MATCHES ──────────────────────────────────────────")
+            for i, job in enumerate(apply_list[:10], 1):
+                print(f"{i:2}. [Grade {job['grade']} | {job['score']:3}/100] [{job['provider']}] {job['title']} @ {job['company']}")
+                print(f"     {job['url']}")
+
+        return apply_list
+
+
+if __name__ == "__main__":
+    scorer = ClaudeScorer()
+    scorer.run()
+'''
+
+# Replace from def run onwards
+idx = content.find('    def run(self):')
+new_content = content[:idx] + new_run
+
+with open('/root/JobPilot/scoring/claude_scorer.py', 'w') as f:
+    f.write(new_content)
+print('Done')
 EOF
 
-python3 << 'EOF'
-with open('/root/aria_nlp_service.py', 'r') as f:
-    content = f.read()
-
-old = "    keywords = SYMBOL_KEYWORDS.get(symbol, [])\n    relevant = [h for h in headlines if any(k in h.lower() for k in keywords)]"
-
-new = "    keywords = SYMBOL_KEYWORDS.get(symbol, [])\n    relevant = [h for h in headlines if any(k in h.lower() for k in keywords)]\n    # Add NewsAPI headlines for better coverage\n    relevant += fetch_newsapi_headlines(symbol)"
-
-content = content.replace(old, new)
-
-with open('/root/aria_nlp_service.py', 'w') as f:
-    f.write(content)
-
-print("Done")
-EOF
-
-grep -n "NewsAPI\|fetch_newsapi" /root/aria_nlp_service.py | head -10
-pkill -f aria_nlp_service && sleep 2 && nohup python3 /root/aria_nlp_service.py > /root/nlp_service.log 2>&1 & && sleep 30 && tail -15 /root/nlp_service.log
-pkill -f aria_nlp_service
-sleep 2
-nohup python3 /root/aria_nlp_service.py > /root/nlp_service.log 2>&1 &
-sleep 30 && tail -15 /root/nlp_service.log
-systemctl restart aria_nlp && sleep 5 && systemctl status aria_nlp --no-pager | grep Active
-cd /root && git add aria_nlp_service.py && git commit -m "feat: Cap 1 complete - NewsAPI integrated, FOMC hawkish detection live" && git push origin master
+python3 -c "from scoring.claude_scorer import ClaudeScorer; print('Import OK')"
+cd /root/JobPilot && python3 -c "
+from scoring.claude_scorer import ClaudeScorer
+from scoring.pre_filter import filter_jobs
+scorer = ClaudeScorer()
+jobs = scorer._get_unscored_jobs()
+filtered, skipped = filter_jobs(jobs)
+print(f'Total unscored:  {len(jobs)}')
+print(f'After filter:    {len(filtered)}')
+print(f'Skipped:         {skipped}')
+print(f'API calls saved: {int(skipped/max(len(jobs),1)*100)}%')
+"
+systemctl restart jobpilot.service && systemctl status jobpilot.service
+cd /root/JobPilot
+git add scoring/pre_filter.py scoring/claude_scorer.py
+git commit -m "feat: two-stage pre-filter — 38% API calls saved"
+git push origin main
