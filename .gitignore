@@ -3,9 +3,10 @@ aria-env/
 *.log
 __pycache__/
 *.pyc
-.env
 *.bin
 *.so
 nlp_service.log
 .bash_history
 ensemble_log.txt
+config.bat
+node_modules
