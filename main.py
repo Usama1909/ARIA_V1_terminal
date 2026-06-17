@@ -822,7 +822,7 @@ RULES: Never say buy or sell directly. Always mention key risk alongside opportu
 LIVE NEWS:\n{get_live_news_context()}
 MARKET DATA:\n{context_str}
 Time: {datetime.now().strftime('%Y-%m-%d %H:%M UTC')} | Fear/Greed: {fg_value}"""
-    response = client.messages.create(model="claude-sonnet-4-20250514", max_tokens=1000,
+    response = client.messages.create(model="claude-sonnet-4-6", max_tokens=1000,
                                       system=system_prompt, messages=[{"role": "user", "content": user_message}])
     return response.content[0].text
 
